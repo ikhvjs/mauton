@@ -24,9 +24,15 @@ class Sidebar extends Component {
 			( url ==="/dashboard" )?
 			(	<Navbar  bg="primary" variant="dark" expand="lg" className="sidebar" >
 					<Nav className ="flex-column">
-			          	<LinkContainer to='/home'>
-							<Nav.Link>Home</Nav.Link>
+			          	<LinkContainer to={`${url}/menu`}>
+							<Nav.Link>Menu</Nav.Link>
+						</LinkContainer>
+						<LinkContainer to={`${url}/category`}>
+							<Nav.Link>Blog Category</Nav.Link>
 						</LinkContainer>	
+						<LinkContainer to={`${url}/tag`}>
+							<Nav.Link>Tag</Nav.Link>
+						</LinkContainer>		
 					</Nav>
 				</Navbar>
 			):

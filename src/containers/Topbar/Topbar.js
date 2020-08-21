@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Navbar, Nav} from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
 import './Topbar.css';
+import logo from './logo.png'
 
 
 class Topbar extends Component {
@@ -12,7 +13,18 @@ class Topbar extends Component {
 		    <Navbar  bg="light" variant="light" expand="lg" className="topbar">
 				<Nav className = "topbar_nav">
 					<LinkContainer to="/">
-			    		<Navbar.Brand id="home">Home</Navbar.Brand>
+			    		<Navbar.Brand id="home">
+			    			{ //Logo made by Freepik from www.flaticon.com 
+			    			}
+			    			<img
+						        src={logo}
+						        width="30"
+						        height="30"
+						        className="d-inline-block align-top"
+						        alt="Mauton logo"
+						      />
+						      Mauton
+			    		</Navbar.Brand>
 			    	</LinkContainer>
 			    	{topbars.map((topbar)=>{
 						return(

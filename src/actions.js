@@ -13,7 +13,10 @@ import {
   REQUEST_BLOG_FAILED,
   REQUEST_BLOG_C_PENDING,
   REQUEST_BLOG_C_SUCCESS,
-  REQUEST_BLOG_C_FAILED
+  REQUEST_BLOG_C_FAILED,
+  REQUEST_BLOG_S_PENDING,
+  REQUEST_BLOG_S_SUCCESS,
+  REQUEST_BLOG_S_FAILED
  } from './constants';
 
 export const requestTopbarAct = () => (dispatch) => {
@@ -69,4 +72,15 @@ export const requestBlogByClickAct = (sidebarMenuPath) => (dispatch) =>{
     .then(response => response.json())
     .then(data => dispatch({ type: REQUEST_BLOG_C_SUCCESS, payload: data }))
     .catch(error => dispatch({ type: REQUEST_BLOG_C_FAILED, payload: error }))
+};
+
+export const requestSingleBlogByClickAct = (blogPath) => (dispatch) =>{
+  dispatch({ type: REQUEST_BLOG_S_PENDING })
+    fetch(`http://localhost:3001/blog/path/${blogPath}`, {
+          method: 'get',
+          headers: {'Content-Type': 'application/json'}
+        })
+    .then(response => response.json())
+    .then(data => dispatch({ type: REQUEST_BLOG_S_SUCCESS, payload: data }))
+    .catch(error => dispatch({ type: REQUEST_BLOG_S_FAILED, payload: error }))
 };

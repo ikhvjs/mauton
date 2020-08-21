@@ -15,7 +15,25 @@ import {
   REQUEST_BLOG_FAILED,
   REQUEST_BLOG_C_PENDING,
   REQUEST_BLOG_C_SUCCESS,
-  REQUEST_BLOG_C_FAILED  
+  REQUEST_BLOG_C_FAILED,
+  REQUEST_BLOG_S_PENDING,
+  REQUEST_BLOG_S_SUCCESS,
+  REQUEST_BLOG_S_FAILED,
+  REQUEST_CATEGORY_PENDING,
+  REQUEST_CATEGORY_SUCCESS,
+  REQUEST_CATEGORY_FAILED,
+  REQUEST_CATEGORY_C_PENDING,
+  REQUEST_CATEGORY_C_SUCCESS,
+  REQUEST_CATEGORY_C_FAILED,
+  POST_CATEGORY_PENDING,
+  POST_CATEGORY_SUCCESS,
+  POST_CATEGORY_FAILED,
+  DELETE_CATEGORY_PENDING,
+  DELETE_CATEGORY_SUCCESS,
+  DELETE_CATEGORY_FAILED,
+  SEARCH_CATEGORY_PENDING,
+  SEARCH_CATEGORY_SUCCESS,
+  SEARCH_CATEGORY_FAILED, 
  } from './constants';
 
 
@@ -68,32 +86,91 @@ export const requestSidebarRdc = (state=initialStateSidebar, action={}) => {
 const initialStateBlog = {
   blogs: [],
   isPendingBlog: false,
-  isPendingBlogByClick: false
+  isPendingBlogByClick: false,
+  isSingleBlogRequest: false,
+  isPendingSingleBlog: false
 }
 
 export const requestBlogRdc = (state=initialStateBlog, action={}) => {
   switch (action.type) {
 	case REQUEST_BLOG_PENDING:
-	  return Object.assign({}, state, {isPendingBlog: true})
+	  return Object.assign({}, state, {isPendingBlog: true, isSingleBlogRequest: false})
 	case REQUEST_BLOG_SUCCESS:
 	  return Object.assign({}, state, {blogs: action.payload, isPendingBlog: false})
 	case REQUEST_BLOG_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
 	case REQUEST_BLOG_C_PENDING:
-	  return Object.assign({}, state, {isPendingBlogByClick: true})
+	  return Object.assign({}, state, {isPendingBlogByClick: true, isSingleBlogRequest: false})
 	case REQUEST_BLOG_C_SUCCESS:
 	  return Object.assign({}, state, {blogs: action.payload, isPendingBlogByClick: false})
 	case REQUEST_BLOG_C_FAILED:
 	  return Object.assign({}, state, {error: action.payload})  
+  case REQUEST_BLOG_S_PENDING:
+    return Object.assign({}, state, {isPendingSingleBlog: true, isSingleBlogRequest:true})
+  case REQUEST_BLOG_S_SUCCESS:
+    return Object.assign({}, state, {blogs: action.payload, isPendingSingleBlog: false})
+  case REQUEST_BLOG_S_FAILED:
+    return Object.assign({}, state, {error: action.payload}) 
 	default:
 	  return state
   }
 }
 
+const initialStateCategory= {
+  categories: [],
+  isRefreshNeeded:false,
+  // isPendingRequestCategory: false,
+  // isPendingRequestCategoryByClick: false,
+  // isPendingDeleteCategory:false,
+  // isPendingPostCategory:false
+}
+
+export const categoryRdc = (state=initialStateCategory, action={}) => {
+  switch (action.type) {
+  case REQUEST_CATEGORY_PENDING:
+    return Object.assign({}, state, {})
+  case REQUEST_CATEGORY_SUCCESS:
+    return Object.assign({}, state, {categories: action.payload, isRefreshNeeded:false})
+  case REQUEST_CATEGORY_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case REQUEST_CATEGORY_C_PENDING:
+    return Object.assign({}, state, {})
+  case REQUEST_CATEGORY_C_SUCCESS:
+    return Object.assign({}, state, {categories: action.payload, isRefreshNeeded:false})
+  case REQUEST_CATEGORY_C_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case POST_CATEGORY_PENDING:
+    return Object.assign({}, state, {})
+  case POST_CATEGORY_SUCCESS:
+    return Object.assign({}, state, {isRefreshNeeded:true})
+  case POST_CATEGORY_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case DELETE_CATEGORY_PENDING:
+    return Object.assign({}, state, {})
+  case DELETE_CATEGORY_SUCCESS:
+    return Object.assign({}, state, {isRefreshNeeded:true})
+  case DELETE_CATEGORY_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case SEARCH_CATEGORY_PENDING:
+    return Object.assign({}, state, {})
+  case SEARCH_CATEGORY_SUCCESS:
+    return Object.assign({}, state, {categories: action.payload, isRefreshNeeded:false})
+  case SEARCH_CATEGORY_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  default:
+    return state
+  }
+}
+
+
+
+
+
 const rootReducer = combineReducers({
 	requestTopbarRdc,
 	requestSidebarRdc,
-	requestBlogRdc
+	requestBlogRdc,
+  categoryRdc
 });
 
 export default rootReducer;

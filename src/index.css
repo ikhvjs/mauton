@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'BalooTamma2';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/BalooTamma2-Regular.ttf') format('truetype')
+}
+body {
+  font-family: 'BalooTamma2';
+}

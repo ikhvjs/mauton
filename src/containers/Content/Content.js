@@ -7,6 +7,7 @@ import {
 
 import Bloglist from '../Bloglist/Bloglist';
 import Sidebar from '../Sidebar/Sidebar';
+// import Blog from '../../components/Blog/Blog';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col} from "react-bootstrap";
@@ -14,8 +15,7 @@ import './Content.css';
 
 
 
-//userRouteMatch only be allowed to use in function.
-//Content component need to be a function
+
 const Content = ({ sidebars, 
 		onRequestBlog, 
 		blogs,
@@ -23,10 +23,14 @@ const Content = ({ sidebars,
 		onRequestSidebar,
 		isPendingSidebarByClick,
 		onRequestBlogByClick,
-		isPendingBlogByClick
+		isPendingBlogByClick,
+		onRequestSingleBlogByClick,
+		isSingleBlogRequest,
+		isPendingSingleBlog
 	}) => {
 	
-	
+	//userRouteMatch only be allowed to use in function.
+	//Content component need to be a function
 	const match = useRouteMatch();
 	return (
 		<React.Fragment>
@@ -48,6 +52,9 @@ const Content = ({ sidebars,
 			        	<Bloglist blogs={blogs}
 			        	onRequestBlog={onRequestBlog}
 			        	isPendingBlogByClick={isPendingBlogByClick}
+			        	onRequestSingleBlogByClick={onRequestSingleBlogByClick}
+			        	isSingleBlogRequest={isSingleBlogRequest}
+			        	isPendingSingleBlog={isPendingSingleBlog}
 			        	/>
 			        </Route>
 			    </Switch>

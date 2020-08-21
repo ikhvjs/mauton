@@ -5,7 +5,8 @@ import {
 	requestSidebarAct,
 	requestBlogAct,
 	requestSidebarByClickAct,
-	requestBlogByClickAct
+	requestBlogByClickAct,
+	requestSingleBlogByClickAct
 } from '../../actions';
 import {
   BrowserRouter as Router,
@@ -37,7 +38,9 @@ const mapStateToProps = (state) => {
     isPendingSidebarByClick:state.requestSidebarRdc.isPendingSidebarByClick,
     blogs:state.requestBlogRdc.blogs,
     isPendingBlog:state.requestBlogRdc.isPendingBlog,
-    isPendingBlogByClick:state.requestBlogRdc.isPendingBlogByClick
+    isPendingBlogByClick:state.requestBlogRdc.isPendingBlogByClick,
+    isSingleBlogRequest:state.requestBlogRdc.isSingleBlogRequest,
+ 	isPendingSingleBlog:state.requestBlogRdc.isPendingSingleBlog
 
   }
 }
@@ -53,7 +56,10 @@ const mapDispatchToProps = (dispatch) => {
     onRequestBlog:(sidebarMenuPath) => 
     	dispatch(requestBlogAct(sidebarMenuPath)),
     onRequestBlogByClick:(event) => 
-    	dispatch(requestBlogByClickAct(event.target.getAttribute('value')))
+    	//getAttribute('value') is the sideMenuPath 
+    	dispatch(requestBlogByClickAct(event.target.getAttribute('value'))),
+    onRequestSingleBlogByClick:(event) => 
+    	dispatch(requestSingleBlogByClickAct(event.target.getAttribute('value')))
   }
 }
 
@@ -73,7 +79,10 @@ class App extends Component {
 				onRequestSidebarByClick,
 				isPendingSidebarByClick,
 				onRequestBlogByClick,
-				isPendingBlogByClick
+				isPendingBlogByClick,
+				isSingleBlogRequest,
+				isPendingSingleBlog,
+				onRequestSingleBlogByClick
 			} = this.props;
 
 						    
@@ -100,6 +109,9 @@ class App extends Component {
 												topbarMenuID={topbar.menu_id}
 												onRequestSidebar={onRequestSidebar}
 												isPendingSidebarByClick={isPendingSidebarByClick}
+												onRequestSingleBlogByClick={onRequestSingleBlogByClick}
+												isSingleBlogRequest={isSingleBlogRequest}
+												isPendingSingleBlog={isPendingSingleBlog}
 											/>
 						    			</Route>
 									)
