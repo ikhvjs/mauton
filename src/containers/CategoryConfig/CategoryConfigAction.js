@@ -14,6 +14,10 @@ import {
   SEARCH_CATEGORY_PENDING,
   SEARCH_CATEGORY_SUCCESS,
   SEARCH_CATEGORY_FAILED,
+  SELECT_UPDATE_CATEGORY,
+  UPDATE_CATEGORY_PENDING,
+  UPDATE_CATEGORY_SUCCESS,
+  UPDATE_CATEGORY_FAILED 
  } from '../../constants';
 
 export const requestCategoryAct = () => (dispatch) => {
@@ -114,46 +118,121 @@ export const searchCategoryAct = (category) => (dispatch) =>{
       }
   )
   .then(response => response.json())
-  .then(data => {
-    console.log('searchCategoryAct data',data);
-    dispatch({ type: SEARCH_CATEGORY_SUCCESS, payload: data})
-  }
-    )
+  .then(data => dispatch({ type: SEARCH_CATEGORY_SUCCESS, payload: data}))
   .catch(error => dispatch({ type: SEARCH_CATEGORY_FAILED, payload: error }))
 }
 
 
 
-export const selectUpdateCategoryAct = (event) => {
-  const category ={};
+export const beforeUpdateCategoryAct = (event) => {
+  const beforeUpdateCategory ={};
 
+  //declare a input field
   const inputTag = document.createElement("input");
   inputTag.classList.add("form-control");
   inputTag.classList.add("form-control-sm");
 
+  const categoryID = event.target.parentNode.parentNode.id;
+  Object.assign(beforeUpdateCategory,  {"blog_category_id": categoryID});
+  console.log('beforeUpdateCategoryAct categoryID',categoryID);
+
   const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td[name]");
-  console.log('selectUpdateCategoryAct childrenNode',childrenNode);
+  console.log('beforeUpdateCategoryAct childrenNode',childrenNode);
+
+  const buttonParentNode = event.target.parentNode.parentNode.querySelector("td[headers]");
+  console.log('beforeUpdateCategoryAct buttonNode',buttonParentNode);
+
+  const buttonNodes = buttonParentNode.querySelectorAll('button[name]');
+  console.log('selectedButton buttonNodes',buttonNodes);
+
+  //Dispaly 'Save to change' Button and hide 'Update' and 'Delete' button
+  buttonNodes.forEach((node)=>{
+    if (node.classList.contains('hidden-button')){
+      node.classList.remove('hidden-button');
+    } else {
+      node.classList.add('hidden-button');
+    }
+  })
+
+  //Add inline edit when click 'Update' Button
   childrenNode.forEach((node)=>{
+    let nodeValue = node.innerHTML;
+    let nodeAttribute = node.getAttribute('name');
     let inputTagClone = inputTag.cloneNode(false);
-    inputTagClone.setAttribute('name', node.getAttribute('name'));
-    inputTagClone.value = node.innerHTML;
+
+    inputTagClone.setAttribute('name', nodeAttribute);
+    inputTagClone.value = nodeValue;
     node.innerHTML="";
     node.appendChild(inputTagClone);
-    Object.assign(category,  {[node.getAttribute('name')]: node.innerHTML})
+    Object.assign(beforeUpdateCategory,  {[nodeAttribute]: nodeValue})
 
     // console.log('node.name',node.getAttribute('name'));
     // console.log('node.value',node.innerHTML);
   })
-  console.log('selectUpdateCategoryAct category',category);
-  // return category;
+  console.log('beforeUpdateCategoryAct beforeUpdateCategory',beforeUpdateCategory);
+  return {type: SELECT_UPDATE_CATEGORY, payload: beforeUpdateCategory };
 
 }
 
 
 
-export const updateCategoryAct = (category) => (dispatch) =>{
+export const afterUpdateCategoryAct = (event) =>{
+  const afterUpdateCategory ={};
 
+  const categoryID=event.target.parentNode.parentNode.id;
+  Object.assign(afterUpdateCategory,  {"blog_category_id": categoryID});
+  console.log('afterUpdateCategoryAct categoryID',categoryID);
+
+  const tdNode = event.target.parentNode.parentNode.querySelectorAll("td[name]");
+  console.log('afterUpdateCategoryAct tdNode',tdNode);
+
+  const inputNode = event.target.parentNode.parentNode.querySelectorAll("td[name] > input");
+  console.log('afterUpdateCategoryAct childrenNode',inputNode);
+  inputNode.forEach((node)=>{
+    let nodeValue = node.value;
+    let nodeAttribute = node.getAttribute('name');
+    Object.assign(afterUpdateCategory,  {[nodeAttribute]: nodeValue})
+  })
+
+  
+  console.log('afterUpdateCategoryAct afterUpdateCategory',afterUpdateCategory);
+  return afterUpdateCategory;
 
 }
 
+
+export const updateCategoryAct = (afterUpdateCategory)  => (dispatch, getState) =>{
+  let isChangeNeeded = false;
+  const {beforeUpdateCategory} = getState().categoryRdc;
+  if (JSON.stringify(afterUpdateCategory) ===
+    JSON.stringify(beforeUpdateCategory)){
+    console.log('Same value, no changes updated');
+  } else{
+    isChangeNeeded = true;
+  }
+  if (isChangeNeeded === true) {
+    dispatch({ type: UPDATE_CATEGORY_PENDING })
+    fetch('http://localhost:3001/category/update', {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json',
+                    'Accept': 'application/json'},
+          body: JSON.stringify({
+            blog_category_id:afterUpdateCategory.blog_category_id,
+            blog_category_name: afterUpdateCategory.blog_category_name,
+            blog_category_desc: afterUpdateCategory.blog_category_desc,
+            seq:afterUpdateCategory.seq
+          })
+        }
+    )
+    .then(response => response.json())
+    .then(data => dispatch({ type: UPDATE_CATEGORY_SUCCESS, payload: data}))
+    .catch(error => dispatch({ type: UPDATE_CATEGORY_FAILED, payload: error }))
+  }
+
+}
+
+export const getUpdateCategoryAct =  () => (dispatch, getState) => {
+    const { updatedCategory } = getState();
+    return updatedCategory;
+}
 

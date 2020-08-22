@@ -9,8 +9,10 @@ import {
 	selectDeleteCategoryAct,
 	selectSearchCategoryAct,
 	searchCategoryAct,
+	beforeUpdateCategoryAct,
+	afterUpdateCategoryAct,
 	updateCategoryAct,
-	selectUpdateCategoryAct
+	getUpdateCategoryAct
 } from './CategoryConfigAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,6 +23,7 @@ import './CategoryConfig.css'
 const mapStateToProps = (state) => {
   return {
     categories: state.categoryRdc.categories,
+    beforeUpdateCategory: state.categoryRdc.beforeUpdateCategory,
   	isRefreshNeeded:state.categoryRdc.isRefreshNeeded
   }
 }
@@ -37,12 +40,21 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(deleteCategoryAct(selectDeleteCategoryAct(event))),
 		onSearchCategory:(event) =>
 			dispatch(searchCategoryAct(selectSearchCategoryAct(event))),
-		onUpdateCategory:(event) =>
-			dispatch(updateCategoryAct(selectUpdateCategoryAct(event)))
+		onSelectToUpdateCategory:(event) => 
+			dispatch(beforeUpdateCategoryAct(event)),
+		onUpdateCategory:(event) => 
+			dispatch(updateCategoryAct(afterUpdateCategoryAct(event)))
+
 	}
 }
 
 
+// const mergeProps = (propsFromState, propsFromDispatch, ownProps) => {
+//     return {
+//         onUpdateCategory2:(event) => 
+//         	propsFromDispatch.onUpdateCategory1(propsFromState.updatedCategory)(event)
+//     };
+// };
 
 class CategoryConfig extends Component  {
 
@@ -56,14 +68,19 @@ class CategoryConfig extends Component  {
 		}
 	}
 
+
 	render() {
 
 		const { categories,
 				onCreateCategory,
 				onDeleteCategory,
 				onSearchCategory,
+				onSelectToUpdateCategory,
 				onUpdateCategory
 			} = this.props;
+
+
+
 
 		return (
 			<React.Fragment>
@@ -112,12 +129,18 @@ class CategoryConfig extends Component  {
 					      <td name='blog_category_name'>{category.blog_category_name}</td>
 					      <td name='blog_category_desc'>{category.blog_category_desc}</td>
 					      <td name='seq'>{category.seq}</td>
-					      <td>
-					      	<Button variant="success" size="sm" onClick={onUpdateCategory}>
+					      <td headers='button'>
+					      	<Button variant="success" name="update"
+					      	size="sm" onClick={onSelectToUpdateCategory}>
 					      		Update
 					      	</Button>{" "}
-							<Button variant="danger" size="sm" onClick={onDeleteCategory}>
+							<Button variant="danger" name="delete"
+							size="sm" onClick={onDeleteCategory}>
 								Delete
+							</Button>{" "}
+							<Button className="hidden-button" variant="primary" name="save"
+							size="sm" onClick={onUpdateCategory}>
+								Save the Change
 							</Button>
 						  </td>
 					    </tr>
@@ -134,3 +157,9 @@ class CategoryConfig extends Component  {
 
 // export default CategoryConfig;
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryConfig)
+
+
+
+//The first connect(mapStateToprops) is used to bind the state so that you can pass 
+// agrument( onUpdateCategory, updatedCategory) to mapDispatchToProps
+// export default connect(mapStateToProps)(connect(mapStateToProps, mapDispatchToProps)(CategoryConfig))

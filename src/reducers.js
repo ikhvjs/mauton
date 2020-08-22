@@ -34,6 +34,10 @@ import {
   SEARCH_CATEGORY_PENDING,
   SEARCH_CATEGORY_SUCCESS,
   SEARCH_CATEGORY_FAILED, 
+  SELECT_UPDATE_CATEGORY,
+  UPDATE_CATEGORY_PENDING,
+  UPDATE_CATEGORY_SUCCESS,
+  UPDATE_CATEGORY_FAILED, 
  } from './constants';
 
 
@@ -118,6 +122,7 @@ export const requestBlogRdc = (state=initialStateBlog, action={}) => {
 
 const initialStateCategory= {
   categories: [],
+  beforeUpdateCategory:[],
   isRefreshNeeded:false,
   // isPendingRequestCategory: false,
   // isPendingRequestCategoryByClick: false,
@@ -156,6 +161,14 @@ export const categoryRdc = (state=initialStateCategory, action={}) => {
   case SEARCH_CATEGORY_SUCCESS:
     return Object.assign({}, state, {categories: action.payload, isRefreshNeeded:false})
   case SEARCH_CATEGORY_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case SELECT_UPDATE_CATEGORY:
+    return Object.assign({}, state, {beforeUpdateCategory: action.payload, isRefreshNeeded:false})
+  case UPDATE_CATEGORY_PENDING:
+    return Object.assign({}, state, {})
+  case UPDATE_CATEGORY_SUCCESS:
+    return Object.assign({}, state, {isRefreshNeeded:true})
+  case UPDATE_CATEGORY_FAILED:
     return Object.assign({}, state, {error: action.payload})
   default:
     return state
