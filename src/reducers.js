@@ -38,6 +38,8 @@ import {
   UPDATE_CATEGORY_PENDING,
   UPDATE_CATEGORY_SUCCESS,
   UPDATE_CATEGORY_FAILED, 
+  CANCEL_UPDATE_CATEGORY,
+  CLEAR_SEARCH_CATEGORY
  } from './constants';
 
 
@@ -170,6 +172,10 @@ export const categoryRdc = (state=initialStateCategory, action={}) => {
     return Object.assign({}, state, {isRefreshNeeded:true})
   case UPDATE_CATEGORY_FAILED:
     return Object.assign({}, state, {error: action.payload})
+  case CANCEL_UPDATE_CATEGORY:
+    return Object.assign({}, state, {isRefreshNeeded:true})
+  case CLEAR_SEARCH_CATEGORY:
+    return Object.assign({}, state, {isRefreshNeeded:true})
   default:
     return state
   }

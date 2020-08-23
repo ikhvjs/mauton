@@ -12,7 +12,8 @@ import {
 	beforeUpdateCategoryAct,
 	afterUpdateCategoryAct,
 	updateCategoryAct,
-	getUpdateCategoryAct
+	updateCancelCategoryAct,
+	clearSearchCategoryAct
 } from './CategoryConfigAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -43,7 +44,11 @@ const mapDispatchToProps = (dispatch) => {
 		onSelectToUpdateCategory:(event) => 
 			dispatch(beforeUpdateCategoryAct(event)),
 		onUpdateCategory:(event) => 
-			dispatch(updateCategoryAct(afterUpdateCategoryAct(event)))
+			dispatch(updateCategoryAct(afterUpdateCategoryAct(event))),
+		onCancelUpdateCategory:(event) =>
+			dispatch(updateCancelCategoryAct(event)),
+		onClearSearchCategory:(event) =>
+			dispatch(clearSearchCategoryAct(event))
 
 	}
 }
@@ -76,7 +81,9 @@ class CategoryConfig extends Component  {
 				onDeleteCategory,
 				onSearchCategory,
 				onSelectToUpdateCategory,
-				onUpdateCategory
+				onUpdateCategory,
+				onCancelUpdateCategory,
+				onClearSearchCategory
 			} = this.props;
 
 
@@ -95,8 +102,11 @@ class CategoryConfig extends Component  {
 					<Form.Control size="sm" name="blog_category_desc"
 						type="text" placeholder="Enter Category Description" />
 				</Col>
-				<Col>
+				<Col  xs={0.3}>
 					<Button size="sm" onClick={onSearchCategory}>Search</Button>
+				</Col>
+				<Col  xs={0.3}>
+					<Button size="sm" variant="secondary" onClick={onClearSearchCategory}>Clear</Button>
 				</Col>
 			</Form.Row>
 			<br/>
@@ -110,15 +120,16 @@ class CategoryConfig extends Component  {
 			    </tr>
 			  </thead>
 			  <tbody>
-			  <tr type='new'>
+			  <tr id='new'>
 			      <td><Form.Control  size="sm" name="blog_category_name" 
 			      	type="text" placeholder="Enter Category Name" /></td>
 			      <td><Form.Control  size="sm" name="blog_category_desc" 
 			      	type="text" placeholder="Enter Category Description" /></td>
 			      <td><Form.Control  size="sm" name="seq" 
 			      	type="text" placeholder="Enter seq" /></td>
-			      <td>
-			      	<Button onClick={onCreateCategory} variant="primary" size="sm">
+			      <td headers='button'>
+			      	<Button name="create" onClick={onCreateCategory} 
+			      		variant="primary" size="sm">
 			      		Create
 			      	</Button>
 			      </td>
@@ -141,6 +152,10 @@ class CategoryConfig extends Component  {
 							<Button className="hidden-button" variant="primary" name="save"
 							size="sm" onClick={onUpdateCategory}>
 								Save the Change
+							</Button>{" "}
+							<Button className="hidden-button" variant="secondary" name="cancel"
+							size="sm" onClick={onCancelUpdateCategory}>
+								Cancel
 							</Button>
 						  </td>
 					    </tr>
