@@ -25,7 +25,7 @@ const mapStateToProps = (state) => {
   return {
     categories: state.categoryRdc.categories,
     beforeUpdateCategory: state.categoryRdc.beforeUpdateCategory,
-  	isRefreshNeeded:state.categoryRdc.isRefreshNeeded
+  	isRefreshCategoryNeeded:state.categoryRdc.isRefreshCategoryNeeded
   }
 }
 
@@ -68,7 +68,7 @@ class CategoryConfig extends Component  {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (this.props.isRefreshNeeded === true) {
+		if (this.props.isRefreshCategoryNeeded === true) {
 					this.props.onRequestCategoryByClick();
 		}
 	}
@@ -102,10 +102,10 @@ class CategoryConfig extends Component  {
 					<Form.Control size="sm" name="blog_category_desc"
 						type="text" placeholder="Enter Category Description" />
 				</Col>
-				<Col  xs={0.3}>
+				<Col name='button' xs={0.3}>
 					<Button size="sm" onClick={onSearchCategory}>Search</Button>
 				</Col>
-				<Col  xs={0.3}>
+				<Col name='button' xs={0.3}>
 					<Button size="sm" variant="secondary" onClick={onClearSearchCategory}>Clear</Button>
 				</Col>
 			</Form.Row>
@@ -116,7 +116,7 @@ class CategoryConfig extends Component  {
 			      <th width="20%">Category Name</th>
 			      <th width="50%">Category Description</th>
 			      <th width="10%">Seq</th>
-			      <th width="20%"></th>
+			      <th width="20%">Action</th>
 			    </tr>
 			  </thead>
 			  <tbody>
@@ -151,7 +151,7 @@ class CategoryConfig extends Component  {
 							</Button>{" "}
 							<Button className="hidden-button" variant="primary" name="save"
 							size="sm" onClick={onUpdateCategory}>
-								Save the Change
+								Save
 							</Button>{" "}
 							<Button className="hidden-button" variant="secondary" name="cancel"
 							size="sm" onClick={onCancelUpdateCategory}>
@@ -172,9 +172,3 @@ class CategoryConfig extends Component  {
 
 // export default CategoryConfig;
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryConfig)
-
-
-
-//The first connect(mapStateToprops) is used to bind the state so that you can pass 
-// agrument( onUpdateCategory, updatedCategory) to mapDispatchToProps
-// export default connect(mapStateToProps)(connect(mapStateToProps, mapDispatchToProps)(CategoryConfig))
