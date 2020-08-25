@@ -65,7 +65,29 @@ import {
   UPDATE_TAG_SUCCESS,
   UPDATE_TAG_FAILED, 
   CANCEL_UPDATE_TAG,
-  CLEAR_SEARCH_TAG
+  CLEAR_SEARCH_TAG,
+//Menu
+  REQUEST_MENU1_PENDING,
+  REQUEST_MENU1_SUCCESS,
+  REQUEST_MENU1_FAILED, 
+  REQUEST_MENU1_C_PENDING,
+  REQUEST_MENU1_C_SUCCESS,
+  REQUEST_MENU1_C_FAILED,
+  POST_MENU1_PENDING,
+  POST_MENU1_SUCCESS,
+  POST_MENU1_FAILED,
+  DELETE_MENU1_PENDING,
+  DELETE_MENU1_SUCCESS,
+  DELETE_MENU1_FAILED,
+  SEARCH_MENU1_PENDING,
+  SEARCH_MENU1_SUCCESS,
+  SEARCH_MENU1_FAILED, 
+  SELECT_UPDATE_MENU1,
+  UPDATE_MENU1_PENDING,
+  UPDATE_MENU1_SUCCESS,
+  UPDATE_MENU1_FAILED, 
+  CANCEL_UPDATE_MENU1,
+  CLEAR_SEARCH_MENU1, 
  } from './constants';
 
 
@@ -213,7 +235,7 @@ export const categoryRdc = (state=initialStateCategory, action={}) => {
 const initialStateTag= {
   tags: [],
   beforeUpdateTag:[],
-  isRefreshTagNeeded:false,
+  isRefreshTagNeeded:false
   // isPendingRequestCategory: false,
   // isPendingRequestCategoryByClick: false,
   // isPendingDeleteCategory:false,
@@ -269,7 +291,60 @@ export const tagRdc = (state=initialStateTag, action={}) => {
   }
 }
 
+const initialStateMenu1= {
+  menus1: [],
+  beforeUpdateMenu1:[],
+  isRefreshMenu1Needed:false
+}
 
+export const menu1Rdc = (state=initialStateMenu1, action={}) => {
+  switch (action.type) {
+  case REQUEST_MENU1_PENDING:
+    return Object.assign({}, state, {})
+  case REQUEST_MENU1_SUCCESS:
+    return Object.assign({}, state, {menus1: action.payload, isRefreshMenu1Needed:false})
+  case REQUEST_MENU1_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case REQUEST_MENU1_C_PENDING:
+    return Object.assign({}, state, {})
+  case REQUEST_MENU1_C_SUCCESS:
+    return Object.assign({}, state, {menus1: action.payload, isRefreshMenu1Needed:false})
+  case REQUEST_MENU1_C_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case POST_MENU1_PENDING:
+    return Object.assign({}, state, {})
+  case POST_MENU1_SUCCESS:
+    return Object.assign({}, state, {isRefreshMenu1Needed:true})
+  case POST_MENU1_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case DELETE_MENU1_PENDING:
+    return Object.assign({}, state, {})
+  case DELETE_MENU1_SUCCESS:
+    return Object.assign({}, state, {isRefreshMenu1Needed:true})
+  case DELETE_MENU1_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case SEARCH_MENU1_PENDING:
+    return Object.assign({}, state, {})
+  case SEARCH_MENU1_SUCCESS:
+    return Object.assign({}, state, {menus1: action.payload, isRefreshMenu1Needed:false})
+  case SEARCH_MENU1_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case SELECT_UPDATE_MENU1:
+    return Object.assign({}, state, {beforeUpdateMenu1: action.payload, isRefreshMenu1Needed:false})
+  case UPDATE_MENU1_PENDING:
+    return Object.assign({}, state, {})
+  case UPDATE_MENU1_SUCCESS:
+    return Object.assign({}, state, {isRefreshMenu1Needed:true})
+  case UPDATE_MENU1_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case CANCEL_UPDATE_MENU1:
+    return Object.assign({}, state, {isRefreshMenu1Needed:true})
+  case CLEAR_SEARCH_MENU1:
+    return Object.assign({}, state, {isRefreshMenu1Needed:true})
+  default:
+    return state
+  }
+}
 
 
 const rootReducer = combineReducers({
@@ -277,7 +352,8 @@ const rootReducer = combineReducers({
 	requestSidebarRdc,
 	requestBlogRdc,
   categoryRdc,
-  tagRdc
-});
+  tagRdc,
+  menu1Rdc
+}); 
 
 export default rootReducer;
