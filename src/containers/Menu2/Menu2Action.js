@@ -1,86 +1,105 @@
 import {
-  REQUEST_MENU1_PENDING,
-  REQUEST_MENU1_SUCCESS,
-  REQUEST_MENU1_FAILED,
-  REQUEST_MENU1_C_PENDING,
-  REQUEST_MENU1_C_SUCCESS,
-  REQUEST_MENU1_C_FAILED,
-  POST_MENU1_PENDING,
-  POST_MENU1_SUCCESS,
-  POST_MENU1_FAILED,
-  DELETE_MENU1_PENDING,
-  DELETE_MENU1_SUCCESS,
-  DELETE_MENU1_FAILED,
-  SEARCH_MENU1_PENDING,
-  SEARCH_MENU1_SUCCESS,
-  SEARCH_MENU1_FAILED,
-  SELECT_UPDATE_MENU1,
-  UPDATE_MENU1_PENDING,
-  UPDATE_MENU1_SUCCESS,
-  UPDATE_MENU1_FAILED ,
-  CANCEL_UPDATE_MENU1,
-  CLEAR_SEARCH_MENU1 
+  REQUEST_MENU2_PENDING,
+  REQUEST_MENU2_SUCCESS,
+  REQUEST_MENU2_FAILED,
+  REQUEST_MENU2_C_PENDING,
+  REQUEST_MENU2_C_SUCCESS,
+  REQUEST_MENU2_C_FAILED,
+  POST_MENU2_PENDING,
+  POST_MENU2_SUCCESS,
+  POST_MENU2_FAILED,
+  DELETE_MENU2_PENDING,
+  DELETE_MENU2_SUCCESS,
+  DELETE_MENU2_FAILED,
+  SEARCH_MENU2_PENDING,
+  SEARCH_MENU2_SUCCESS,
+  SEARCH_MENU2_FAILED,
+  SELECT_UPDATE_MENU2,
+  UPDATE_MENU2_PENDING,
+  UPDATE_MENU2_SUCCESS,
+  UPDATE_MENU2_FAILED ,
+  CANCEL_UPDATE_MENU2,
+  CLEAR_SEARCH_MENU2,
+  SELECT_PARENT_MENU_NAME,
+  CLEAR_CREATE_MENU2
  } from '../../constants';
 
-export const requestMenu1Act = () => (dispatch) => {
-  dispatch({ type: REQUEST_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/get', {
+export const requestMenu2Act = () => (dispatch) => {
+  dispatch({ type: REQUEST_MENU2_PENDING })
+  fetch('http://localhost:3001/menu2/get', {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
     .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_MENU1_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_MENU1_FAILED, payload: error }))
+    .then(data => dispatch({ type: REQUEST_MENU2_SUCCESS, payload: data }))
+    .catch(error => dispatch({ type: REQUEST_MENU2_FAILED, payload: error }))
 }
 
-export const requestMenu1ByClickAct = () => (dispatch) => {
-  dispatch({ type: REQUEST_MENU1_C_PENDING })
-  fetch('http://localhost:3001/menu1/get', {
+export const requestMenu2ByClickAct = () => (dispatch) => {
+  dispatch({ type: REQUEST_MENU2_C_PENDING })
+  fetch('http://localhost:3001/menu2/get', {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
     .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_MENU1_C_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_MENU1_C_FAILED, payload: error }))
+    .then(data => dispatch({ type: REQUEST_MENU2_C_SUCCESS, payload: data }))
+    .catch(error => dispatch({ type: REQUEST_MENU2_C_FAILED, payload: error }))
 }
 
-export const selectCreateMenu1Act = (event) => {
-  const menu1 ={};
+export const selectCreateMenu2Act = (event) => {
+  const menu2 ={};
+  const selectedParentMenuID = event.target.parentNode.parentNode.querySelector("td[id]").id;
   const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
+
+
+  Object.assign(menu2,  {"parent_menu_id": selectedParentMenuID})
   childrenNode.forEach((node)=>{
-    Object.assign(menu1,  {[node.name]: node.value})
+    Object.assign(menu2,  {[node.name]: node.value})
     node.value = "";
+    node.defaultValue  = "";
   })
-  
-  return menu1;
+  console.log('create menu2',menu2);
+  return menu2;
 }
 
-export const postMenu1Act = (menu1) => (dispatch) =>{
-  dispatch({ type: POST_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/create', {
+export const postMenu2Act = (menu2) => (dispatch) =>{
+  dispatch({ type: POST_MENU2_PENDING })
+  fetch('http://localhost:3001/menu2/create', {
         method: 'post',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
         body: JSON.stringify({
-          menu_name: menu1.menu_name,
-          menu_path: menu1.menu_path,
-          seq:menu1.seq
+          menu_name: menu2.menu_name,
+          menu_path: menu2.menu_path,
+          seq:menu2.seq,
+          parent_menu_id:menu2.parent_menu_id
         })
       }
   )
   .then(response => response.json())
-  .then(data => dispatch({ type: POST_MENU1_SUCCESS }))
-  .catch(error => dispatch({ type: POST_MENU1_FAILED, payload: error }))
+  .then(data => dispatch({ type: POST_MENU2_SUCCESS }))
+  .catch(error => dispatch({ type: POST_MENU2_FAILED, payload: error }))
 
 }
 
-export const selectDeleteMenu1Act = (event) => {
+export const clearCreateMenu2Act = (event) => {
+  const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
+
+  childrenNode.forEach((node)=>{
+    node.value = "";
+    node.defaultValue  = "";
+  });
+
+  return { type: CLEAR_CREATE_MENU2 };
+}
+
+export const selectDeleteMenu2Act = (event) => {
   return event.target.parentNode.parentNode.id;
 }
 
-export const deleteMenu1Act = (menuID) => (dispatch) =>{
-  dispatch({ type: DELETE_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/delete', {
+export const deleteMenu2Act = (menuID) => (dispatch) =>{
+  dispatch({ type: DELETE_MENU2_PENDING })
+  fetch('http://localhost:3001/menu2/delete', {
         method: 'delete',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -90,26 +109,25 @@ export const deleteMenu1Act = (menuID) => (dispatch) =>{
       }
   )
   .then(response => response.json())
-  .then(data => dispatch({ type: DELETE_MENU1_SUCCESS}))
-  .catch(error => dispatch({ type: DELETE_MENU1_FAILED, payload: error }))
+  .then(data => dispatch({ type: DELETE_MENU2_SUCCESS}))
+  .catch(error => dispatch({ type: DELETE_MENU2_FAILED, payload: error }))
 }
 
 
-export const selectSearchMenu1Act = (event) => {
-  const menu1 ={};
+export const selectSearchMenu2Act = (event) => {
+  const menu2 ={};
   const childrenNode = event.target.parentNode.parentNode.querySelectorAll("div > input.form-control");
   // console.log('selectSearchCategoryAct childrenNode',childrenNode);
   childrenNode.forEach((node)=>{
-    Object.assign(menu1,  {[node.name]: node.value})
+    Object.assign(menu2,  {[node.name]: node.value})
   })
   // console.log('selectSearchCategoryAct category',category);
-  return menu1;
-
+  return menu2;
 }
 
-export const searchMenu1Act = (menu) => (dispatch) =>{
-  dispatch({ type: SEARCH_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/search', {
+export const searchMenu2Act = (menu) => (dispatch) =>{
+  dispatch({ type: SEARCH_MENU2_PENDING })
+  fetch('http://localhost:3001/menu2/search', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -120,8 +138,8 @@ export const searchMenu1Act = (menu) => (dispatch) =>{
       }
   )
   .then(response => response.json())
-  .then(data => dispatch({ type: SEARCH_MENU1_SUCCESS, payload: data}))
-  .catch(error => dispatch({ type: SEARCH_MENU1_FAILED, payload: error }))
+  .then(data => dispatch({ type: SEARCH_MENU2_SUCCESS, payload: data}))
+  .catch(error => dispatch({ type: SEARCH_MENU2_FAILED, payload: error }))
 }
 
 
@@ -180,8 +198,8 @@ const toggleDisplayButton = (selectedNode) => {
 
 
 
-export const beforeUpdateMenu1Act = (event) => {
-  const beforeUpdateMenu1 ={};
+export const beforeUpdateMenu2Act = (event) => {
+  const beforeUpdateMenu2 ={};
 
   //declare a input field
   const inputTag = document.createElement("input");
@@ -191,7 +209,7 @@ export const beforeUpdateMenu1Act = (event) => {
 
   const selectedNode = event.target.parentNode.parentNode;
   const selectedMenuID = selectedNode.id;
-  Object.assign(beforeUpdateMenu1,  {"menu_id": selectedMenuID});
+  Object.assign(beforeUpdateMenu2,  {"menu_id": selectedMenuID});
   // console.log('beforeUpdateCategoryAct selectedCategoryID',selectedCategoryID);
 
   const tdNode = selectedNode.querySelectorAll("td[name]");
@@ -209,23 +227,23 @@ export const beforeUpdateMenu1Act = (event) => {
     inputTagClone.value = nodeValue;
     node.innerHTML="";
     node.appendChild(inputTagClone);
-    Object.assign(beforeUpdateMenu1,  {[nodeAttribute]: nodeValue})
+    Object.assign(beforeUpdateMenu2,  {[nodeAttribute]: nodeValue})
   })
 
   toggleDisplayButton(selectedNode);
 
   // console.log('beforeUpdateCategoryAct beforeUpdateCategory',beforeUpdateCategory);
-  return {type: SELECT_UPDATE_MENU1, payload: beforeUpdateMenu1 };
+  return {type: SELECT_UPDATE_MENU2, payload: beforeUpdateMenu2 };
 
 }
 
 
-export const afterUpdateMenu1Act = (event) =>{
-  const afterUpdateMenu1 ={};
+export const afterUpdateMenu2Act = (event) =>{
+  const afterUpdateMenu2 ={};
   const selectedNode=event.target.parentNode.parentNode;
   const menuID=selectedNode.id;
 
-  Object.assign(afterUpdateMenu1,  {"menu_id": menuID});
+  Object.assign(afterUpdateMenu2,  {"menu_id": menuID});
   // console.log('afterUpdateCategoryAct categoryID',categoryID);
 
   const tdNode = selectedNode.querySelectorAll("td[name]");
@@ -235,7 +253,7 @@ export const afterUpdateMenu1Act = (event) =>{
     let inputNode = node.querySelector("input");
     let nodeValue = inputNode.value;
     let nodeAttribute = inputNode.getAttribute('name');
-    Object.assign(afterUpdateMenu1,  {[nodeAttribute]: nodeValue})
+    Object.assign(afterUpdateMenu2,  {[nodeAttribute]: nodeValue})
 
     node.removeChild(inputNode);
     node.innerHTML = nodeValue;
@@ -246,11 +264,11 @@ export const afterUpdateMenu1Act = (event) =>{
 
   
   // console.log('afterUpdateCategoryAct afterUpdateCategory',afterUpdateCategory);
-  return afterUpdateMenu1;
+  return afterUpdateMenu2;
 
 }
 
-export const updateCancelMenu1Act =(event) => {
+export const updateCancelMenu2Act =(event) => {
   const selectedNode = event.target.parentNode.parentNode;
 
   const tdNode = selectedNode.querySelectorAll("td[name]");
@@ -266,37 +284,37 @@ export const updateCancelMenu1Act =(event) => {
 
   toggleDisplayButton(selectedNode);
 
-  return ({ type: CANCEL_UPDATE_MENU1 });
+  return ({ type: CANCEL_UPDATE_MENU2 });
 }
 
 
-export const updateMenu1Act = (afterUpdateMenu1)  => (dispatch, getState) =>{
+export const updateMenu2Act = (afterUpdateMenu2)  => (dispatch, getState) =>{
   
-  const {beforeUpdateMenu1} = getState().menuRdc;
+  const {beforeUpdateMenu2} = getState().menuRdc;
 
-  if (JSON.stringify(afterUpdateMenu1) !==
-    JSON.stringify(beforeUpdateMenu1)) {
-    dispatch({ type: UPDATE_MENU1_PENDING })
-    fetch('http://localhost:3001/menu1/update', {
+  if (JSON.stringify(afterUpdateMenu2) !==
+    JSON.stringify(beforeUpdateMenu2)) {
+    dispatch({ type: UPDATE_MENU2_PENDING })
+    fetch('http://localhost:3001/menu2/update', {
           method: 'PUT',
           headers: {'Content-Type': 'application/json',
                     'Accept': 'application/json'},
           body: JSON.stringify({
-            menu_id:afterUpdateMenu1.menu_id,
-            menu_name: afterUpdateMenu1.menu_name,
-            menu_path: afterUpdateMenu1.menu_path,
-            seq:afterUpdateMenu1.seq
+            menu_id:afterUpdateMenu2.menu_id,
+            menu_name: afterUpdateMenu2.menu_name,
+            menu_path: afterUpdateMenu2.menu_path,
+            seq:afterUpdateMenu2.seq
           })
         }
     )
     .then(response => response.json())
-    .then(data => dispatch({ type: UPDATE_MENU1_SUCCESS, payload: data}))
-    .catch(error => dispatch({ type: UPDATE_MENU1_FAILED, payload: error }))
+    .then(data => dispatch({ type: UPDATE_MENU2_SUCCESS, payload: data}))
+    .catch(error => dispatch({ type: UPDATE_MENU2_FAILED, payload: error }))
   }
 
 }
 
-export const clearSearchMenu1Act = (event) => {
+export const clearSearchMenu2Act = (event) => {
   const selectedNode = event.target.parentNode.parentNode;
   const inputNode = selectedNode.querySelectorAll('div > input[name]');
 
@@ -304,7 +322,12 @@ export const clearSearchMenu1Act = (event) => {
     node.value="";
   })
 
-  return { type: CLEAR_SEARCH_MENU1 };
+  return { type: CLEAR_SEARCH_MENU2 };
 
 }
+
+export const selectParentMenuNameAct = (event) =>{
+  return { type: SELECT_PARENT_MENU_NAME };
+}
+
 

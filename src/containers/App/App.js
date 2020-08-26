@@ -82,7 +82,8 @@ class App extends Component {
 				isPendingBlogByClick,
 				isSingleBlogRequest,
 				isPendingSingleBlog,
-				onRequestSingleBlogByClick
+				onRequestSingleBlogByClick,
+				onRequestTopbar
 			} = this.props;
 
 						    
@@ -118,7 +119,7 @@ class App extends Component {
 								})
 				          	}
 				          	<Route path="/dashboard">
-				           		<Dashboard />
+				           		<Dashboard onRequestTopbar={onRequestTopbar} />
 				          	</Route>
 				          	<Route path="*">
 					            <Home />

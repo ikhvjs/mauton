@@ -18,13 +18,14 @@ import {
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Table, Form, Button, Col} from "react-bootstrap";
-import './Menu1.css'
+// import './Menu1.css'
 
 const mapStateToProps = (state) => {
   return {
-  	menus1: state.menu1Rdc.menus1,
-    beforeUpdateMenu1: state.menu1Rdc.beforeUpdateMenu1,
-  	isRefreshMenu1Needed:state.menu1Rdc.isRefreshMenu1Needed
+  	menus1: state.menuRdc.menus1,
+    beforeUpdateMenu1: state.menuRdc.beforeUpdateMenu1,
+  	isRefreshMenu1Needed:state.menuRdc.isRefreshMenu1Needed,
+  	isRefreshTopbarNeeded:state.menuRdc.isRefreshTopbarNeeded
   }
 }
 
@@ -59,8 +60,13 @@ class Menu1 extends Component  {
 
 	componentDidUpdate(prevProps) {
 		if (this.props.isRefreshMenu1Needed === true) {
-					this.props.onRequestMenu1ByClick();
+			this.props.onRequestMenu1ByClick();
+
+			if(this.props.isRefreshTopbarNeeded === true) {
+				this.props.onRequestTopbar();
+			}
 		}
+		
 	}
 
 	render() {
@@ -95,7 +101,7 @@ class Menu1 extends Component  {
 					</Col>
 				</Form.Row>
 				<br/>
-				<Table striped  hover size="sm" className="menu-table">
+				<Table striped  hover size="sm" className="menu1-table">
 				  <thead>
 				    <tr>
 				      <th width="20%">Menu Name</th>

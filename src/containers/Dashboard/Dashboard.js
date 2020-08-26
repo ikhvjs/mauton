@@ -15,7 +15,7 @@ import { Col } from "react-bootstrap";
 import './Dashboard.css';
 
 
-const Dashboard = () => {
+const Dashboard = ({onRequestTopbar}) => {
 	const match = useRouteMatch();
 	return (
 	    <React.Fragment>
@@ -28,7 +28,7 @@ const Dashboard = () => {
 			          <h3>Please select a topic.</h3>
 			        </Route>
 			        <Route path={`${match.path}/menu`}>
-			        	<MenuConfig />
+			        	<MenuConfig onRequestTopbar={onRequestTopbar} />
 			        </Route>
 			        <Route path={`${match.path}/category`}>
 			        	<CategoryConfig/>
