@@ -1,12 +1,13 @@
 import React , { Component } from 'react';
 import { connect } from 'react-redux';
 import { 
-	requestParentMenuAct,
+	requestParentMenuModalAct,
 	closeParentMenuModalAct,
-	searchParentMenuAct,
-	selectSearchParentMenuAct,
-	clearSearchParentMenuAct,
-	selectParentMenuAct
+	searchParentMenuModalAct,
+	selectSearchParentMenuModalAct,
+	clearSearchParentMenuModalAct,
+	selectCreateParentMenuModalAct,
+	selectUpdateParentMenuModalAct
 } from './ParentMenuModalAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,28 +23,30 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onRequestParentMenu:()=>
-			dispatch(requestParentMenuAct()),
+		onRequestParentMenuModal:()=>
+			dispatch(requestParentMenuModalAct()),
 		onCloseParentMenuModal:() =>
 			dispatch(closeParentMenuModalAct()),
-		onSearchParentMenu:(event)=>
-			dispatch(searchParentMenuAct(selectSearchParentMenuAct(event))),
-		onClearSearchParentMenu:(event) =>
-			dispatch(clearSearchParentMenuAct(event)),
-		onSelectParentMenu:(event)=>
-			dispatch(selectParentMenuAct(event))
-	}
+		onSearchParentMenuModal:(event)=>
+			dispatch(searchParentMenuModalAct(selectSearchParentMenuModalAct(event))),
+		onClearSearchParentMenuModal:(event) =>
+			dispatch(clearSearchParentMenuModalAct(event)),
+		onSelectCreateParentMenuModal:(event)=>
+			dispatch(selectCreateParentMenuModalAct(event)),
+		onSelectUpdateParentMenuModal:(event)=>
+			dispatch(selectUpdateParentMenuModalAct(event))
+	}	
 }
 
 class ParentMenuModal extends Component  {
 
 	componentDidMount() {
-		this.props.onRequestParentMenu();
+		this.props.onRequestParentMenuModal();
 	}
 
 	componentDidUpdate(prevProps) {
 		if (this.props.isRefreshParentMenuNeeded === true) {
-			this.props.onRequestParentMenu();
+			this.props.onRequestParentMenuModal();
 		}
 	}
 
@@ -51,9 +54,11 @@ class ParentMenuModal extends Component  {
 		const { isShowParentMenuModal,
 				onCloseParentMenuModal,
 				parentMenus,
-				onSearchParentMenu,
-				onClearSearchParentMenu,
-				onSelectParentMenu
+				onSearchParentMenuModal,
+				onClearSearchParentMenuModal,
+				onSelectCreateParentMenuModal,
+				isCreateActionMenu2,
+				onSelectUpdateParentMenuModal
 			} = this.props;
 
 		return (
@@ -72,11 +77,11 @@ class ParentMenuModal extends Component  {
 								type="text" placeholder="Enter Menu Path" />
 						</Col>
 						<Col name='button' xs={0.3}>   
-							<Button size="sm" onClick={onSearchParentMenu}>Search</Button>
+							<Button size="sm" onClick={onSearchParentMenuModal}>Search</Button>
 						</Col>
 						<Col name='button' xs={0.3}>
 							<Button size="sm" variant="secondary" 
-								onClick={onClearSearchParentMenu}>
+								onClick={onClearSearchParentMenuModal}>
 								Clear
 							</Button>
 						</Col>
@@ -99,7 +104,10 @@ class ParentMenuModal extends Component  {
 							      <td name='menu_path'>{menu.menu_path}</td>
 							      <td name='seq'>{menu.seq}</td>
 							      <td headers='button'>
-									<Button name="select" size="sm" onClick={onSelectParentMenu} >
+									<Button name="select" size="sm" 
+										onClick={isCreateActionMenu2?
+											onSelectCreateParentMenuModal
+											:onSelectUpdateParentMenuModal} >
 										Select
 									</Button>
 								  </td>

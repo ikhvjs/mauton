@@ -20,8 +20,10 @@ import {
   UPDATE_MENU2_FAILED ,
   CANCEL_UPDATE_MENU2,
   CLEAR_SEARCH_MENU2,
-  SELECT_PARENT_MENU_NAME,
-  CLEAR_CREATE_MENU2
+  SELECT_CREATE_PARENT_MENU_NAME,
+  SELECT_UPDATE_PARENT_MENU_NAME,
+  CLEAR_CREATE_MENU2,
+  SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME
  } from '../../constants';
 
 export const requestMenu2Act = () => (dispatch) => {
@@ -133,7 +135,8 @@ export const searchMenu2Act = (menu) => (dispatch) =>{
                   'Accept': 'application/json'},
         body: JSON.stringify({
           menu_name: menu.menu_name,
-          menu_path: menu.menu_path
+          menu_path: menu.menu_path,
+          parent_menu_name:menu.parent_menu_name
         })
       }
   )
@@ -143,11 +146,12 @@ export const searchMenu2Act = (menu) => (dispatch) =>{
 }
 
 
-const toggleDisplayButton = (selectedNode) => {
+const toggleDisplayMenu2Button = (selectedNode) => {
 
-  const searchNode = selectedNode.parentNode.parentNode.parentNode.querySelectorAll('div.form-row > div[name="button"]');
+  const searchNode = selectedNode.parentNode.parentNode.parentNode
+    .querySelectorAll('div.form-row > div[name="button"]');
 
-   //toggle the display of search Category Button 
+   //toggle the display of search Menu2 Button 
   searchNode.forEach((node)=>{
     let searchButtonNode = node.querySelector('button');
     searchButtonNode.classList.contains('hidden-button')?
@@ -155,22 +159,30 @@ const toggleDisplayButton = (selectedNode) => {
       searchButtonNode.classList.add('hidden-button');
   })
 
-  const selectedCategoryID = selectedNode.id;
+  const selectedMenuID = selectedNode.id;
+  
+  
   const notSelectedNodes =  selectedNode.parentNode
-    .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedCategoryID)}])`);
-  // console.log('beforeUpdateCategoryAct notSelectedNodes',notSelectedNodes);
+    .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedMenuID)}])`);
 
-  const createCategoryInputNode = selectedNode.parentNode
+  const createMenuInputNode = selectedNode.parentNode
     .querySelector('tr[id="new"]').querySelectorAll('td > input');
 
-  const selectedButtonNodes = selectedNode.querySelector("td[headers]").querySelectorAll('button[name]');
-  // console.log('beforeUpdateCategoryAct selectedButtonNodes',selectedButtonNodes);
+  const selectedButtonNodes = selectedNode
+    .querySelector("td[headers]").querySelectorAll('button[name]');
+  
+  // const selectedParentMenuInput = selectedNode
+  //   .querySelector('td[name="parent_menu_name"] > input');
 
-  //toggle the display of input of create Category record 
-  createCategoryInputNode.forEach((node)=>{
+  //toggle the display of input of create Menu2 record 
+  createMenuInputNode.forEach((node)=>{
     node.disabled ? (node.disabled = false) : (node.disabled = true);
   })
 
+  //toggle the display of parent menu input of  Menu2  record 
+  // selectedParentMenuInput.classList.contains('hidden-button')?
+  //   selectedParentMenuInput.classList.remove('hidden-button'):
+  //     selectedParentMenuInput.classList.add('hidden-button');
 
 //toggle all the non-selected node 
   notSelectedNodes.forEach((notSelectedNode)=>{
@@ -201,23 +213,19 @@ const toggleDisplayButton = (selectedNode) => {
 export const beforeUpdateMenu2Act = (event) => {
   const beforeUpdateMenu2 ={};
 
-  //declare a input field
+  //dump a input field
   const inputTag = document.createElement("input");
   inputTag.classList.add("form-control");
   inputTag.classList.add("form-control-sm");
 
-
   const selectedNode = event.target.parentNode.parentNode;
   const selectedMenuID = selectedNode.id;
   Object.assign(beforeUpdateMenu2,  {"menu_id": selectedMenuID});
-  // console.log('beforeUpdateCategoryAct selectedCategoryID',selectedCategoryID);
 
   const tdNode = selectedNode.querySelectorAll("td[name]");
-  // console.log('beforeUpdateCategoryAct tdNode',tdNode);
 
-  
-  
-  //Add inline edit when click 'Update' Button
+
+    //Add inline edit when click 'Update' Button
   tdNode.forEach((node)=>{
     let nodeValue = node.innerHTML;
     let nodeAttribute = node.getAttribute('name');
@@ -225,14 +233,17 @@ export const beforeUpdateMenu2Act = (event) => {
 
     inputTagClone.setAttribute('name', nodeAttribute);
     inputTagClone.value = nodeValue;
-    node.innerHTML="";
-    node.appendChild(inputTagClone);
+    if (nodeAttribute!=='parent_menu_name') {
+      node.innerHTML="";
+      node.appendChild(inputTagClone);
+    }
+    
     Object.assign(beforeUpdateMenu2,  {[nodeAttribute]: nodeValue})
   })
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayMenu2Button(selectedNode);
 
-  // console.log('beforeUpdateCategoryAct beforeUpdateCategory',beforeUpdateCategory);
+  console.log('beforeUpdate ',beforeUpdateMenu2);
   return {type: SELECT_UPDATE_MENU2, payload: beforeUpdateMenu2 };
 
 }
@@ -260,7 +271,7 @@ export const afterUpdateMenu2Act = (event) =>{
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayMenu2Button(selectedNode);
 
   
   // console.log('afterUpdateCategoryAct afterUpdateCategory',afterUpdateCategory);
@@ -268,10 +279,10 @@ export const afterUpdateMenu2Act = (event) =>{
 
 }
 
-export const updateCancelMenu2Act =(event) => {
+export const updateCancelMenu2Act =(event) => (getState) => {
   const selectedNode = event.target.parentNode.parentNode;
-
-  const tdNode = selectedNode.querySelectorAll("td[name]");
+  
+  const tdNode = selectedNode.querySelectorAll('td[name]:not([name="parent_menu_name"])');
 
   tdNode.forEach((node)=>{
     let inputNode = node.querySelector("input");
@@ -282,7 +293,7 @@ export const updateCancelMenu2Act =(event) => {
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayMenu2Button(selectedNode);
 
   return ({ type: CANCEL_UPDATE_MENU2 });
 }
@@ -326,8 +337,15 @@ export const clearSearchMenu2Act = (event) => {
 
 }
 
-export const selectParentMenuNameAct = (event) =>{
-  return { type: SELECT_PARENT_MENU_NAME };
+export const selectCreateParentMenuNameAct = () =>{
+  return { type: SELECT_CREATE_PARENT_MENU_NAME };
+}
+
+export const selectUpdateParentMenuNameAct = (event) =>{
+  return { type: SELECT_UPDATE_PARENT_MENU_NAME };
 }
 
 
+export const setNotAllowUpdateParentMenuNameAct = () =>{
+  return { type: SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME };
+}

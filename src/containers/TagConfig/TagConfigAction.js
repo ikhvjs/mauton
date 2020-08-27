@@ -123,11 +123,11 @@ export const searchTagAct = (tag) => (dispatch) =>{
 }
 
 
-const toggleDisplayButton = (selectedNode) => {
+const toggleDisplayTagButton = (selectedNode) => {
 
   const searchNode = selectedNode.parentNode.parentNode.parentNode.querySelectorAll('div.form-row > div[name="button"]');
 
-   //toggle the display of search Category Button 
+   //toggle the display of search Tag Button 
   searchNode.forEach((node)=>{
     let searchButtonNode = node.querySelector('button');
     searchButtonNode.classList.contains('hidden-button')?
@@ -135,19 +135,19 @@ const toggleDisplayButton = (selectedNode) => {
       searchButtonNode.classList.add('hidden-button');
   })
 
-  const selectedCategoryID = selectedNode.id;
+  const selectedTagID = selectedNode.id;
   const notSelectedNodes =  selectedNode.parentNode
-    .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedCategoryID)}])`);
+    .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedTagID)}])`);
   // console.log('beforeUpdateCategoryAct notSelectedNodes',notSelectedNodes);
 
-  const createCategoryInputNode = selectedNode.parentNode
+  const createTagInputNode = selectedNode.parentNode
     .querySelector('tr[id="new"]').querySelectorAll('td > input');
 
   const selectedButtonNodes = selectedNode.querySelector("td[headers]").querySelectorAll('button[name]');
   // console.log('beforeUpdateCategoryAct selectedButtonNodes',selectedButtonNodes);
 
-  //toggle the display of input of create Category record 
-  createCategoryInputNode.forEach((node)=>{
+  //toggle the display of input of create Tag record 
+  createTagInputNode.forEach((node)=>{
     node.disabled ? (node.disabled = false) : (node.disabled = true);
   })
 
@@ -210,7 +210,7 @@ export const beforeUpdateTagAct = (event) => {
     Object.assign(beforeUpdateTag,  {[nodeAttribute]: nodeValue})
   })
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayTagButton(selectedNode);
 
   // console.log('beforeUpdateCategoryAct beforeUpdateCategory',beforeUpdateCategory);
   return {type: SELECT_UPDATE_TAG, payload: beforeUpdateTag };
@@ -240,7 +240,7 @@ export const afterUpdateTagAct = (event) =>{
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayTagButton(selectedNode);
 
   
   // console.log('afterUpdateCategoryAct afterUpdateCategory',afterUpdateCategory);
@@ -262,7 +262,7 @@ export const updateCancelTagAct =(event) => {
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayTagButton(selectedNode);
 
   return ({ type: CANCEL_UPDATE_TAG });
 }

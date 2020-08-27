@@ -125,11 +125,11 @@ export const searchMenu1Act = (menu) => (dispatch) =>{
 }
 
 
-const toggleDisplayButton = (selectedNode) => {
+const toggleDisplayMenu1Button = (selectedNode) => {
 
   const searchNode = selectedNode.parentNode.parentNode.parentNode.querySelectorAll('div.form-row > div[name="button"]');
 
-   //toggle the display of search Category Button 
+   //toggle the display of search Menu1 Button 
   searchNode.forEach((node)=>{
     let searchButtonNode = node.querySelector('button');
     searchButtonNode.classList.contains('hidden-button')?
@@ -137,19 +137,19 @@ const toggleDisplayButton = (selectedNode) => {
       searchButtonNode.classList.add('hidden-button');
   })
 
-  const selectedCategoryID = selectedNode.id;
+  const selectedMenuID = selectedNode.id;
   const notSelectedNodes =  selectedNode.parentNode
-    .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedCategoryID)}])`);
+    .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedMenuID)}])`);
   // console.log('beforeUpdateCategoryAct notSelectedNodes',notSelectedNodes);
 
-  const createCategoryInputNode = selectedNode.parentNode
+  const createMenuInputNode = selectedNode.parentNode
     .querySelector('tr[id="new"]').querySelectorAll('td > input');
 
   const selectedButtonNodes = selectedNode.querySelector("td[headers]").querySelectorAll('button[name]');
   // console.log('beforeUpdateCategoryAct selectedButtonNodes',selectedButtonNodes);
 
-  //toggle the display of input of create Category record 
-  createCategoryInputNode.forEach((node)=>{
+  //toggle the display of input of create Menu1 record 
+  createMenuInputNode.forEach((node)=>{
     node.disabled ? (node.disabled = false) : (node.disabled = true);
   })
 
@@ -212,7 +212,7 @@ export const beforeUpdateMenu1Act = (event) => {
     Object.assign(beforeUpdateMenu1,  {[nodeAttribute]: nodeValue})
   })
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayMenu1Button(selectedNode);
 
   // console.log('beforeUpdateCategoryAct beforeUpdateCategory',beforeUpdateCategory);
   return {type: SELECT_UPDATE_MENU1, payload: beforeUpdateMenu1 };
@@ -242,7 +242,7 @@ export const afterUpdateMenu1Act = (event) =>{
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayMenu1Button(selectedNode);
 
   
   // console.log('afterUpdateCategoryAct afterUpdateCategory',afterUpdateCategory);
@@ -264,7 +264,7 @@ export const updateCancelMenu1Act =(event) => {
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayMenu1Button(selectedNode);
 
   return ({ type: CANCEL_UPDATE_MENU1 });
 }

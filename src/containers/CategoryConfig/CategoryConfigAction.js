@@ -125,7 +125,7 @@ export const searchCategoryAct = (category) => (dispatch) =>{
 }
 
 
-const toggleDisplayButton = (selectedNode) => {
+const toggleDisplayCategoryButton = (selectedNode) => {
 
   const searchNode = selectedNode.parentNode.parentNode.parentNode.querySelectorAll('div.form-row > div[name="button"]');
 
@@ -212,7 +212,7 @@ export const beforeUpdateCategoryAct = (event) => {
     Object.assign(beforeUpdateCategory,  {[nodeAttribute]: nodeValue})
   })
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayCategoryButton(selectedNode);
 
   // console.log('beforeUpdateCategoryAct beforeUpdateCategory',beforeUpdateCategory);
   return {type: SELECT_UPDATE_CATEGORY, payload: beforeUpdateCategory };
@@ -242,7 +242,7 @@ export const afterUpdateCategoryAct = (event) =>{
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayCategoryButton(selectedNode);
 
   
   // console.log('afterUpdateCategoryAct afterUpdateCategory',afterUpdateCategory);
@@ -264,7 +264,7 @@ export const updateCancelCategoryAct =(event) => {
 
   });
 
-  toggleDisplayButton(selectedNode);
+  toggleDisplayCategoryButton(selectedNode);
 
   return ({ type: CANCEL_UPDATE_CATEGORY });
 }

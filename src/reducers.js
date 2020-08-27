@@ -111,7 +111,8 @@ import {
   CANCEL_UPDATE_MENU2,
   CLEAR_SEARCH_MENU2,
   SELECT_MENU_LEVEL,
-  SELECT_PARENT_MENU_NAME,
+  SELECT_CREATE_PARENT_MENU_NAME,
+  SELECT_UPDATE_PARENT_MENU_NAME,
   CLOSE_PARENT_MENU_MODAL,
   REQUEST_PARENT_MENU_PENDING,
   REQUEST_PARENT_MENU_SUCCESS,
@@ -120,8 +121,10 @@ import {
   SEARCH_PARENT_MENU_SUCCESS,
   SEARCH_PARENT_MENU_FAILED,
   CLEAR_SEARCH_PARENT_MENU,
-  SELECT_PARENT_MENU,
-  CLEAR_CREATE_MENU2
+  SELECT_CREATE_PARENT_MENU,
+  SELECT_UPDATE_PARENT_MENU,
+  CLEAR_CREATE_MENU2,
+  SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME
  } from './constants';
 
 
@@ -337,7 +340,10 @@ const initialStateMenu= {
   isShowParentMenuModal:false,
   parentMenus:[],
   isRefreshParentMenuNeeded: false,
-  createParentMenu:[]
+  createParentMenu:[],
+  updateParentMenu:[],
+  isAllowUpdateParentMenuName:false,
+  isCreateActionMenu2:false
 }
 
 export const menuRdc = (state=initialStateMenu, action={}) => {
@@ -410,7 +416,7 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case DELETE_MENU2_PENDING:
     return Object.assign({}, state, {})
   case DELETE_MENU2_SUCCESS:
-    return Object.assign({}, state, {isRefreshMenu1Needed:true})
+    return Object.assign({}, state, {isRefreshMenu2Needed:true})
   case DELETE_MENU2_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case SEARCH_MENU2_PENDING:
@@ -420,7 +426,8 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case SEARCH_MENU2_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case SELECT_UPDATE_MENU2:
-    return Object.assign({}, state, {beforeUpdateMenu2: action.payload, isRefreshMenu2Needed:false})
+    return Object.assign({}, state, 
+      {beforeUpdateMenu2: action.payload, isRefreshMenu2Needed:false, isAllowUpdateParentMenuName:true})
   case UPDATE_MENU2_PENDING:
     return Object.assign({}, state, {})
   case UPDATE_MENU2_SUCCESS:
@@ -430,9 +437,12 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case CANCEL_UPDATE_MENU2:
     return Object.assign({}, state, {isRefreshMenu2Needed:true})
   case CLEAR_SEARCH_MENU2:
-    return Object.assign({}, state, {isRefreshMenu1Needed:true})
-  case SELECT_PARENT_MENU_NAME:
-    return Object.assign({}, state, {isShowParentMenuModal:true})
+    return Object.assign({}, state, {isRefreshMenu2Needed:true})
+  case SELECT_CREATE_PARENT_MENU_NAME:
+    return Object.assign({}, state, {isShowParentMenuModal:true, isCreateActionMenu2:true})
+  case SELECT_UPDATE_PARENT_MENU_NAME:
+    return Object.assign({}, state, 
+      {isShowParentMenuModal:true, isCreateActionMenu2:false})
   case CLOSE_PARENT_MENU_MODAL:
     return Object.assign({}, state, {isShowParentMenuModal:false})
 //PARENT MENU MODAL
@@ -450,10 +460,16 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
     return Object.assign({}, state, {error: action.payload})
   case CLEAR_SEARCH_PARENT_MENU:
     return Object.assign({}, state, {isRefreshParentMenuNeeded:true})
-  case SELECT_PARENT_MENU:
-    return Object.assign({}, state, {createParentMenu:action.payload, isShowParentMenuModal:false})
+  case SELECT_CREATE_PARENT_MENU:
+    return Object.assign({}, state, 
+      {createParentMenu:action.payload, isShowParentMenuModal:false})
+  case SELECT_UPDATE_PARENT_MENU:
+    return Object.assign({}, state, 
+      {updateParentMenu:action.payload, isShowParentMenuModal:false})
   case CLEAR_CREATE_MENU2:
     return Object.assign({}, state, {})
+  case SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME:
+    return Object.assign({}, state, {isAllowUpdateParentMenuName:false})
   default:
     return state
   }

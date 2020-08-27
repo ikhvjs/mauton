@@ -15,7 +15,9 @@ import {
 	updateMenu2Act,
 	updateCancelMenu2Act,
 	clearSearchMenu2Act,
-	selectParentMenuNameAct
+	selectCreateParentMenuNameAct,
+	selectUpdateParentMenuNameAct,
+	setNotAllowUpdateParentMenuNameAct
 } from './Menu2Action';
 
 import ParentMenuModal from '../../components/ParentMenuModal/ParentMenuModal';
@@ -30,7 +32,10 @@ const mapStateToProps = (state) => {
   	isShowParentMenuModal: state.menuRdc.isShowParentMenuModal,
     beforeUpdateMenu2: state.menuRdc.beforeUpdateMenu2,
   	isRefreshMenu2Needed:state.menuRdc.isRefreshMenu2Needed,
-  	createParentMenu: state.menuRdc.createParentMenu
+  	createParentMenu: state.menuRdc.createParentMenu,
+  	updateParentMenu: state.menuRdc.updateParentMenu,
+  	isAllowUpdateParentMenuName :state.menuRdc.isAllowUpdateParentMenuName,
+  	isCreateActionMenu2:state.menuRdc.isCreateActionMenu2
   }
 }
 
@@ -56,8 +61,12 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(updateCancelMenu2Act(event)),
 		onClearSearchMenu2:(event) =>
 			dispatch(clearSearchMenu2Act(event)),
-		onSelectParentMenuName:(event) =>
-			dispatch(selectParentMenuNameAct(event))
+		onSelectCreateParentMenuName:() =>
+			dispatch(selectCreateParentMenuNameAct()),
+		onSelectUpdateParentMenuName:() =>
+			dispatch(selectUpdateParentMenuNameAct()),
+		setNotAllowUpdateParentMenuName:()=>
+			dispatch(setNotAllowUpdateParentMenuNameAct())
 	}
 }
 
@@ -65,11 +74,12 @@ class Menu2 extends Component  {
 
 	componentDidMount() {
 		this.props.onRequestMenu2();
+		this.props.setNotAllowUpdateParentMenuName();
 	}
 
 	componentDidUpdate(prevProps) {
 		if (this.props.isRefreshMenu2Needed === true) {
-					this.props.onRequestMenu2ByClick();
+			this.props.onRequestMenu2ByClick();
 		}
 	}
 
@@ -84,10 +94,18 @@ class Menu2 extends Component  {
 				onCancelUpdateMenu2,
 				onClearSearchMenu2,
 				isShowParentMenuModal,
-				onSelectParentMenuName,
+				onSelectCreateParentMenuName,
 				createParentMenu,
-				onClearCreateMenu2
+				onClearCreateMenu2,
+				isAllowUpdateParentMenuName,
+				isCreateActionMenu2,
+				updateParentMenu,
+				onSelectUpdateParentMenuName,
+				beforeUpdateMenu2
 			} = this.props;
+
+			console.log('updateParentMenu', updateParentMenu);
+			console.log('beforeUpdateMenu2', beforeUpdateMenu2);
 
 		return (
 			<React.Fragment>
@@ -97,10 +115,10 @@ class Menu2 extends Component  {
 						<Form.Control size="sm" name="menu_name"
 							type="text" placeholder="Enter Menu Name" />
 					</Col>
-						<Col xs={3}>
-							<Form.Control size="sm" name="parent_menu_name"
-								type="text" placeholder="Enter Parent Menu Name" />
-						</Col>
+					<Col xs={3}>
+						<Form.Control size="sm" name="parent_menu_name"
+							type="text" placeholder="Enter Parent Menu Name" />
+					</Col>
 					<Col xs={2}>
 						<Form.Control size="sm" name="menu_path"
 							type="text" placeholder="Enter Menu Path" />
@@ -128,7 +146,7 @@ class Menu2 extends Component  {
 				      <td><Form.Control  size="sm" name="menu_name" 
 				      	type="text" placeholder="Enter Menu Name" /></td>
 				      <td id={createParentMenu.menu_id}>
-				      	<Form.Control  onClick={onSelectParentMenuName} 
+				      	<Form.Control  onClick={onSelectCreateParentMenuName} 
 				      		size="sm" name="parent_menu_name" type="text" 
 				      		placeholder="Click to select Parent Menu" 
 				      		defaultValue={createParentMenu.menu_name}
@@ -154,7 +172,16 @@ class Menu2 extends Component  {
 				  		return(
 				  			<tr id={menu.menu_id} key={menu.menu_id}>
 						      <td name='menu_name'>{menu.menu_name}</td>
-						      <td name='parent_menu_name'>{menu.parent_menu_name}</td>
+						      <td id={updateParentMenu.menu_id?updateParentMenu.menu_id:menu.parent_menu_id} 
+						      	name='parent_menu_name' 
+						      	onClick={isAllowUpdateParentMenuName?
+						      			onSelectUpdateParentMenuName:null}>
+						      			{ (beforeUpdateMenu2.menu_id == menu.menu_id)
+						      				?updateParentMenu.menu_name
+							      			:menu.parent_menu_name
+						      			}
+						      			
+						      </td>
 						      <td name='menu_path'>{menu.menu_path}</td>
 						      <td name='seq'>{menu.seq}</td>
 						      <td headers='button'>
@@ -180,7 +207,8 @@ class Menu2 extends Component  {
 				  	}
 				  </tbody>
 				</Table>
-				<ParentMenuModal isShowParentMenuModal={isShowParentMenuModal}/>
+				<ParentMenuModal isShowParentMenuModal={isShowParentMenuModal}
+					isCreateActionMenu2={isCreateActionMenu2}/>
 			</React.Fragment>
 		)
 	}
