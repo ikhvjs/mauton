@@ -250,23 +250,24 @@ export const afterUpdateMenu1Act = (event) =>{
 
 }
 
-export const updateCancelMenu1Act =(event) => {
+export const cancelUpdateMenu1Act =(event) => (dispatch,getState)=> {
   const selectedNode = event.target.parentNode.parentNode;
 
   const tdNode = selectedNode.querySelectorAll("td[name]");
 
   tdNode.forEach((node)=>{
     let inputNode = node.querySelector("input");
-    let nodeValue = inputNode.value;
+    let nodeAttribute = node.getAttribute('name');
 
     node.removeChild(inputNode);
-    node.innerHTML = nodeValue;
+
+    node.innerHTML = getState().menuRdc.beforeUpdateMenu1[nodeAttribute];
 
   });
 
   toggleDisplayMenu1Button(selectedNode);
 
-  return ({ type: CANCEL_UPDATE_MENU1 });
+  dispatch ({ type: CANCEL_UPDATE_MENU1 });
 }
 
 

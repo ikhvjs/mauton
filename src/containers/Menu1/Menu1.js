@@ -12,7 +12,7 @@ import {
 	beforeUpdateMenu1Act,
 	afterUpdateMenu1Act,
 	updateMenu1Act,
-	updateCancelMenu1Act,
+	cancelUpdateMenu1Act,
 	clearSearchMenu1Act
 } from './Menu1Action';
 
@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch) => {
 		onUpdateMenu1:(event) => 
 			dispatch(updateMenu1Act(afterUpdateMenu1Act(event))),
 		onCancelUpdateMenu1:(event) =>
-			dispatch(updateCancelMenu1Act(event)),
+			dispatch(cancelUpdateMenu1Act(event)),
 		onClearSearchMenu1:(event) =>
 			dispatch(clearSearchMenu1Act(event))
 	}

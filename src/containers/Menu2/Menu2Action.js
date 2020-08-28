@@ -227,8 +227,15 @@ export const beforeUpdateMenu2Act = (event) => {
 
     //Add inline edit when click 'Update' Button
   tdNode.forEach((node)=>{
-    let nodeValue = node.innerHTML;
+    console.log('Node',node);
     let nodeAttribute = node.getAttribute('name');
+    let nodeValue;
+
+    nodeValue = node.innerHTML;
+    if (nodeAttribute ==='parent_menu_name'){
+      Object.assign(beforeUpdateMenu2,  {parent_menu_id: node.id});
+    }
+
     let inputTagClone = inputTag.cloneNode(false);
 
     inputTagClone.setAttribute('name', nodeAttribute);
@@ -261,12 +268,25 @@ export const afterUpdateMenu2Act = (event) =>{
   // console.log('afterUpdateCategoryAct tdNode',tdNode);
 
   tdNode.forEach((node)=>{
-    let inputNode = node.querySelector("input");
-    let nodeValue = inputNode.value;
-    let nodeAttribute = inputNode.getAttribute('name');
+    let inputNode;
+    let nodeValue;
+    let nodeAttribute = node.getAttribute('name');
+
+    if (nodeAttribute !=='parent_menu_name'){
+      inputNode = node.querySelector("input");
+      nodeValue = inputNode.value;
+    } else {
+      nodeValue=node.innerText;
+      Object.assign(afterUpdateMenu2,  {parent_menu_id: node.id});
+    }
+
+
     Object.assign(afterUpdateMenu2,  {[nodeAttribute]: nodeValue})
 
-    node.removeChild(inputNode);
+    if (nodeAttribute !=='parent_menu_name') {
+      node.removeChild(inputNode);
+    }
+    
     node.innerHTML = nodeValue;
 
   });
@@ -279,23 +299,28 @@ export const afterUpdateMenu2Act = (event) =>{
 
 }
 
-export const updateCancelMenu2Act =(event) => (getState) => {
+export const cancelUpdateMenu2Act =(event) => (dispatch, getState) => {
   const selectedNode = event.target.parentNode.parentNode;
   
   const tdNode = selectedNode.querySelectorAll('td[name]:not([name="parent_menu_name"])');
 
   tdNode.forEach((node)=>{
-    let inputNode = node.querySelector("input");
-    let nodeValue = inputNode.value;
+    
+    let nodeAttribute = node.getAttribute('name');
 
-    node.removeChild(inputNode);
-    node.innerHTML = nodeValue;
+    if (nodeAttribute!=='parent_menu_name') {
+      node.removeChild(node.querySelector("input"));
+    }else{
+      node.id = getState().menuRdc.beforeUpdateMenu2['parent_menu_id'];
+    }
+    node.innerHTML = getState().menuRdc.beforeUpdateMenu2[nodeAttribute];
+    
 
   });
 
   toggleDisplayMenu2Button(selectedNode);
 
-  return ({ type: CANCEL_UPDATE_MENU2 });
+  dispatch ({ type: CANCEL_UPDATE_MENU2 });
 }
 
 
@@ -314,7 +339,8 @@ export const updateMenu2Act = (afterUpdateMenu2)  => (dispatch, getState) =>{
             menu_id:afterUpdateMenu2.menu_id,
             menu_name: afterUpdateMenu2.menu_name,
             menu_path: afterUpdateMenu2.menu_path,
-            seq:afterUpdateMenu2.seq
+            seq:afterUpdateMenu2.seq,
+            parent_menu_id:afterUpdateMenu2.parent_menu_id
           })
         }
     )
@@ -349,3 +375,13 @@ export const selectUpdateParentMenuNameAct = (event) =>{
 export const setNotAllowUpdateParentMenuNameAct = () =>{
   return { type: SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME };
 }
+
+// export const changeParentMenuNameAct = (event) => {
+//   const updateParentMenu = {};
+//   const value = event.target.value;
+//   const id = event.target.parentNode.id;
+
+//   Object.assign(updateParentMenu,  {menu_id: id, menu_name:value});
+
+//   return { type: CHANGE_PARENT_MENU_NAME,  payload:updateParentMenu};
+// }

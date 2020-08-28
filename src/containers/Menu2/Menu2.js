@@ -13,11 +13,12 @@ import {
 	beforeUpdateMenu2Act,
 	afterUpdateMenu2Act,
 	updateMenu2Act,
-	updateCancelMenu2Act,
+	cancelUpdateMenu2Act,
 	clearSearchMenu2Act,
 	selectCreateParentMenuNameAct,
 	selectUpdateParentMenuNameAct,
 	setNotAllowUpdateParentMenuNameAct
+	// changeParentMenuNameAct
 } from './Menu2Action';
 
 import ParentMenuModal from '../../components/ParentMenuModal/ParentMenuModal';
@@ -33,9 +34,10 @@ const mapStateToProps = (state) => {
     beforeUpdateMenu2: state.menuRdc.beforeUpdateMenu2,
   	isRefreshMenu2Needed:state.menuRdc.isRefreshMenu2Needed,
   	createParentMenu: state.menuRdc.createParentMenu,
-  	updateParentMenu: state.menuRdc.updateParentMenu,
+  	// updateParentMenu: state.menuRdc.updateParentMenu,
   	isAllowUpdateParentMenuName :state.menuRdc.isAllowUpdateParentMenuName,
-  	isCreateActionMenu2:state.menuRdc.isCreateActionMenu2
+  	isCreateActionMenu2:state.menuRdc.isCreateActionMenu2,
+  	updateParentMenu:state.menuRdc.updateParentMenu
   }
 }
 
@@ -58,7 +60,7 @@ const mapDispatchToProps = (dispatch) => {
 		onUpdateMenu2:(event) => 
 			dispatch(updateMenu2Act(afterUpdateMenu2Act(event))),
 		onCancelUpdateMenu2:(event) =>
-			dispatch(updateCancelMenu2Act(event)),
+			dispatch(cancelUpdateMenu2Act(event)),
 		onClearSearchMenu2:(event) =>
 			dispatch(clearSearchMenu2Act(event)),
 		onSelectCreateParentMenuName:() =>
@@ -66,7 +68,9 @@ const mapDispatchToProps = (dispatch) => {
 		onSelectUpdateParentMenuName:() =>
 			dispatch(selectUpdateParentMenuNameAct()),
 		setNotAllowUpdateParentMenuName:()=>
-			dispatch(setNotAllowUpdateParentMenuNameAct())
+			dispatch(setNotAllowUpdateParentMenuNameAct()),
+		// onChangeParentMenuName:(event)=>
+		// 	dispatch(changeParentMenuNameAct(event))
 	}
 }
 
@@ -102,10 +106,21 @@ class Menu2 extends Component  {
 				updateParentMenu,
 				onSelectUpdateParentMenuName,
 				beforeUpdateMenu2
+				// onChangeParentMenuName
 			} = this.props;
 
-			console.log('updateParentMenu', updateParentMenu);
+			// console.log('updateParentMenu', updateParentMenu);
 			console.log('beforeUpdateMenu2', beforeUpdateMenu2);
+			console.log('isAllowUpdateParentMenuName', isAllowUpdateParentMenuName);
+			// menus2.map((menu)=>{
+			// 	// isAllowUpdateParentMenuName&&(beforeUpdateMenu2.menu_id === menu.menu_id)
+			// 	console.log('beforeUpdateMenu2.menu_id', beforeUpdateMenu2.menu_id);
+			// 	console.log('menu.menu_id',menu.menu_id);
+			// 	console.log('===',Number(beforeUpdateMenu2.menu_id) === Number(menu.menu_id));
+			// 	console.log('updateParentMenu.menu_id', updateParentMenu.menu_id);
+			// 	console.log('===2',Number(updateParentMenu.menu_id) === Number(menu.menu_id));
+
+			// });
 
 		return (
 			<React.Fragment>
@@ -174,13 +189,18 @@ class Menu2 extends Component  {
 						      <td name='menu_name'>{menu.menu_name}</td>
 						      <td id={updateParentMenu.menu_id?updateParentMenu.menu_id:menu.parent_menu_id} 
 						      	name='parent_menu_name' 
-						      	onClick={isAllowUpdateParentMenuName?
-						      			onSelectUpdateParentMenuName:null}>
-						      			{ (beforeUpdateMenu2.menu_id == menu.menu_id)
-						      				?updateParentMenu.menu_name
-							      			:menu.parent_menu_name
+						      	onClick={( isAllowUpdateParentMenuName
+						      				&&( Number(beforeUpdateMenu2.menu_id) === Number(menu.menu_id) ))
+						      				?onSelectUpdateParentMenuName
+						      				:null
 						      			}
-						      			
+						      >
+						      		{(isAllowUpdateParentMenuName
+						      			&&( Number(beforeUpdateMenu2.menu_id) === Number(menu.menu_id) ))
+						      			?(updateParentMenu.menu_name?
+						      				updateParentMenu.menu_name
+						      				:beforeUpdateMenu2.parent_menu_name)
+						      			:(menu.parent_menu_name)}
 						      </td>
 						      <td name='menu_path'>{menu.menu_path}</td>
 						      <td name='seq'>{menu.seq}</td>
