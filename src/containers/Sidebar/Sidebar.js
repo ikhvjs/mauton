@@ -4,10 +4,27 @@ import React ,{ Component } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Navbar, Nav} from "react-bootstrap";
+import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-
+import { 
+	requestBloglistByClickAct
+} from './SidebarAction';
 
 import './Sidebar.css';
+
+const mapStateToProps = (state) => {
+  return {
+    bloglist:state.requestBloglistRdc.bloglist
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onRequestBloglistByClick:(event) => 
+    	//getAttribute('value') is the sideMenuPath 
+    	dispatch(requestBloglistByClickAct(event.target.getAttribute('value')))
+  }
+}
 
 class Sidebar extends Component {
 
@@ -19,7 +36,7 @@ class Sidebar extends Component {
 
 
 	render() {
-		const { url, sidebars, onRequestBlogByClick} = this.props;
+		const { url, sidebars, onRequestBloglistByClick} = this.props;
 		return (
 			( url ==="/dashboard" )?
 			(	<Navbar  bg="primary" variant="dark" expand="lg" className="sidebar" >
@@ -41,7 +58,7 @@ class Sidebar extends Component {
 					{sidebars.map((sidebar)=>{
 						return(
 							<LinkContainer key={sidebar.menu_id} to={`${url}/${sidebar.menu_path}`}>
-								<Nav.Link value={sidebar.menu_path} onClick={onRequestBlogByClick}>
+								<Nav.Link value={sidebar.menu_path} onClick={onRequestBloglistByClick}>
 									{sidebar.menu_name}
 								</Nav.Link>	
 							</LinkContainer>	
@@ -55,4 +72,5 @@ class Sidebar extends Component {
 	
 }
 
-export default Sidebar;
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

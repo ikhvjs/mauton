@@ -12,16 +12,17 @@ import {
   REQUEST_SIDEBAR_C_PENDING,
   REQUEST_SIDEBAR_C_SUCCESS,
   REQUEST_SIDEBAR_C_FAILED,
+//Bloglist
+  REQUEST_BLOGLIST_PENDING,
+  REQUEST_BLOGLIST_SUCCESS,
+  REQUEST_BLOGLIST_FAILED,
+  REQUEST_BLOGLIST_C_PENDING,
+  REQUEST_BLOGLIST_C_SUCCESS,
+  REQUEST_BLOGLIST_C_FAILED,
 //Blog
   REQUEST_BLOG_PENDING,
   REQUEST_BLOG_SUCCESS,
   REQUEST_BLOG_FAILED,
-  REQUEST_BLOG_C_PENDING,
-  REQUEST_BLOG_C_SUCCESS,
-  REQUEST_BLOG_C_FAILED,
-  REQUEST_BLOG_S_PENDING,
-  REQUEST_BLOG_S_SUCCESS,
-  REQUEST_BLOG_S_FAILED,
 //Category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
@@ -66,6 +67,8 @@ import {
   UPDATE_TAG_FAILED, 
   CANCEL_UPDATE_TAG,
   CLEAR_SEARCH_TAG,
+//MenuConfig
+  SET_MENU_TAB_NOT_DISABLE,
 //Menu1
   REQUEST_MENU1_PENDING,
   REQUEST_MENU1_SUCCESS,
@@ -110,9 +113,11 @@ import {
   UPDATE_MENU2_FAILED, 
   CANCEL_UPDATE_MENU2,
   CLEAR_SEARCH_MENU2,
-  SELECT_MENU_LEVEL,
   SELECT_CREATE_PARENT_MENU_NAME,
   SELECT_UPDATE_PARENT_MENU_NAME,
+  CLEAR_CREATE_MENU2,
+  SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME,
+  //Parent Menu Modal
   CLOSE_PARENT_MENU_MODAL,
   REQUEST_PARENT_MENU_PENDING,
   REQUEST_PARENT_MENU_SUCCESS,
@@ -122,9 +127,7 @@ import {
   SEARCH_PARENT_MENU_FAILED,
   CLEAR_SEARCH_PARENT_MENU,
   SELECT_CREATE_PARENT_MENU,
-  SELECT_UPDATE_PARENT_MENU,
-  CLEAR_CREATE_MENU2,
-  SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME
+  SELECT_UPDATE_PARENT_MENU
  } from './constants';
 
 
@@ -174,38 +177,54 @@ export const requestSidebarRdc = (state=initialStateSidebar, action={}) => {
 
 
 
-const initialStateBlog = {
-  blogs: [],
-  isPendingBlog: false,
-  isPendingBlogByClick: false,
-  isSingleBlogRequest: false,
-  isPendingSingleBlog: false
+const initialStateBloglist = {
+  bloglist: [],
+  isPendingBloglist: false,
+  isPendingBloglistByClick: false
+  // isSingleBlogRequest: false,
+  // isPendingSingleBlog: false
 }
 
-export const requestBlogRdc = (state=initialStateBlog, action={}) => {
+export const requestBloglistRdc = (state=initialStateBloglist, action={}) => {
   switch (action.type) {
-	case REQUEST_BLOG_PENDING:
-	  return Object.assign({}, state, {isPendingBlog: true, isSingleBlogRequest: false})
-	case REQUEST_BLOG_SUCCESS:
-	  return Object.assign({}, state, {blogs: action.payload, isPendingBlog: false})
-	case REQUEST_BLOG_FAILED:
+	case REQUEST_BLOGLIST_PENDING:
+	  return Object.assign({}, state, {isPendingBloglist: true})
+	case REQUEST_BLOGLIST_SUCCESS:
+	  return Object.assign({}, state, {bloglist: action.payload, isPendingBloglist: false})
+	case REQUEST_BLOGLIST_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
-	case REQUEST_BLOG_C_PENDING:
-	  return Object.assign({}, state, {isPendingBlogByClick: true, isSingleBlogRequest: false})
-	case REQUEST_BLOG_C_SUCCESS:
-	  return Object.assign({}, state, {blogs: action.payload, isPendingBlogByClick: false})
-	case REQUEST_BLOG_C_FAILED:
+	case REQUEST_BLOGLIST_C_PENDING:
+	  return Object.assign({}, state, {isPendingBloglistByClick: true})
+	case REQUEST_BLOGLIST_C_SUCCESS:
+	  return Object.assign({}, state, {bloglist: action.payload, isPendingBloglistByClick: false})
+	case REQUEST_BLOGLIST_C_FAILED:
 	  return Object.assign({}, state, {error: action.payload})  
-  case REQUEST_BLOG_S_PENDING:
-    return Object.assign({}, state, {isPendingSingleBlog: true, isSingleBlogRequest:true})
-  case REQUEST_BLOG_S_SUCCESS:
-    return Object.assign({}, state, {blogs: action.payload, isPendingSingleBlog: false})
-  case REQUEST_BLOG_S_FAILED:
-    return Object.assign({}, state, {error: action.payload}) 
 	default:
 	  return state
   }
 }
+
+
+const initialStateBlog = {
+  blog: [],
+  isPendingBlog: false
+}
+
+
+export const requestBlogRdc = (state=initialStateBlog, action={}) => {
+  switch (action.type) {
+  case REQUEST_BLOG_PENDING:
+    return Object.assign({}, state, {isPendingBlog: true})
+  case REQUEST_BLOG_SUCCESS:
+    return Object.assign({}, state, {blog: action.payload, isPendingBlog: false})
+  case REQUEST_BLOG_FAILED:
+    return Object.assign({}, state, {error: action.payload}) 
+  default:
+    return state
+  }
+}
+
+
 
 const initialStateCategory= {
   categories: [],
@@ -343,14 +362,15 @@ const initialStateMenu= {
   createParentMenu:[],
   updateParentMenu:[],
   isAllowUpdateParentMenuName:false,
-  isCreateActionMenu2:false
+  isCreateActionMenu2:false,
+  isDisableMenuTab:false
 }
 
 export const menuRdc = (state=initialStateMenu, action={}) => {
   switch (action.type) {
   //MenuConfig
-  case SELECT_MENU_LEVEL:
-    return Object.assign({}, state, {menuLevel: action.payload})
+  case SET_MENU_TAB_NOT_DISABLE:
+    return Object.assign({}, state, {isDisableMenuTab:false})
   //Menu1
   case REQUEST_MENU1_PENDING:
     return Object.assign({}, state, {})
@@ -383,7 +403,8 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case SEARCH_MENU1_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case SELECT_UPDATE_MENU1:
-    return Object.assign({}, state, {beforeUpdateMenu1: action.payload, isRefreshMenu1Needed:false})
+    return Object.assign({}, state, 
+      {beforeUpdateMenu1: action.payload, isRefreshMenu1Needed:false, isDisableMenuTab:true})
   case UPDATE_MENU1_PENDING:
     return Object.assign({}, state, {})
   case UPDATE_MENU1_SUCCESS:
@@ -391,7 +412,8 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case UPDATE_MENU1_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case CANCEL_UPDATE_MENU1:
-    return Object.assign({}, state, {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:false})
+    return Object.assign({}, state, 
+      {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:false, isDisableMenuTab:false})
   case CLEAR_SEARCH_MENU1:
     return Object.assign({}, state, {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:false})
   //Menu2
@@ -428,7 +450,7 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case SELECT_UPDATE_MENU2:
     return Object.assign({}, state, 
       {beforeUpdateMenu2: action.payload, isRefreshMenu2Needed:false,
-         isAllowUpdateParentMenuName:true})
+         isAllowUpdateParentMenuName:true, isDisableMenuTab:true })
   case UPDATE_MENU2_PENDING:
     return Object.assign({}, state, {})
   case UPDATE_MENU2_SUCCESS:
@@ -436,7 +458,9 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case UPDATE_MENU2_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case CANCEL_UPDATE_MENU2:
-    return Object.assign({}, state, {isRefreshMenu2Needed:true, isAllowUpdateParentMenuName:false})
+    return Object.assign({}, state, 
+      {isRefreshMenu2Needed:true, isAllowUpdateParentMenuName:false,
+        beforeUpdateMenu2:{} , updateParentMenu:{},  isDisableMenuTab:false })
   case CLEAR_SEARCH_MENU2:
     return Object.assign({}, state, {isRefreshMenu2Needed:true})
   case SELECT_CREATE_PARENT_MENU_NAME:
@@ -483,7 +507,8 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
 const rootReducer = combineReducers({
 	requestTopbarRdc,
 	requestSidebarRdc,
-	requestBlogRdc,
+	requestBloglistRdc,
+  requestBlogRdc,
   categoryRdc,
   tagRdc,
   menuRdc

@@ -24,7 +24,7 @@ import {
 import ParentMenuModal from '../../components/ParentMenuModal/ParentMenuModal';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Table, Form, Button, Col} from "react-bootstrap";
+import {Table, Form, Button, Col, Row} from "react-bootstrap";
 // import './Menu2.css'
 
 const mapStateToProps = (state) => {
@@ -109,9 +109,10 @@ class Menu2 extends Component  {
 				// onChangeParentMenuName
 			} = this.props;
 
+			// console.log('beforeUpdateMenu2', beforeUpdateMenu2);
 			// console.log('updateParentMenu', updateParentMenu);
-			console.log('beforeUpdateMenu2', beforeUpdateMenu2);
-			console.log('isAllowUpdateParentMenuName', isAllowUpdateParentMenuName);
+			// console.log('isAllowUpdateParentMenuName', isAllowUpdateParentMenuName);
+
 			// menus2.map((menu)=>{
 			// 	// isAllowUpdateParentMenuName&&(beforeUpdateMenu2.menu_id === menu.menu_id)
 			// 	console.log('beforeUpdateMenu2.menu_id', beforeUpdateMenu2.menu_id);
@@ -160,13 +161,20 @@ class Menu2 extends Component  {
 				  <tr id='new'>
 				      <td><Form.Control  size="sm" name="menu_name" 
 				      	type="text" placeholder="Enter Menu Name" /></td>
-				      <td id={createParentMenu.menu_id}>
-				      	<Form.Control  onClick={onSelectCreateParentMenuName} 
-				      		size="sm" name="parent_menu_name" type="text" 
-				      		placeholder="Click to select Parent Menu" 
-				      		defaultValue={createParentMenu.menu_name}
-				      		readOnly
-				      	/>
+				      <td id={createParentMenu.menu_id} name="parent_menu_name"
+				      	onClick={isAllowUpdateParentMenuName?null:onSelectCreateParentMenuName}>
+				      	<Row>
+					      	<Col name="parent_menu_name" xs={8}>
+						      	<div name="parent_menu_name">
+						      		{createParentMenu.menu_name}
+						      	</div>
+					      	</Col>
+					      	<Col name="change-button" xs={2}>
+						      	<Button name="changeCreateParentMenuButton" size="sm" variant="link">
+						      		Change
+						      	</Button>
+					      	</Col>
+				      	</Row>
 				      </td>
 				      <td><Form.Control  size="sm" name="menu_path" 
 				      	type="text" placeholder="Enter Menu Path" /></td>
@@ -187,7 +195,7 @@ class Menu2 extends Component  {
 				  		return(
 				  			<tr id={menu.menu_id} key={menu.menu_id}>
 						      <td name='menu_name'>{menu.menu_name}</td>
-						      <td id={updateParentMenu.menu_id?updateParentMenu.menu_id:menu.parent_menu_id} 
+						      <td id={(updateParentMenu.length===1)?updateParentMenu.menu_id:menu.parent_menu_id} 
 						      	name='parent_menu_name' 
 						      	onClick={( isAllowUpdateParentMenuName
 						      				&&( Number(beforeUpdateMenu2.menu_id) === Number(menu.menu_id) ))
@@ -195,12 +203,23 @@ class Menu2 extends Component  {
 						      				:null
 						      			}
 						      >
-						      		{(isAllowUpdateParentMenuName
-						      			&&( Number(beforeUpdateMenu2.menu_id) === Number(menu.menu_id) ))
-						      			?(updateParentMenu.menu_name?
-						      				updateParentMenu.menu_name
-						      				:beforeUpdateMenu2.parent_menu_name)
-						      			:(menu.parent_menu_name)}
+						      	<Row>
+							      	<Col name="parent_menu_name" xs={8}>
+								      	<div name="parent_menu_name">
+								      		{(isAllowUpdateParentMenuName
+								      			&&( Number(beforeUpdateMenu2.menu_id) === Number(menu.menu_id) ))
+								      			?(updateParentMenu.menu_name?
+								      				updateParentMenu.menu_name
+								      				:beforeUpdateMenu2.parent_menu_name)
+								      			:(menu.parent_menu_name)}
+								      	</div>
+							      	</Col>
+							      	<Col name="change-button" xs={2}>
+								      	<Button className="hidden-button" name="changeUpdateParentMenuButton" size="sm" variant="link">
+								      		Change
+								      	</Button>
+							      	</Col>
+						      	</Row>
 						      </td>
 						      <td name='menu_path'>{menu.menu_path}</td>
 						      <td name='seq'>{menu.seq}</td>

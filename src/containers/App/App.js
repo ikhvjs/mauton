@@ -3,11 +3,8 @@ import { connect } from 'react-redux';
 import { 
 	requestTopbarAct,
 	requestSidebarAct,
-	requestBlogAct,
-	requestSidebarByClickAct,
-	requestBlogByClickAct,
-	requestSingleBlogByClickAct
-} from '../../actions';
+	requestSidebarByClickAct
+} from './AppActions';
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,8 +17,6 @@ import Content from '../Content/Content';
 import Dashboard from '../Dashboard/Dashboard';
 import Footer from '../Footer/Footer';
 
-
-//CSS import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Row} from "react-bootstrap";
 import './App.css';
@@ -35,13 +30,7 @@ const mapStateToProps = (state) => {
     isPendingTopbar: state.requestTopbarRdc.isPendingTopbar,
     sidebars:state.requestSidebarRdc.sidebars,
     isPendingSidebar:state.requestSidebarRdc.isPendingSidebar,
-    isPendingSidebarByClick:state.requestSidebarRdc.isPendingSidebarByClick,
-    blogs:state.requestBlogRdc.blogs,
-    isPendingBlog:state.requestBlogRdc.isPendingBlog,
-    isPendingBlogByClick:state.requestBlogRdc.isPendingBlogByClick,
-    isSingleBlogRequest:state.requestBlogRdc.isSingleBlogRequest,
- 	isPendingSingleBlog:state.requestBlogRdc.isPendingSingleBlog
-
+    isPendingSidebarByClick:state.requestSidebarRdc.isPendingSidebarByClick
   }
 }
 
@@ -52,14 +41,8 @@ const mapDispatchToProps = (dispatch) => {
     onRequestSidebar:(topbarMenuID) => 
     	dispatch(requestSidebarAct(topbarMenuID)),
     onRequestSidebarByClick:(event) => 
-    	dispatch(requestSidebarByClickAct(event.target.getAttribute('href'))),
-    onRequestBlog:(sidebarMenuPath) => 
-    	dispatch(requestBlogAct(sidebarMenuPath)),
-    onRequestBlogByClick:(event) => 
-    	//getAttribute('value') is the sideMenuPath 
-    	dispatch(requestBlogByClickAct(event.target.getAttribute('value'))),
-    onRequestSingleBlogByClick:(event) => 
-    	dispatch(requestSingleBlogByClickAct(event.target.getAttribute('value')))
+    	dispatch(requestSidebarByClickAct(event.target.getAttribute('href')))
+    
   }
 }
 
@@ -73,17 +56,10 @@ class App extends Component {
 	render() {
 		const { topbars,
 				sidebars,
-				blogs,
+				onRequestTopbar,
 				onRequestSidebar,
-				onRequestBlog,
 				onRequestSidebarByClick,
-				isPendingSidebarByClick,
-				onRequestBlogByClick,
-				isPendingBlogByClick,
-				isSingleBlogRequest,
-				isPendingSingleBlog,
-				onRequestSingleBlogByClick,
-				onRequestTopbar
+				isPendingSidebarByClick
 			} = this.props;
 
 						    
@@ -103,16 +79,9 @@ class App extends Component {
 									return(
 										<Route key={topbar.menu_id} path={`/${topbar.menu_path}`}>
 											<Content sidebars={sidebars} 
-												onRequestBlog={onRequestBlog}
-												onRequestBlogByClick={onRequestBlogByClick}
-												isPendingBlogByClick={isPendingBlogByClick}
-												blogs={blogs}
 												topbarMenuID={topbar.menu_id}
 												onRequestSidebar={onRequestSidebar}
 												isPendingSidebarByClick={isPendingSidebarByClick}
-												onRequestSingleBlogByClick={onRequestSingleBlogByClick}
-												isSingleBlogRequest={isSingleBlogRequest}
-												isPendingSingleBlog={isPendingSingleBlog}
 											/>
 						    			</Route>
 									)

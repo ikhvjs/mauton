@@ -7,7 +7,6 @@ import {
 
 import Bloglist from '../Bloglist/Bloglist';
 import Sidebar from '../Sidebar/Sidebar';
-// import Blog from '../../components/Blog/Blog';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col} from "react-bootstrap";
@@ -17,16 +16,9 @@ import './Content.css';
 
 
 const Content = ({ sidebars, 
-		onRequestBlog, 
-		blogs,
 		topbarMenuID,
 		onRequestSidebar,
-		isPendingSidebarByClick,
-		onRequestBlogByClick,
-		isPendingBlogByClick,
-		onRequestSingleBlogByClick,
-		isSingleBlogRequest,
-		isPendingSingleBlog
+		isPendingSidebarByClick
 	}) => {
 	
 	//userRouteMatch only be allowed to use in function.
@@ -37,7 +29,6 @@ const Content = ({ sidebars,
 			<Col sm={1} md={2} lg={2} className="sidebar_container">
 				<Sidebar url={match.url} 
 					sidebars={sidebars}
-					onRequestBlogByClick={onRequestBlogByClick}
 					topbarMenuID={topbarMenuID}
 					onRequestSidebar={onRequestSidebar}
 					isPendingSidebarByClick={isPendingSidebarByClick}
@@ -49,13 +40,7 @@ const Content = ({ sidebars,
 			          <h3>Please select a topic.</h3>
 			        </Route>
 			        <Route path={`${match.path}/:sidebarMenuPath`}>
-			        	<Bloglist blogs={blogs}
-			        	onRequestBlog={onRequestBlog}
-			        	isPendingBlogByClick={isPendingBlogByClick}
-			        	onRequestSingleBlogByClick={onRequestSingleBlogByClick}
-			        	isSingleBlogRequest={isSingleBlogRequest}
-			        	isPendingSingleBlog={isPendingSingleBlog}
-			        	/>
+			        	<Bloglist />
 			        </Route>
 			    </Switch>
 			</Col>     

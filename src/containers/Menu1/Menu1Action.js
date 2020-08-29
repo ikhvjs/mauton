@@ -238,7 +238,6 @@ export const afterUpdateMenu1Act = (event) =>{
     Object.assign(afterUpdateMenu1,  {[nodeAttribute]: nodeValue})
 
     node.removeChild(inputNode);
-    node.innerHTML = nodeValue;
 
   });
 

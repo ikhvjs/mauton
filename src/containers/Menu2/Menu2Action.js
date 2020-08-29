@@ -50,16 +50,20 @@ export const requestMenu2ByClickAct = () => (dispatch) => {
 
 export const selectCreateMenu2Act = (event) => {
   const menu2 ={};
-  const selectedParentMenuID = event.target.parentNode.parentNode.querySelector("td[id]").id;
-  const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
-
+  const trNode = event.target.parentNode.parentNode;
+  const selectedParentMenuID = trNode.querySelector("td[id]").id;
+  const selectedOtherNode = trNode.querySelectorAll("td > input.form-control");
 
   Object.assign(menu2,  {"parent_menu_id": selectedParentMenuID})
-  childrenNode.forEach((node)=>{
+
+  selectedOtherNode.forEach((node)=>{
     Object.assign(menu2,  {[node.name]: node.value})
     node.value = "";
-    node.defaultValue  = "";
   })
+
+  trNode.querySelector("td[id]").querySelector("div.row > div.col")
+    .querySelector("div[name]").innerHTML = "";
+
   console.log('create menu2',menu2);
   return menu2;
 }
@@ -85,12 +89,17 @@ export const postMenu2Act = (menu2) => (dispatch) =>{
 }
 
 export const clearCreateMenu2Act = (event) => {
-  const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
+  const trNode = event.target.parentNode.parentNode;
+  const selectedOtherNode = trNode.querySelectorAll("td > input.form-control");
+  const selectedParentMenuNode = trNode.querySelector("td > div.row")
+    .querySelector('div[name="parent_menu_name"] > div[name]');
 
-  childrenNode.forEach((node)=>{
+  selectedOtherNode.forEach((node)=>{
     node.value = "";
-    node.defaultValue  = "";
   });
+
+  selectedParentMenuNode.innerText  = "";
+
 
   return { type: CLEAR_CREATE_MENU2 };
 }
@@ -165,14 +174,18 @@ const toggleDisplayMenu2Button = (selectedNode) => {
   const notSelectedNodes =  selectedNode.parentNode
     .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedMenuID)}])`);
 
+    console.log('notSelectedNodes',notSelectedNodes);
+
   const createMenuInputNode = selectedNode.parentNode
     .querySelector('tr[id="new"]').querySelectorAll('td > input');
 
-  const selectedButtonNodes = selectedNode
+  const selectedActionButtonNodes = selectedNode
     .querySelector("td[headers]").querySelectorAll('button[name]');
   
-  // const selectedParentMenuInput = selectedNode
-  //   .querySelector('td[name="parent_menu_name"] > input');
+  const selectedChangeButtonNode = selectedNode
+    .querySelector('td[name="parent_menu_name"]')
+    .querySelector('div.row > div[name="change-button"]')
+    .querySelector('button');
 
   //toggle the display of input of create Menu2 record 
   createMenuInputNode.forEach((node)=>{
@@ -190,21 +203,27 @@ const toggleDisplayMenu2Button = (selectedNode) => {
     buttonNodes.forEach((buttonNode)=>{
       ( buttonNode.classList.contains('hidden-button')
           && (buttonNode.getAttribute('name')!=="save") 
-            && (buttonNode.getAttribute('name')!=="cancel")
-      )? 
-        buttonNode.classList.remove('hidden-button'):
-        buttonNode.classList.add('hidden-button');
+          && (buttonNode.getAttribute('name')!=="cancel")
+          // &&(buttonNode.getAttribute('name')!=="changeCreateParentMenuButton")
+          &&(buttonNode.getAttribute('name')!=="changeUpdateParentMenuButton")
+      )? buttonNode.classList.remove('hidden-button')
+      : buttonNode.classList.add('hidden-button');
 
 
     })
   });
 
 //Toggle'Save to change', 'Update' and 'Delete' button of the selected Node
-  selectedButtonNodes.forEach((node)=>{
-    node.classList.contains('hidden-button')? 
-      node.classList.remove('hidden-button'):
-      node.classList.add('hidden-button')
+  selectedActionButtonNodes.forEach((node)=>{
+    node.classList.contains('hidden-button')
+    ? node.classList.remove('hidden-button')
+    : node.classList.add('hidden-button')
   });
+
+//Toggle 'change' button of selected Node
+  selectedChangeButtonNode.classList.contains('hidden-button')
+    ? selectedChangeButtonNode.classList.remove('hidden-button')
+    : selectedChangeButtonNode.classList.add('hidden-button');
 
 }
 
@@ -218,11 +237,11 @@ export const beforeUpdateMenu2Act = (event) => {
   inputTag.classList.add("form-control");
   inputTag.classList.add("form-control-sm");
 
-  const selectedNode = event.target.parentNode.parentNode;
-  const selectedMenuID = selectedNode.id;
+  const trNode = event.target.parentNode.parentNode;
+  const selectedMenuID = trNode.id;
   Object.assign(beforeUpdateMenu2,  {"menu_id": selectedMenuID});
 
-  const tdNode = selectedNode.querySelectorAll("td[name]");
+  const tdNode = trNode.querySelectorAll("td[name]");
 
 
     //Add inline edit when click 'Update' Button
@@ -231,7 +250,15 @@ export const beforeUpdateMenu2Act = (event) => {
     let nodeAttribute = node.getAttribute('name');
     let nodeValue;
 
-    nodeValue = node.innerHTML;
+    if (nodeAttribute!=='parent_menu_name') {
+      nodeValue = node.innerHTML;
+    } else {
+      nodeValue = node.querySelector('td > div.row')
+        .querySelector('div[name="parent_menu_name"]').innerText;
+    }
+
+
+
     if (nodeAttribute ==='parent_menu_name'){
       Object.assign(beforeUpdateMenu2,  {parent_menu_id: node.id});
     }
@@ -243,12 +270,12 @@ export const beforeUpdateMenu2Act = (event) => {
     if (nodeAttribute!=='parent_menu_name') {
       node.innerHTML="";
       node.appendChild(inputTagClone);
-    }
+    } 
     
     Object.assign(beforeUpdateMenu2,  {[nodeAttribute]: nodeValue})
   })
 
-  toggleDisplayMenu2Button(selectedNode);
+  toggleDisplayMenu2Button(trNode);
 
   console.log('beforeUpdate ',beforeUpdateMenu2);
   return {type: SELECT_UPDATE_MENU2, payload: beforeUpdateMenu2 };
@@ -258,13 +285,13 @@ export const beforeUpdateMenu2Act = (event) => {
 
 export const afterUpdateMenu2Act = (event) =>{
   const afterUpdateMenu2 ={};
-  const selectedNode=event.target.parentNode.parentNode;
-  const menuID=selectedNode.id;
+  const trNode=event.target.parentNode.parentNode;
+  const menuID=trNode.id;
 
   Object.assign(afterUpdateMenu2,  {"menu_id": menuID});
   // console.log('afterUpdateCategoryAct categoryID',categoryID);
 
-  const tdNode = selectedNode.querySelectorAll("td[name]");
+  const tdNode = trNode.querySelectorAll("td[name]");
   // console.log('afterUpdateCategoryAct tdNode',tdNode);
 
   tdNode.forEach((node)=>{
@@ -276,22 +303,21 @@ export const afterUpdateMenu2Act = (event) =>{
       inputNode = node.querySelector("input");
       nodeValue = inputNode.value;
     } else {
-      nodeValue=node.innerText;
+      nodeValue=node.querySelector('td > div.row')
+        .querySelector('div[name="parent_menu_name"]').innerText;
       Object.assign(afterUpdateMenu2,  {parent_menu_id: node.id});
     }
-
 
     Object.assign(afterUpdateMenu2,  {[nodeAttribute]: nodeValue})
 
     if (nodeAttribute !=='parent_menu_name') {
       node.removeChild(inputNode);
+      node.innerHTML = nodeValue;
     }
-    
-    node.innerHTML = nodeValue;
 
   });
 
-  toggleDisplayMenu2Button(selectedNode);
+  toggleDisplayMenu2Button(trNode);
 
   
   // console.log('afterUpdateCategoryAct afterUpdateCategory',afterUpdateCategory);
@@ -308,19 +334,13 @@ export const cancelUpdateMenu2Act =(event) => (dispatch, getState) => {
     
     let nodeAttribute = node.getAttribute('name');
 
-    if (nodeAttribute!=='parent_menu_name') {
-      node.removeChild(node.querySelector("input"));
-    }else{
-      node.id = getState().menuRdc.beforeUpdateMenu2['parent_menu_id'];
-    }
+    node.removeChild(node.querySelector("input"));
     node.innerHTML = getState().menuRdc.beforeUpdateMenu2[nodeAttribute];
-    
-
   });
 
   toggleDisplayMenu2Button(selectedNode);
 
-  dispatch ({ type: CANCEL_UPDATE_MENU2 });
+  dispatch ({ type: CANCEL_UPDATE_MENU2});
 }
 
 

@@ -1,8 +1,7 @@
 import {
-  SELECT_MENU_LEVEL
+  SET_MENU_TAB_NOT_DISABLE
  } from '../../constants';
 
-
-export const selectMenuLevelAct = (key) => {
-  return ({ type: SELECT_MENU_LEVEL, payload:key });
+export const setTabNotDisableAct = () => {
+  return ({type:SET_MENU_TAB_NOT_DISABLE});
 }
