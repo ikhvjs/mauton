@@ -84,7 +84,7 @@ class TagConfig extends Component  {
 
 		return (
 			<React.Fragment>
-			<h3>BLog Tag</h3>
+			<h3>Tag</h3>
 			<br/>
 			<Form.Row>
 				<Col xs={3}>

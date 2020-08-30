@@ -61,7 +61,7 @@ export const selectCreateMenu2Act = (event) => {
     node.value = "";
   })
 
-  trNode.querySelector("td[id]").querySelector("div.row > div.col")
+  trNode.querySelector("td[id]").querySelector('div.row > div[name="parent_menu_name"]')
     .querySelector("div[name]").innerHTML = "";
 
   console.log('create menu2',menu2);

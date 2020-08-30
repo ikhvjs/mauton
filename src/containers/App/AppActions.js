@@ -14,7 +14,7 @@ export const requestTopbarAct = () => (dispatch) => {
 	dispatch({ type: REQUEST_TOPBAR_PENDING })
 	fetch('http://localhost:3001/topbar', {
 	        method: 'get',
-	        headers: {'Content-Type': 'application/json'}
+	        headers: {'Content-Type': 'text/plain'}
         })
     .then(response => response.json())
     .then(data => dispatch({ type: REQUEST_TOPBAR_SUCCESS, payload: data }))
@@ -25,7 +25,7 @@ export const requestSidebarAct = (topbarMenuID) => (dispatch) =>{
   dispatch({ type: REQUEST_SIDEBAR_PENDING })
     fetch(`http://localhost:3001/sidebar/id/${topbarMenuID}`, {
           method: 'get',
-          headers: {'Content-Type': 'application/json'}
+          headers: {'Content-Type': 'text/plain'}
         })
     .then(response => response.json())
     .then(data => dispatch({ type: REQUEST_SIDEBAR_SUCCESS, payload: data }))
@@ -36,7 +36,7 @@ export const requestSidebarByClickAct = (topbarMenuPath) => (dispatch) =>{
   dispatch({ type: REQUEST_SIDEBAR_C_PENDING })
     fetch(`http://localhost:3001/sidebar/path${topbarMenuPath}`, {
           method: 'get',
-          headers: {'Content-Type': 'application/json'}
+          headers: {'Content-Type': 'text/plain'}
         })
     .then(response => response.json())
     .then(data => dispatch({ type: REQUEST_SIDEBAR_C_SUCCESS, payload: data }))

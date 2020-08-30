@@ -12,7 +12,7 @@ export default function Footer(){
 	// console.log('location', location)
 	return (
 			<div className="footer">
-		          © 2020 - developed by ikhvjs
+		          mauton v1.0 © 2020 - developed by ikhvjs 
 			</div>
 	)
 }

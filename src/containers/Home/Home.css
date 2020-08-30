@@ -1,4 +1,12 @@
-.home_container {
+/*.home_container {
 	min-height: 100vh;
 	padding:20px;
+}
+*/
+
+
+.carousel {
+  width:1000px;
+  height:700px;
+  margin: auto;
 }

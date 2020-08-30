@@ -1,20 +1,19 @@
 import React ,{ Component } from 'react';
-
-// import SidebarItem from '../../components/SidebarItem/SidebarItem';
+import { connect } from 'react-redux';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Navbar, Nav} from "react-bootstrap";
-import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+
 import { 
 	requestBloglistByClickAct
-} from './SidebarAction';
+} from '../Bloglist/BloglistAction';
 
 import './Sidebar.css';
 
 const mapStateToProps = (state) => {
   return {
-    bloglist:state.requestBloglistRdc.bloglist
+    bloglist:state.blogRdc.bloglist
   }
 }
 

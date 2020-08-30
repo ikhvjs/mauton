@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 
 import {
+//Home
+  SELECT_HOME_INDEX,
 //Topbar
   REQUEST_TOPBAR_PENDING,
   REQUEST_TOPBAR_SUCCESS,
@@ -20,9 +22,15 @@ import {
   REQUEST_BLOGLIST_C_SUCCESS,
   REQUEST_BLOGLIST_C_FAILED,
 //Blog
+  REQUEST_BLOG_C_PENDING,
+  REQUEST_BLOG_C_SUCCESS,
+  REQUEST_BLOG_C_FAILED,
   REQUEST_BLOG_PENDING,
   REQUEST_BLOG_SUCCESS,
   REQUEST_BLOG_FAILED,
+  SEARCH_BLOGLIST_PENDING,
+  SEARCH_BLOGLIST_SUCCESS,
+  SEARCH_BLOGLIST_FAILED,
 //Category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
@@ -131,6 +139,21 @@ import {
  } from './constants';
 
 
+
+const initialStateHome= {
+  homeIndex: 0
+}
+
+export const homeRdc = (state=initialStateHome, action={}) => {
+  switch (action.type) {
+    case SELECT_HOME_INDEX:
+      return Object.assign({}, state, {homeIndex: action.payload})
+    default:
+      return state
+  }
+}
+
+
 const initialStateTopbar = {
   topbars: [],
   isPendingTopbar: true
@@ -177,52 +200,58 @@ export const requestSidebarRdc = (state=initialStateSidebar, action={}) => {
 
 
 
-const initialStateBloglist = {
+const initialStateBlog = {
   bloglist: [],
   isPendingBloglist: false,
-  isPendingBloglistByClick: false
-  // isSingleBlogRequest: false,
+  isPendingBloglistByClick: false,
+  blog: [],
+  isPendingBlog: false,
+  isPendingBlogByClick: false,
+  isHiddenBloglist:false
   // isPendingSingleBlog: false
 }
 
-export const requestBloglistRdc = (state=initialStateBloglist, action={}) => {
+export const blogRdc = (state=initialStateBlog, action={}) => {
   switch (action.type) {
 	case REQUEST_BLOGLIST_PENDING:
 	  return Object.assign({}, state, {isPendingBloglist: true})
 	case REQUEST_BLOGLIST_SUCCESS:
-	  return Object.assign({}, state, {bloglist: action.payload, isPendingBloglist: false})
+	  return Object.assign({}, state, 
+      {bloglist: action.payload, isPendingBloglist: false})
 	case REQUEST_BLOGLIST_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
 	case REQUEST_BLOGLIST_C_PENDING:
 	  return Object.assign({}, state, {isPendingBloglistByClick: true})
 	case REQUEST_BLOGLIST_C_SUCCESS:
-	  return Object.assign({}, state, {bloglist: action.payload, isPendingBloglistByClick: false})
+	  return Object.assign({}, state, 
+      {bloglist: action.payload, isPendingBloglistByClick: false, isHiddenBloglist:false})
 	case REQUEST_BLOGLIST_C_FAILED:
-	  return Object.assign({}, state, {error: action.payload})  
-	default:
-	  return state
-  }
-}
-
-
-const initialStateBlog = {
-  blog: [],
-  isPendingBlog: false
-}
-
-
-export const requestBlogRdc = (state=initialStateBlog, action={}) => {
-  switch (action.type) {
+	  return Object.assign({}, state, {error: action.payload})
+  case REQUEST_BLOG_C_PENDING:
+    return Object.assign({}, state, {isPendingBlogByClick: true})
+  case REQUEST_BLOG_C_SUCCESS:
+    return Object.assign({}, state, 
+      {blog: action.payload, isPendingBlogByClick: false, isHiddenBloglist:true})
+  case REQUEST_BLOG_C_FAILED:
+    return Object.assign({}, state, {error: action.payload}) 
   case REQUEST_BLOG_PENDING:
     return Object.assign({}, state, {isPendingBlog: true})
   case REQUEST_BLOG_SUCCESS:
-    return Object.assign({}, state, {blog: action.payload, isPendingBlog: false})
+    return Object.assign({}, state, 
+      {blog: action.payload, isPendingBlog: false, isHiddenBloglist:true})
   case REQUEST_BLOG_FAILED:
     return Object.assign({}, state, {error: action.payload}) 
+  case SEARCH_BLOGLIST_PENDING:
+    return Object.assign({}, state, {})
+  case SEARCH_BLOGLIST_SUCCESS:
+    return Object.assign({}, state, {bloglist:action.payload})
+  case SEARCH_BLOGLIST_FAILED:
+    return Object.assign({}, state, {error: action.payload}) 
   default:
-    return state
+    return state  
   }
 }
+
 
 
 
@@ -387,13 +416,15 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case POST_MENU1_PENDING:
     return Object.assign({}, state, {})
   case POST_MENU1_SUCCESS:
-    return Object.assign({}, state, {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:true})
+    return Object.assign({}, state, 
+      {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:true, isRefreshParentMenuNeeded:true})
   case POST_MENU1_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case DELETE_MENU1_PENDING:
     return Object.assign({}, state, {})
   case DELETE_MENU1_SUCCESS:
-    return Object.assign({}, state, {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:true})
+    return Object.assign({}, state, 
+      {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:true, isRefreshParentMenuNeeded:true})
   case DELETE_MENU1_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case SEARCH_MENU1_PENDING:
@@ -408,7 +439,9 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case UPDATE_MENU1_PENDING:
     return Object.assign({}, state, {})
   case UPDATE_MENU1_SUCCESS:
-    return Object.assign({}, state, {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:true})
+    return Object.assign({}, state, 
+      {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:true
+        , isRefreshParentMenuNeeded:true,isDisableMenuTab:false})
   case UPDATE_MENU1_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case CANCEL_UPDATE_MENU1:
@@ -505,10 +538,10 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
 
 
 const rootReducer = combineReducers({
+  homeRdc,
 	requestTopbarRdc,
 	requestSidebarRdc,
-	requestBloglistRdc,
-  requestBlogRdc,
+	blogRdc,
   categoryRdc,
   tagRdc,
   menuRdc

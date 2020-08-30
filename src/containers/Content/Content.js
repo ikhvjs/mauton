@@ -7,7 +7,7 @@ import {
 
 import Bloglist from '../Bloglist/Bloglist';
 import Sidebar from '../Sidebar/Sidebar';
-
+import Page404 from '../../components/Page404/Page404';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col} from "react-bootstrap";
 import './Content.css';
@@ -42,6 +42,9 @@ const Content = ({ sidebars,
 			        <Route path={`${match.path}/:sidebarMenuPath`}>
 			        	<Bloglist />
 			        </Route>
+			        <Route path="*">
+					    <Page404 />
+					 </Route>
 			    </Switch>
 			</Col>     
 		</React.Fragment>

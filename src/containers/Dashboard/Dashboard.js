@@ -9,6 +9,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import MenuConfig from '../MenuConfig/MenuConfig';
 import CategoryConfig from '../CategoryConfig/CategoryConfig';
 import TagConfig from '../TagConfig/TagConfig';
+import Page404 from '../../components/Page404/Page404';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col } from "react-bootstrap";
@@ -27,15 +28,18 @@ const Dashboard = ({onRequestTopbar}) => {
 			        <Route exact path={match.path}>
 			          <h3>Please select a topic.</h3>
 			        </Route>
-			        <Route path={`${match.path}/menu`}>
+			        <Route exact path={`${match.path}/menu`}>
 			        	<MenuConfig onRequestTopbar={onRequestTopbar} />
 			        </Route>
-			        <Route path={`${match.path}/category`}>
+			        <Route exact path={`${match.path}/category`}>
 			        	<CategoryConfig/>
 			        </Route>
-			        <Route path={`${match.path}/tag`}>
+			        <Route exact path={`${match.path}/tag`}>
 			        	<TagConfig/>
 			        </Route>
+			        <Route path="*">
+					    <Page404 />
+					 </Route>
 			    </Switch>
 			</Col>     
 		</React.Fragment>

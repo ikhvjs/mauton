@@ -1,3 +1,7 @@
 .bloglist{
 	margin: 0.5rem; 
 }
+
+.hidden-container {
+	display: none;
+}

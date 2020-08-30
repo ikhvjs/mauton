@@ -9,12 +9,14 @@ import {
   BrowserRouter as Router,
   Switch,
   Route
+  // Redirect
 } from "react-router-dom";
 
 import Home from '../Home/Home';
 import Topbar from '../Topbar/Topbar';
 import Content from '../Content/Content';
 import Dashboard from '../Dashboard/Dashboard';
+// import Page404 from '../../components/Page404/Page404';
 import Footer from '../Footer/Footer';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -90,9 +92,11 @@ class App extends Component {
 				          	<Route path="/dashboard">
 				           		<Dashboard onRequestTopbar={onRequestTopbar} />
 				          	</Route>
-				          	<Route path="*">
-					            <Home />
-					        </Route>
+				          	{
+					         //  	<Route path="*">
+						        //     <Page404 />
+						        // </Route>
+					    	}
 						</Switch>
 					</Row>	
 					<Row className = "footer_container">
