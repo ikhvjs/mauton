@@ -5,3 +5,7 @@
 .hidden-container {
 	display: none;
 }
+
+.blog-container{
+	min-height: 100vh;
+}

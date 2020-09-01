@@ -8,10 +8,17 @@ import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap'
 import { 
 	requestBloglistAct,
-	requestBlogByClickAct,
 	selectSearchBloglistAct,
-	searchBloglistAct
+	searchBloglistAct,
+	clearSearchBloglistAct
 } from './BloglistAction';
+
+import { 
+	requestBlogByClickAct,
+	requestBlogTagByClickAct 
+	} from '../../components/Blog/BlogAction';
+
+import { transformDate } from '../../utility/utility';
 
 import Blog from '../../components/Blog/Blog';
 // import Page404 from '../../components/Page404/Page404';
@@ -23,62 +30,71 @@ const mapStateToProps = (state) => {
   return {
     bloglist:state.blogRdc.bloglist,
     isPendingBloglistByClick:state.blogRdc.isPendingBloglistByClick,
-    isHiddenBloglist:state.blogRdc.isHiddenBloglist
+    isHiddenBloglist:state.blogRdc.isHiddenBloglist,
+    isRefreshBloglistNeeded: state.blogRdc.isRefreshBloglistNeeded,
+    blog:state.blogRdc.blog
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch,ownProps) => {
   return {
     onRequestBloglist:(sidebarMenuPath) => 
     	dispatch(requestBloglistAct(sidebarMenuPath)),
-    onRequestBlogByClick:(event)=>
-    //event.target.value is blog_path
-    	dispatch(requestBlogByClickAct(event.target.value)),
+    onRequestBlogByClick:(event)=>{
+    //event.target.getAttribute('value') is blog_path
+    	dispatch(requestBlogByClickAct(event.target.getAttribute('value')));
+    	dispatch(requestBlogTagByClickAct(event.target.getAttribute('value')));
+    },
     onSearchBloglist:(event)=>
-    	dispatch(searchBloglistAct(selectSearchBloglistAct(event)))
+    	dispatch(searchBloglistAct(
+    		selectSearchBloglistAct(event,ownProps.match.params.sidebarMenuPath))),
+    onClearSearchBloglist:(event)=>
+    	dispatch(clearSearchBloglistAct(event))
   }
 }
 
 class Bloglist extends Component  {
 
 	componentDidMount() {
-		const {
-			isPendingBloglistByClick,
-			onRequestBloglist
-			} = this.props;
+		const { isPendingBloglistByClick, onRequestBloglist } = this.props;
+		const { sidebarMenuPath }=this.props.match.params;
 
 		if (isPendingBloglistByClick === false){
-	    	onRequestBloglist(this.props.match.params.sidebarMenuPath);
+	    	onRequestBloglist(sidebarMenuPath);
 		}
 
 	}
 
+
+	componentDidUpdate(prevProps) {
+		const { onRequestBloglist, isRefreshBloglistNeeded } = this.props;
+		const { sidebarMenuPath }=this.props.match.params;
+
+		if (isRefreshBloglistNeeded === true) {
+			onRequestBloglist(sidebarMenuPath);
+		}
+		
+	}
+
+
+
 	render(){
 		const {
 			bloglist,
-			isHiddenBloglist,
+			blog,
+			// isHiddenBloglist,
 			onRequestBlogByClick,
-			onSearchBloglist
+			onSearchBloglist,
+			onClearSearchBloglist
 			} = this.props;
 
-		this.transformDate = (dateInput) =>{
-			var date = new Date(dateInput);
-			
-			function pad(n) {
-				return n<10 ? '0'+n : n
-			}
-			return  date.getFullYear() +
-	   				 "-" +
-	   				 pad(date.getMonth()+1) +
-	   				 "-" +
-	   				 pad(date.getDate()) 
-		}
+		
 		
 
 		return (
 			<React.Fragment>
 				<div name="bloglist-control-wrapper" 
-					className={isHiddenBloglist?"hidden-container":""}>
+					className={(blog.length ===1)?"hidden-container":null}>
 					<Form.Row name="search_blog">
 						<Col xs={4}>
 							<Form.Control size="sm" name="blog_title"
@@ -96,11 +112,10 @@ class Bloglist extends Component  {
 							<Button size="sm" onClick={onSearchBloglist}>Search</Button>
 						</Col>
 						<Col name='button' xs={0.3}>
-							<Button size="sm" variant="secondary" onClick={null}>Clear</Button>
+							<Button size="sm" variant="secondary" onClick={onClearSearchBloglist}>Clear</Button>
 						</Col>
-					</Form.Row>
-					<br/>
-					<Form.Row>
+						<Col name='button' xs={1}>
+						</Col>
 						<Col name='button' xs={0.3}>
 							<Button size="sm" variant="success" onClick={null}>Create</Button>
 						</Col>
@@ -110,11 +125,12 @@ class Bloglist extends Component  {
 						<CardColumns>
 							{ bloglist.map(blog =>{
 								return(
-									<Card key={blog.blog_id} style={{ width: '18rem'}}
+									<Card bg="light" text="dark" border="primary"
+										key={blog.blog_id} style={{ width: '18rem'}}
 										id={blog.blog_id} className='bloglist' >
 									  <Card.Header as="h5">{blog.blog_title}</Card.Header>
 									  <Card.Body>
-									    <Card.Title>{blog.blog_category_name}</Card.Title>
+									    <Card.Title className="text-muted">{blog.blog_category_name}</Card.Title>
 									    <Card.Text>
 									    	{blog.blog_desc}
 									    	{
@@ -131,7 +147,7 @@ class Bloglist extends Component  {
 									    </LinkContainer>
 									    <Card.Text>
 									    	<small className="text-muted">
-									  			{`last updated:${this.transformDate(blog.last_updated_date)}`}
+									  			{`last updated:${transformDate(blog.last_updated_date)}`}
 									  		</small>
 									    </Card.Text>
 									  </Card.Body>
@@ -141,7 +157,7 @@ class Bloglist extends Component  {
 						</CardColumns>
 					</Row>
 				</div>
-				<Row name="blog-container">
+				<Row className={(blog.length ===1)?null:"hidden-container"}>
 					<Switch>
 						<Route path={`${this.props.match.url}/:blogPath`}>
 							<Blog />

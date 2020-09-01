@@ -21,6 +21,10 @@ import {
   REQUEST_BLOGLIST_C_PENDING,
   REQUEST_BLOGLIST_C_SUCCESS,
   REQUEST_BLOGLIST_C_FAILED,
+  SEARCH_BLOGLIST_PENDING,
+  SEARCH_BLOGLIST_SUCCESS,
+  SEARCH_BLOGLIST_FAILED,
+  CLEAR_SEARCH_BLOGLIST,
 //Blog
   REQUEST_BLOG_C_PENDING,
   REQUEST_BLOG_C_SUCCESS,
@@ -28,9 +32,12 @@ import {
   REQUEST_BLOG_PENDING,
   REQUEST_BLOG_SUCCESS,
   REQUEST_BLOG_FAILED,
-  SEARCH_BLOGLIST_PENDING,
-  SEARCH_BLOGLIST_SUCCESS,
-  SEARCH_BLOGLIST_FAILED,
+  REQUEST_BLOG_TAG_PENDING,
+  REQUEST_BLOG_TAG_SUCCESS,
+  REQUEST_BLOG_TAG_FAILED,
+  REQUEST_BLOG_TAG_C_PENDING,
+  REQUEST_BLOG_TAG_C_SUCCESS,
+  REQUEST_BLOG_TAG_C_FAILED,
 //Category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
@@ -199,54 +206,66 @@ export const requestSidebarRdc = (state=initialStateSidebar, action={}) => {
 }
 
 
-
 const initialStateBlog = {
   bloglist: [],
-  isPendingBloglist: false,
   isPendingBloglistByClick: false,
   blog: [],
-  isPendingBlog: false,
   isPendingBlogByClick: false,
-  isHiddenBloglist:false
-  // isPendingSingleBlog: false
+  isRefreshBloglistNeeded:false,
+  tags:[]
 }
 
 export const blogRdc = (state=initialStateBlog, action={}) => {
   switch (action.type) {
+// Bloglist
 	case REQUEST_BLOGLIST_PENDING:
-	  return Object.assign({}, state, {isPendingBloglist: true})
+	  return Object.assign({}, state, { blog:{} })
 	case REQUEST_BLOGLIST_SUCCESS:
 	  return Object.assign({}, state, 
-      {bloglist: action.payload, isPendingBloglist: false})
+      {bloglist: action.payload,isRefreshBloglistNeeded:false})
 	case REQUEST_BLOGLIST_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
 	case REQUEST_BLOGLIST_C_PENDING:
-	  return Object.assign({}, state, {isPendingBloglistByClick: true})
+	  return Object.assign({}, state, {isPendingBloglistByClick: true,blog:{}})
 	case REQUEST_BLOGLIST_C_SUCCESS:
 	  return Object.assign({}, state, 
-      {bloglist: action.payload, isPendingBloglistByClick: false, isHiddenBloglist:false})
+      {bloglist: action.payload, isPendingBloglistByClick: false,
+        isRefreshBloglistNeeded:false})
 	case REQUEST_BLOGLIST_C_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
-  case REQUEST_BLOG_C_PENDING:
-    return Object.assign({}, state, {isPendingBlogByClick: true})
-  case REQUEST_BLOG_C_SUCCESS:
-    return Object.assign({}, state, 
-      {blog: action.payload, isPendingBlogByClick: false, isHiddenBloglist:true})
-  case REQUEST_BLOG_C_FAILED:
-    return Object.assign({}, state, {error: action.payload}) 
-  case REQUEST_BLOG_PENDING:
-    return Object.assign({}, state, {isPendingBlog: true})
-  case REQUEST_BLOG_SUCCESS:
-    return Object.assign({}, state, 
-      {blog: action.payload, isPendingBlog: false, isHiddenBloglist:true})
-  case REQUEST_BLOG_FAILED:
-    return Object.assign({}, state, {error: action.payload}) 
   case SEARCH_BLOGLIST_PENDING:
     return Object.assign({}, state, {})
   case SEARCH_BLOGLIST_SUCCESS:
-    return Object.assign({}, state, {bloglist:action.payload})
+    return Object.assign({}, state, {bloglist:action.payload,isRefreshBloglistNeeded:false})
   case SEARCH_BLOGLIST_FAILED:
     return Object.assign({}, state, {error: action.payload}) 
+  case CLEAR_SEARCH_BLOGLIST:
+    return Object.assign({}, state, {isRefreshBloglistNeeded:true}) 
+//Blog
+  case REQUEST_BLOG_C_PENDING:
+    return Object.assign({}, state, {isPendingBlogByClick: true})
+  case REQUEST_BLOG_C_SUCCESS:
+    return Object.assign({}, state,  {blog: action.payload, isPendingBlogByClick: false})
+  case REQUEST_BLOG_C_FAILED:
+    return Object.assign({}, state, {error: action.payload}) 
+  case REQUEST_BLOG_PENDING:
+    return Object.assign({}, state, {})
+  case REQUEST_BLOG_SUCCESS:
+    return Object.assign({}, state, {blog: action.payload})
+  case REQUEST_BLOG_FAILED:
+    return Object.assign({}, state, {error: action.payload}) 
+  case REQUEST_BLOG_TAG_PENDING:
+    return Object.assign({}, state, {})
+  case REQUEST_BLOG_TAG_SUCCESS:
+    return Object.assign({}, state,  {tags: action.payload})
+  case REQUEST_BLOG_TAG_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case REQUEST_BLOG_TAG_C_PENDING:
+    return Object.assign({}, state, {})
+  case REQUEST_BLOG_TAG_C_SUCCESS:
+    return Object.assign({}, state,  {tags: action.payload})
+  case REQUEST_BLOG_TAG_C_FAILED:
+    return Object.assign({}, state, {error: action.payload})
   default:
     return state  
   }

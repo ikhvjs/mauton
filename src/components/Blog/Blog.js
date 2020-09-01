@@ -6,14 +6,22 @@ import {
 import { connect } from 'react-redux';
 
 import { 
-	requestBlogAct
+	requestBlogAct,
+	requestBlogTagAct
 } from './BlogAction';
+
+import { transformDate } from '../../utility/utility';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Col, Badge } from "react-bootstrap";
+// import './Blog.css';
 
 
 
 const mapStateToProps = (state) => {
   return {
     blog:state.blogRdc.blog,
+    tags:state.blogRdc.tags,
     isPendingBlogByClick:state.blogRdc.isPendingBlogByClick
   }
 }
@@ -21,26 +29,58 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onRequestBlog:(blogPath)=>
-    	dispatch(requestBlogAct(blogPath))
+    	dispatch(requestBlogAct(blogPath)),
+    onRequestBlogTag:(blogPath)=>
+    	dispatch(requestBlogTagAct(blogPath))
   }
 }
 
 class Blog extends Component  {
 
 	componentDidMount() {
-		const {
-			isPendingBlogByClick,
-			onRequestBlog
-			} = this.props;
-
+		const { isPendingBlogByClick, onRequestBlog, onRequestBlogTag } = this.props;
+		const { blogPath } = this.props.match.params;
+		// console.log('DidMount blogPath',blogPath);
 		if (isPendingBlogByClick === false){
-	    	onRequestBlog(this.props.match.params.blogPath);
+	    	onRequestBlog(blogPath);
+	    	onRequestBlogTag(blogPath);
 		}
 	}
 
 	render(){
+		const {
+			blog,
+			tags
+		}=this.props;
+
 		return(
-			<h1>blog page</h1>
+			(blog.length === 1)?
+			<React.Fragment>
+				<Col className = "blog-container-wrapper">
+					<h1>{blog[0].blog_title}</h1>
+					<hr></hr>
+					<h4>{blog[0].blog_desc}</h4>
+	                <p>{`Category: ${blog[0].blog_category_name}`}</p>
+	                <p>Tags: 
+	                	{tags.map((tag)=>{
+	                		return(
+	                			<React.Fragment key={tag.tag_id}>
+	                				<Badge variant="primary">{tag.tag_name}</Badge>{' '}
+	                			</React.Fragment>
+	                		)
+	                	})}
+					</p>
+	                <p>{`Last updated on ${transformDate(blog[0].last_updated_date)}`}</p>
+					<hr></hr>
+	                <p className="lead">TESTTTTTTTTTTTTTTTTTT.</p>
+	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
+	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor. Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
+	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor. Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
+	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor. Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
+	                				
+                </Col>
+			</React.Fragment>
+			:null
 
 
 		);
