@@ -14,7 +14,7 @@ import { transformDate } from '../../utility/utility';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col, Badge } from "react-bootstrap";
-// import './Blog.css';
+import './Blog.css';
 
 
 
@@ -64,20 +64,13 @@ class Blog extends Component  {
 	                <p>Tags: 
 	                	{tags.map((tag)=>{
 	                		return(
-	                			<React.Fragment key={tag.tag_id}>
-	                				<Badge variant="primary">{tag.tag_name}</Badge>{' '}
-	                			</React.Fragment>
+	                			<Badge key={tag.tag_id} className="blog-tag" variant="primary">{tag.tag_name}</Badge>
 	                		)
 	                	})}
 					</p>
 	                <p>{`Last updated on ${transformDate(blog[0].last_updated_date)}`}</p>
 					<hr></hr>
-	                <p className="lead">TESTTTTTTTTTTTTTTTTTT.</p>
-	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
-	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor. Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
-	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor. Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
-	                <p>Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor. Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
-	                				
+	                <div>{blog[0].blog_content}</div>		
                 </Col>
 			</React.Fragment>
 			:null

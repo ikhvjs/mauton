@@ -10,7 +10,9 @@ import {
   REQUEST_BLOG_TAG_FAILED,
   REQUEST_BLOG_TAG_C_PENDING,
   REQUEST_BLOG_TAG_C_SUCCESS,
-  REQUEST_BLOG_TAG_C_FAILED
+  REQUEST_BLOG_TAG_C_FAILED,
+  SELECT_CREATE_BLOG,
+  SELECT_CREATE_BLOG_C
  } from '../../constants';
 
 export const requestBlogAct = (blogPath) => (dispatch) =>{
@@ -57,4 +59,12 @@ export const requestBlogTagByClickAct =(blogPath)=>(dispatch)=>{
     .then(response => response.json())
     .then(data => dispatch({ type: REQUEST_BLOG_TAG_C_SUCCESS, payload: data }))
     .catch(error => dispatch({ type: REQUEST_BLOG_TAG_C_FAILED, payload: error }))
+}
+
+export const selectCreateBlogByClickAct = ()  => {
+  return ({type: SELECT_CREATE_BLOG_C})
+}
+
+export const selectCreateBlogAct =() => {
+  return ({type: SELECT_CREATE_BLOG})
 }

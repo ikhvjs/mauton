@@ -15,15 +15,18 @@ import {
 
 import { 
 	requestBlogByClickAct,
-	requestBlogTagByClickAct 
+	requestBlogTagByClickAct,
+	selectCreateBlogByClickAct
 	} from '../../components/Blog/BlogAction';
 
 import { transformDate } from '../../utility/utility';
 
 import Blog from '../../components/Blog/Blog';
+import BlogCreate from '../../components/Blog/BlogCreate';
+// import TinyEditorComponent from '../../components/TinyEditorComponent/TinyEditorComponent';
 // import Page404 from '../../components/Page404/Page404';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {CardColumns, Card, Button, Row, Form, Col} from "react-bootstrap";
+import {CardColumns, Card, Button, Row, Form, Col,Container} from "react-bootstrap";
 import './Bloglist.css';
 
 const mapStateToProps = (state) => {
@@ -32,7 +35,8 @@ const mapStateToProps = (state) => {
     isPendingBloglistByClick:state.blogRdc.isPendingBloglistByClick,
     isHiddenBloglist:state.blogRdc.isHiddenBloglist,
     isRefreshBloglistNeeded: state.blogRdc.isRefreshBloglistNeeded,
-    blog:state.blogRdc.blog
+    blog:state.blogRdc.blog,
+    isCreateBlog:state.blogRdc.isCreateBlog
   }
 }
 
@@ -49,7 +53,9 @@ const mapDispatchToProps = (dispatch,ownProps) => {
     	dispatch(searchBloglistAct(
     		selectSearchBloglistAct(event,ownProps.match.params.sidebarMenuPath))),
     onClearSearchBloglist:(event)=>
-    	dispatch(clearSearchBloglistAct(event))
+    	dispatch(clearSearchBloglistAct(event)),
+    onSelectCreateBlogByClick:()=>
+    	dispatch(selectCreateBlogByClickAct())
   }
 }
 
@@ -85,7 +91,9 @@ class Bloglist extends Component  {
 			// isHiddenBloglist,
 			onRequestBlogByClick,
 			onSearchBloglist,
-			onClearSearchBloglist
+			onClearSearchBloglist,
+			onSelectCreateBlogByClick,
+			isCreateBlog
 			} = this.props;
 
 		
@@ -93,8 +101,12 @@ class Bloglist extends Component  {
 
 		return (
 			<React.Fragment>
-				<div name="bloglist-control-wrapper" 
-					className={(blog.length ===1)?"hidden-container":null}>
+			
+				<Container name="bloglist-control-wrapper" 
+					className={
+						(isCreateBlog)?"hidden-container":
+							((blog.length ===1)?"hidden-container":null)
+					}>
 					<Form.Row name="search_blog">
 						<Col xs={4}>
 							<Form.Control size="sm" name="blog_title"
@@ -112,12 +124,16 @@ class Bloglist extends Component  {
 							<Button size="sm" onClick={onSearchBloglist}>Search</Button>
 						</Col>
 						<Col name='button' xs={0.3}>
-							<Button size="sm" variant="secondary" onClick={onClearSearchBloglist}>Clear</Button>
+								<Button size="sm" variant="secondary" 
+									onClick={onClearSearchBloglist}>Clear</Button>
 						</Col>
 						<Col name='button' xs={1}>
 						</Col>
 						<Col name='button' xs={0.3}>
-							<Button size="sm" variant="success" onClick={null}>Create</Button>
+							<LinkContainer to={`${this.props.match.url}/blogcreate`}>
+								<Button size="sm" variant="success" 
+								onClick={onSelectCreateBlogByClick}>Create</Button>
+							</LinkContainer>
 						</Col>
 					</Form.Row>
 					<br/>
@@ -156,14 +172,24 @@ class Bloglist extends Component  {
 							})}
 						</CardColumns>
 					</Row>
-				</div>
-				<Row className={(blog.length ===1)?null:"hidden-container"}>
+				</Container>
+				<Container name="blog-content">
 					<Switch>
+						<Route path={`${this.props.match.url}/blogcreate`}>
+							<Row name="createblog" className={null}>
+								<BlogCreate />
+							</Row>
+						</Route>
 						<Route path={`${this.props.match.url}/:blogPath`}>
-							<Blog />
+							<Row name="showblog" className={
+								(isCreateBlog)?"hidden-container":
+									((blog.length ===1)?null:"hidden-container")
+							}>
+								<Blog />
+							</Row>
 						</Route>
 					</Switch>
-				</Row>
+				</Container>
 			</React.Fragment>
 		)
 	}

@@ -1,3 +1,16 @@
 .blog-container-wrapper {
 	align-items: center;
 }
+
+.blog-tag {
+	margin-right: 10px;
+}
+
+#article, .mce-tinymce,.mce-stack-layout, .mce-edit-area{
+display: flex;
+flex-direction: column;
+flex: 1;
+}
+.mce-tinymce iframe{
+flex: 1;
+}

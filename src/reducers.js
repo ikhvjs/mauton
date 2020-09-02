@@ -38,6 +38,8 @@ import {
   REQUEST_BLOG_TAG_C_PENDING,
   REQUEST_BLOG_TAG_C_SUCCESS,
   REQUEST_BLOG_TAG_C_FAILED,
+  SELECT_CREATE_BLOG,
+  SELECT_CREATE_BLOG_C,
 //Category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
@@ -142,7 +144,9 @@ import {
   SEARCH_PARENT_MENU_FAILED,
   CLEAR_SEARCH_PARENT_MENU,
   SELECT_CREATE_PARENT_MENU,
-  SELECT_UPDATE_PARENT_MENU
+  SELECT_UPDATE_PARENT_MENU,
+//TINY EDITOR
+  INIT_TINY_EDITOR
  } from './constants';
 
 
@@ -212,7 +216,9 @@ const initialStateBlog = {
   blog: [],
   isPendingBlogByClick: false,
   isRefreshBloglistNeeded:false,
-  tags:[]
+  tags:[],
+  isCreateBlog:false,
+  isInitTinyEditorNeeded:false
 }
 
 export const blogRdc = (state=initialStateBlog, action={}) => {
@@ -266,6 +272,12 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state,  {tags: action.payload})
   case REQUEST_BLOG_TAG_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
+  case SELECT_CREATE_BLOG:
+    return Object.assign({}, state, {isCreateBlog: true, isInitTinyEditorNeeded:true})
+  case SELECT_CREATE_BLOG_C:
+    return Object.assign({}, state, {isCreateBlog: true, isInitTinyEditorNeeded:true})
+  case INIT_TINY_EDITOR:
+      return Object.assign({}, state, {isInitTinyEditorNeeded:false})
   default:
     return state  
   }
@@ -484,7 +496,7 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case POST_MENU2_PENDING:
     return Object.assign({}, state, {})
   case POST_MENU2_SUCCESS:
-    return Object.assign({}, state, {isRefreshMenu2Needed:true})
+    return Object.assign({}, state, {createParentMenu:{}, isRefreshMenu2Needed:true})
   case POST_MENU2_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case DELETE_MENU2_PENDING:
@@ -553,6 +565,7 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
     return state
   }
 }
+
 
 
 
