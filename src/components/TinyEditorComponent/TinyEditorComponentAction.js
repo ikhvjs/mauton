@@ -1,5 +1,6 @@
 import {
-  INIT_TINY_EDITOR
+  INIT_TINY_EDITOR,
+  ONCHANGE_BLOG_CONTENT
  } from '../../constants';
 
 // Import TinyMCE
@@ -16,24 +17,58 @@ import 'tinymce/themes/silver';
 
 // // Any plugins you want to use has to be imported
 import 'tinymce/plugins/image';
+import 'tinymce/plugins/imagetools';
+import 'tinymce/plugins/lists';
 import 'tinymce/plugins/link';
-import 'tinymce/plugins/code';
+import 'tinymce/plugins/preview';
+import 'tinymce/plugins/table';
+// import 'tinymce/plugins/wordcount';
+// import 'tinymce/plugins/tinydrive';
+import 'tinymce/plugins/autoresize';
+
+
+
 
 export const initTinyEditorAct = ()  => {
+
+  
+
+  tinymce.remove();
+  // setTimeout(function () {
 	tinymce.init({
         selector: '#frame1',
-        height: 500,
-        menubar: true,
+        width: '100%',
+        min_height: 800,
+        max_height: 800,
+        menubar: false,
         skin:false,
         content_css:false,
+        // init_instance_callback : "onInstanceInit",
+        setup: (editor)=> {
+            editor.on('keyup change', function(e) {
+              const content = editor.getContent();
+              console.log('input change',content);
+            });
+          },
+        branding: false,
         plugins: [
-          'link image code'
+          'image imagetools',
+        ' lists link preview',
+        'table'
         ],
         toolbar: 'undo redo | formatselect | ' +
-        'bold italic backcolor | alignleft aligncenter ' +
+        'bold italic | forecolor backcolor | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | ' +
-        'removeformat | help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        'removeformat | link image |table|preview',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+        
       });
+// },1);
+  
   return ({type:INIT_TINY_EDITOR})
+}
+
+export const onChangeBlogContentAct =(blogContent)=>{
+  console.log('blogContent',blogContent);
+  return ({type:ONCHANGE_BLOG_CONTENT, payload:blogContent})
 }

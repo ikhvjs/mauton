@@ -6,9 +6,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 import { 
-  initTinyEditorAct
-  } from '../../components/TinyEditorComponent/TinyEditorComponentAction';
-
+  onChangeBlogContentAct
+} from './TinyEditorComponentAction';
 
 
 // import $ from 'jquery';
@@ -17,15 +16,15 @@ import {
 
 const mapStateToProps =(state) => {
   return {
-      isInitTinyEditorNeeded:state.blogRdc.isInitTinyEditorNeeded
+      blogContent:state.blogRdc.blogContent
   }
 }
 
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch,ownProps) => {
   return {
-    onInitTinyEditor:()=>
-        dispatch(initTinyEditorAct())
+      onChangeBlogContent:() => 
+        dispatch(onChangeBlogContentAct(ownProps.blogContent)),
 
     }
 
@@ -45,20 +44,18 @@ class TinyEditorComponent extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.isInitTinyEditorNeeded === true) {
-      this.props.onInitTinyEditor();
-    }
+    // if (this.props.isInitTinyEditorNeeded === true) {
+    //   this.props.onInitTinyEditor();
+    // }
   }
 
   render() {
-      
+    const { blogContent, onChangeBlogContent} = this.props;
+
 
     return (
-      <React.Fragment>
-      <div id='frame1'  style={{ width: '50rem', height:'18rem'}} >Helloooooo</div>
-      
-
-      </React.Fragment>
+      <textarea id='frame1' value={blogContent} >
+      </textarea>
     )
   }
 

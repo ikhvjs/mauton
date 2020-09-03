@@ -19,10 +19,15 @@ import {
 	selectCreateBlogByClickAct
 	} from '../../components/Blog/BlogAction';
 
+// import {
+// 	initTinyEditorAct
+// 	} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
+
 import { transformDate } from '../../utility/utility';
 
 import Blog from '../../components/Blog/Blog';
 import BlogCreate from '../../components/Blog/BlogCreate';
+
 // import TinyEditorComponent from '../../components/TinyEditorComponent/TinyEditorComponent';
 // import Page404 from '../../components/Page404/Page404';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -54,10 +59,12 @@ const mapDispatchToProps = (dispatch,ownProps) => {
     		selectSearchBloglistAct(event,ownProps.match.params.sidebarMenuPath))),
     onClearSearchBloglist:(event)=>
     	dispatch(clearSearchBloglistAct(event)),
-    onSelectCreateBlogByClick:()=>
-    	dispatch(selectCreateBlogByClickAct())
+    onSelectCreateBlogByClick:()=> {
+    	dispatch(selectCreateBlogByClickAct());
+    }
   }
 }
+
 
 class Bloglist extends Component  {
 
@@ -176,13 +183,14 @@ class Bloglist extends Component  {
 				<Container name="blog-content">
 					<Switch>
 						<Route path={`${this.props.match.url}/blogcreate`}>
-							<Row name="createblog" className={null}>
+							<Row name="createblog" 
+								className={isCreateBlog?null:"hidden-container"}>
 								<BlogCreate />
 							</Row>
 						</Route>
 						<Route path={`${this.props.match.url}/:blogPath`}>
-							<Row name="showblog" className={
-								(isCreateBlog)?"hidden-container":
+							<Row name="showblog" 
+								className={(isCreateBlog)?"hidden-container":
 									((blog.length ===1)?null:"hidden-container")
 							}>
 								<Blog />

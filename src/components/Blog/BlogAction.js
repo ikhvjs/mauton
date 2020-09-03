@@ -12,7 +12,8 @@ import {
   REQUEST_BLOG_TAG_C_SUCCESS,
   REQUEST_BLOG_TAG_C_FAILED,
   SELECT_CREATE_BLOG,
-  SELECT_CREATE_BLOG_C
+  SELECT_CREATE_BLOG_C,
+  CLICK_SAVE_BLOG
  } from '../../constants';
 
 export const requestBlogAct = (blogPath) => (dispatch) =>{
@@ -67,4 +68,9 @@ export const selectCreateBlogByClickAct = ()  => {
 
 export const selectCreateBlogAct =() => {
   return ({type: SELECT_CREATE_BLOG})
+}
+
+export const clickSaveBlogAct = (value) => {
+  console.log('clickSaveBlogAct',value);
+  return ({type:CLICK_SAVE_BLOG})
 }

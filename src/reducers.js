@@ -40,6 +40,8 @@ import {
   REQUEST_BLOG_TAG_C_FAILED,
   SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
+  CLICK_SAVE_BLOG,
+  ONCHANGE_BLOG_CONTENT,
 //Category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
@@ -218,7 +220,9 @@ const initialStateBlog = {
   isRefreshBloglistNeeded:false,
   tags:[],
   isCreateBlog:false,
-  isInitTinyEditorNeeded:false
+  editorContent:[],
+  isCreateBlogByClick:false,
+  blogContent:[]
 }
 
 export const blogRdc = (state=initialStateBlog, action={}) => {
@@ -232,7 +236,9 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
 	case REQUEST_BLOGLIST_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
 	case REQUEST_BLOGLIST_C_PENDING:
-	  return Object.assign({}, state, {isPendingBloglistByClick: true,blog:{}})
+	  return Object.assign({}, state, 
+      {isPendingBloglistByClick: true,blog:{}, 
+      isCreateBlog:false, isCreateBlogByClick:false})
 	case REQUEST_BLOGLIST_C_SUCCESS:
 	  return Object.assign({}, state, 
       {bloglist: action.payload, isPendingBloglistByClick: false,
@@ -273,11 +279,17 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
   case REQUEST_BLOG_TAG_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case SELECT_CREATE_BLOG:
-    return Object.assign({}, state, {isCreateBlog: true, isInitTinyEditorNeeded:true})
+    return Object.assign({}, state, {isCreateBlog: true})
   case SELECT_CREATE_BLOG_C:
-    return Object.assign({}, state, {isCreateBlog: true, isInitTinyEditorNeeded:true})
+    return Object.assign({}, state, 
+      {isCreateBlog: true, isCreateBlogByClick:true})
+  case CLICK_SAVE_BLOG:
+    return Object.assign({}, state, {})
+  case ONCHANGE_BLOG_CONTENT:
+    return Object.assign({}, state, {blogContent: action.payload})
+//TinyMCE Editor
   case INIT_TINY_EDITOR:
-      return Object.assign({}, state, {isInitTinyEditorNeeded:false})
+      return Object.assign({}, state, {})
   default:
     return state  
   }
