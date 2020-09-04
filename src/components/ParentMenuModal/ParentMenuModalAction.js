@@ -12,14 +12,14 @@ import {
  } from '../../constants';
 
 export const requestParentMenuModalAct = () => (dispatch) => {
-	dispatch({ type: REQUEST_PARENT_MENU_PENDING })
-	fetch('http://localhost:3001/menu1/get', {
-	      method: 'get',
-	      headers: {'Content-Type': 'text/plain'}
-	    })
-	.then(response => response.json())
-	.then(data => dispatch({ type: REQUEST_PARENT_MENU_SUCCESS, payload: data }))
-	.catch(error => dispatch({ type: REQUEST_PARENT_MENU_FAILED, payload: error }))
+  dispatch({ type: REQUEST_PARENT_MENU_PENDING })
+  fetch('http://localhost:3001/menu1/get', {
+        method: 'get',
+        headers: {'Content-Type': 'text/plain'}
+      })
+  .then(response => response.json())
+  .then(data => dispatch({ type: REQUEST_PARENT_MENU_SUCCESS, payload: data }))
+  .catch(error => dispatch({ type: REQUEST_PARENT_MENU_FAILED, payload: error }))
 }
 
 export const closeParentMenuModalAct =()=>{
@@ -68,14 +68,14 @@ export const clearSearchParentMenuModalAct = (event) => {
 }
 
 export const selectCreateParentMenuModalAct = (event) => {
-	const selectedCreateParentMenu = {};
-	const selectedNode = event.target.parentNode.parentNode;
-	const parentMenuID = selectedNode.id;
-	const parentMenuName = selectedNode.querySelector('td[name="menu_name"]').innerHTML;
+  const selectedCreateParentMenu = {};
+  const selectedNode = event.target.parentNode.parentNode;
+  const parentMenuID = selectedNode.id;
+  const parentMenuName = selectedNode.querySelector('td[name="menu_name"]').innerHTML;
 
-	Object.assign(selectedCreateParentMenu,  {"menu_id": parentMenuID, "menu_name":parentMenuName})
+  Object.assign(selectedCreateParentMenu,  {"menu_id": parentMenuID, "menu_name":parentMenuName})
 
-	return { type: SELECT_CREATE_PARENT_MENU, payload:selectedCreateParentMenu };
+  return { type: SELECT_CREATE_PARENT_MENU, payload:selectedCreateParentMenu };
 }
 
 export const selectUpdateParentMenuModalAct = (event) => {

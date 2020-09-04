@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-
-
-
-
 import { connect } from 'react-redux';
 
 import { 
-  onChangeBlogContentAct
+  initTinyEditorAct
 } from './TinyEditorComponentAction';
 
 
@@ -16,45 +12,33 @@ import {
 
 const mapStateToProps =(state) => {
   return {
-      blogContent:state.blogRdc.blogContent
+      
   }
 }
 
 
-const mapDispatchToProps = (dispatch,ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-      onChangeBlogContent:() => 
-        dispatch(onChangeBlogContentAct(ownProps.blogContent)),
-
-    }
+    onInitTinyEditor:(EditorID)=>
+      dispatch(initTinyEditorAct(EditorID))
+  }
 
 }
+
 
 class TinyEditorComponent extends Component {
 
-  // handleEditorChange = (content, editor) => {
-  //    console.log('Content was updated:', content)
-  // }
-
   componentDidMount() {
-    // if (this.props.isInitTinyEditorNeeded === true){
-    //   this.props.onInitTinyEditor();
-    // }
-    
+    const { id, onInitTinyEditor } = this.props;
+    // console.log('tiny didMount id',id);
+    onInitTinyEditor(id);
   }
 
-  componentDidUpdate() {
-    // if (this.props.isInitTinyEditorNeeded === true) {
-    //   this.props.onInitTinyEditor();
-    // }
-  }
 
   render() {
-    const { blogContent, onChangeBlogContent} = this.props;
-
-
+    const { id } = this.props;
     return (
-      <textarea id='frame1' value={blogContent} >
+      <textarea id={id}  onChange={()=>null} >
       </textarea>
     )
   }

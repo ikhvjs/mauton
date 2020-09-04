@@ -41,7 +41,18 @@ import {
   SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
   CLICK_SAVE_BLOG,
-  ONCHANGE_BLOG_CONTENT,
+  SELECT_UPDATE_BLOG_CATEGORY,
+  CLEAR_BLOG_CATEGORY,
+//Category Modal
+  REQUEST_CATEGORY_MODAL_PENDING,
+  REQUEST_CATEGORY_MODAL_SUCCESS,
+  REQUEST_CATEGORY_MODAL_FAILED,
+  CLOSE_CATEGORY_MODAL,
+  SEARCH_CATEGORY_MODAL_PENDING,
+  SEARCH_CATEGORY_MODAL_SUCCESS,
+  SEARCH_CATEGORY_MODAL_FAILED,
+  CLEAR_SEARCH_CATEGORY_MODAL,
+  SELECT_CATEGORY_MODAL,
 //Category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
@@ -222,7 +233,10 @@ const initialStateBlog = {
   isCreateBlog:false,
   editorContent:[],
   isCreateBlogByClick:false,
-  blogContent:[]
+  blogContent:[],
+  isShowCategoryModal:false,
+  blogCategory:[],
+  selectedCategory:[]
 }
 
 export const blogRdc = (state=initialStateBlog, action={}) => {
@@ -284,12 +298,34 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state, 
       {isCreateBlog: true, isCreateBlogByClick:true})
   case CLICK_SAVE_BLOG:
-    return Object.assign({}, state, {})
-  case ONCHANGE_BLOG_CONTENT:
     return Object.assign({}, state, {blogContent: action.payload})
+  case SELECT_UPDATE_BLOG_CATEGORY:
+    return Object.assign({}, state, {isShowCategoryModal:true})
+  case CLEAR_BLOG_CATEGORY:
+    return Object.assign({},state, {selectedCategory:{}})
+//Blog Category Modal
+  case REQUEST_CATEGORY_MODAL_PENDING:
+    return Object.assign({}, state, {isRefreshCategoryNeeded:false})
+  case REQUEST_CATEGORY_MODAL_SUCCESS:
+    return Object.assign({}, state, {blogCategory: action.payload})
+  case REQUEST_CATEGORY_MODAL_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case SEARCH_CATEGORY_MODAL_PENDING:
+    return Object.assign({}, state, {})
+  case SEARCH_CATEGORY_MODAL_SUCCESS:
+    return Object.assign({}, state, {blogCategory: action.payload})
+  case SEARCH_CATEGORY_MODAL_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case CLEAR_SEARCH_CATEGORY_MODAL:
+    return Object.assign({}, state, {isRefreshCategoryNeeded:true})
+  case SELECT_CATEGORY_MODAL:
+    return Object.assign({}, state, 
+      {selectedCategory:action.payload, isShowCategoryModal:false})
+  case CLOSE_CATEGORY_MODAL:
+    return Object.assign({}, state, {isShowCategoryModal:false})
 //TinyMCE Editor
   case INIT_TINY_EDITOR:
-      return Object.assign({}, state, {})
+    return Object.assign({}, state, {})
   default:
     return state  
   }
@@ -550,9 +586,9 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   //   return Object.assign({}, state, {updateParentMenu:action.payload})
 //PARENT MENU MODAL
   case REQUEST_PARENT_MENU_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshParentMenuNeeded:false})
   case REQUEST_PARENT_MENU_SUCCESS:
-    return Object.assign({}, state, {parentMenus: action.payload, isRefreshParentMenuNeeded:false})
+    return Object.assign({}, state, {parentMenus: action.payload})
   case REQUEST_PARENT_MENU_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case SEARCH_PARENT_MENU_PENDING:

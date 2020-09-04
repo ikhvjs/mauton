@@ -1,6 +1,5 @@
 import {
-  INIT_TINY_EDITOR,
-  ONCHANGE_BLOG_CONTENT
+  INIT_TINY_EDITOR
  } from '../../constants';
 
 // Import TinyMCE
@@ -29,28 +28,22 @@ import 'tinymce/plugins/autoresize';
 
 
 
-export const initTinyEditorAct = ()  => {
+export const initTinyEditorAct = (id)  => {
 
-  
+  // console.log('initTiny id',id)
 
   tinymce.remove();
   // setTimeout(function () {
 	tinymce.init({
-        selector: '#frame1',
+        selector: `#${id}`,
         width: '100%',
         min_height: 800,
         max_height: 800,
         menubar: false,
         skin:false,
         content_css:false,
-        // init_instance_callback : "onInstanceInit",
-        setup: (editor)=> {
-            editor.on('keyup change', function(e) {
-              const content = editor.getContent();
-              console.log('input change',content);
-            });
-          },
         branding: false,
+        // images_upload_url: 'postAcceptor.php',
         plugins: [
           'image imagetools',
         ' lists link preview',
@@ -59,7 +52,7 @@ export const initTinyEditorAct = ()  => {
         toolbar: 'undo redo | formatselect | ' +
         'bold italic | forecolor backcolor | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | ' +
-        'removeformat | link image |table|preview',
+        'removeformat | link image  |table|preview',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
         
       });
@@ -68,7 +61,3 @@ export const initTinyEditorAct = ()  => {
   return ({type:INIT_TINY_EDITOR})
 }
 
-export const onChangeBlogContentAct =(blogContent)=>{
-  console.log('blogContent',blogContent);
-  return ({type:ONCHANGE_BLOG_CONTENT, payload:blogContent})
-}

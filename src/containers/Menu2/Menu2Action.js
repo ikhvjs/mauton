@@ -387,7 +387,7 @@ export const selectCreateParentMenuNameAct = () =>{
   return { type: SELECT_CREATE_PARENT_MENU_NAME };
 }
 
-export const selectUpdateParentMenuNameAct = (event) =>{
+export const selectUpdateParentMenuNameAct = () =>{
   return { type: SELECT_UPDATE_PARENT_MENU_NAME };
 }
 

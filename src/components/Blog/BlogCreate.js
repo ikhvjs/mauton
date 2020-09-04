@@ -2,19 +2,24 @@ import React , { Component } from 'react';
 
 import { connect } from 'react-redux';
 
+import { SELECTED_EDITOR_ID } from '../../constants';
+
 import { 
 	selectCreateBlogAct,
-	clickSaveBlogAct
+	clickSaveBlogAct,
+	selectUpdateBlogCategoryAct,
+	clearBlogCategoryAct
 	} from '../../components/Blog/BlogAction';
-import {
-	initTinyEditorAct
-	} from '../../components/TinyEditorComponent/TinyEditorComponentAction'
+// import {
+// 	initTinyEditorAct
+// 	} from '../../components/TinyEditorComponent/TinyEditorComponentAction'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Row,Col,Form, Button} from "react-bootstrap";
+import {Row,Col,Form, Button, Badge} from "react-bootstrap";
 import './Blog.css';
 
 import TinyEditorComponent from '../TinyEditorComponent/TinyEditorComponent';
+import CategoryModal from '../CategoryModal/CategoryModal';
 
 // import tinymce from 'tinymce';
 // import 'tinymce/tinymce.min.js'
@@ -27,7 +32,8 @@ const mapStateToProps =(state) => {
 	    bloglist:state.blogRdc.bloglist,
 	    isCreateBlogByClick:state.blogRdc.isCreateBlogByClick,
 	    isInitTinyEditorByClick:state.blogRdc.isInitTinyEditorByClick,
-	    blogContent:state.blogRdc.blogContent
+	    blogContent:state.blogRdc.blogContent,
+	    selectedCategory:state.blogRdc.selectedCategory
   }
 }
 
@@ -35,10 +41,12 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 	return {
 		onSelectBlogCreate:()=>
     		dispatch(selectCreateBlogAct()),
-    	onInitTinyEditor:()=>
-        	dispatch(initTinyEditorAct()),
         onClickSaveBlog:()=>
-        	dispatch(clickSaveBlogAct(ownProps.blogContent))
+        	dispatch(clickSaveBlogAct(SELECTED_EDITOR_ID)),
+        onSelectUpdateBlogCategory:()=>
+        	dispatch(selectUpdateBlogCategoryAct()),
+        onClearBlogCategory:()=>
+        	dispatch(clearBlogCategoryAct())
 
     }
 
@@ -47,12 +55,10 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 class BlogCreate extends Component  {
 
 	componentDidMount() {
-		console.log('BlogCreate componentDidMount');
+
 		if (this.props.isCreateBlogByClick === false) {
 			this.props.onSelectBlogCreate();
 		}
-
-		this.props.onInitTinyEditor();
 	}
 
 	
@@ -60,7 +66,13 @@ class BlogCreate extends Component  {
 
 	render(){
 
-		const {onClickSaveBlog}=this.props;
+		const {
+			onClickSaveBlog,
+			onSelectUpdateBlogCategory,
+			selectedCategory,
+			onClearBlogCategory
+			}=this.props;
+
 
 		return(
 			<Col>
@@ -82,23 +94,47 @@ class BlogCreate extends Component  {
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Path:</Form.Label>
-					<Col sm="8">
+					<Col sm="5">
 					      <Form.Control size="sm" type="text" placeholder="Enter Blog Path" />
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Category:</Form.Label>
-					<Col sm="8">
-					      <Form.Control size="sm" type="text" placeholder="Enter Blog Category" />
+					<Col sm="5">
+					      <Form.Control readOnly size="sm" 
+					      	type="text" placeholder="Change Blog Category" 
+					      	id={selectedCategory.blog_category_id}
+					      	defaultValue={selectedCategory.blog_category_name}/>
 					</Col>
-					<Col>
-						<Button variant="secondary" size="sm">Clear</Button>
+					<Col sm="0.5">
+						<Button variant="link" size="sm" 
+							onClick={onSelectUpdateBlogCategory}>Change</Button>
+					</Col>
+					<Col sm="1">
+						<Button variant="secondary" size="sm" onClick={onClearBlogCategory}>
+							Clear</Button>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Tag(s):</Form.Label>
-					<Col sm="8">
-					      <Form.Control size="sm" type="text" placeholder="Enter Blog Tags" />
+					<Col sm="auto">
+						<Row className="pl-3">
+							<Col className="px-0" sm="auto">
+								<Badge className="align-bottom" variant="primary">{`Primary `}</Badge>
+								<Badge className="align-bottom blog-tag" variant="light" onClick={()=>console.log('hello')}>x</Badge>
+							</Col> 
+							<Col className="px-0" sm="auto">
+								<Badge className="align-bottom" variant="primary">{`Primary `}</Badge>
+								<Badge className="align-bottom blog-tag" variant="light">x</Badge>
+							</Col> 
+							<Col className="px-0" sm="auto">
+								<Badge className="align-bottom" variant="primary">{`Primary `}</Badge>
+								<Badge className="align-bottom blog-tag" variant="light">x</Badge>
+							</Col>
+						</Row>
+					</Col>
+					<Col sm="0.5">
+						<Button variant="link" size="sm">Add Tags</Button>
 					</Col>
 					<Col>
 						<Button variant="secondary" size="sm">Clear</Button>
@@ -106,7 +142,7 @@ class BlogCreate extends Component  {
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Seq:</Form.Label>
-					<Col sm="8">
+					<Col sm="2">
 					      <Form.Control size="sm" type="text" placeholder="Enter Seq" />
 					</Col>
 				</Form.Group>
@@ -114,9 +150,9 @@ class BlogCreate extends Component  {
 			</Form>
 			<br/>
 			<Row>
-				<TinyEditorComponent />
+				<TinyEditorComponent id={SELECTED_EDITOR_ID} />
 			</Row>
-			
+			<CategoryModal />
 	       </Col>
 		)
 			

@@ -13,8 +13,12 @@ import {
   REQUEST_BLOG_TAG_C_FAILED,
   SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
-  CLICK_SAVE_BLOG
+  CLICK_SAVE_BLOG,
+  SELECT_UPDATE_BLOG_CATEGORY,
+  CLEAR_BLOG_CATEGORY
  } from '../../constants';
+
+import tinymce from 'tinymce/tinymce';
 
 export const requestBlogAct = (blogPath) => (dispatch) =>{
   // console.log('normal blogPath',blogPath);
@@ -70,7 +74,15 @@ export const selectCreateBlogAct =() => {
   return ({type: SELECT_CREATE_BLOG})
 }
 
-export const clickSaveBlogAct = (value) => {
-  console.log('clickSaveBlogAct',value);
-  return ({type:CLICK_SAVE_BLOG})
+export const clickSaveBlogAct = (id) => {
+  const editorContent = tinymce.get(`${id}`).getContent();
+  return ({type:CLICK_SAVE_BLOG, payload:editorContent})
+}
+
+export const selectUpdateBlogCategoryAct = () =>{
+  return { type: SELECT_UPDATE_BLOG_CATEGORY };
+}
+
+export const clearBlogCategoryAct = () =>{
+  return ({ type:CLEAR_BLOG_CATEGORY });
 }
