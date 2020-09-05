@@ -40,9 +40,15 @@ import {
   REQUEST_BLOG_TAG_C_FAILED,
   SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
-  CLICK_SAVE_BLOG,
   SELECT_UPDATE_BLOG_CATEGORY,
   CLEAR_BLOG_CATEGORY,
+  CLEAR_SELECT_BLOG_CATEGORY,
+  SELECT_ADD_BLOG_TAG,
+  DELETE_BLOG_TAG,
+  CLEAR_SELECT_BLOG_TAG,
+  POST_BLOG_PENDING,
+  POST_BLOG_SUCCESS,
+  POST_BLOG_FAILED,
 //Category Modal
   REQUEST_CATEGORY_MODAL_PENDING,
   REQUEST_CATEGORY_MODAL_SUCCESS,
@@ -53,6 +59,16 @@ import {
   SEARCH_CATEGORY_MODAL_FAILED,
   CLEAR_SEARCH_CATEGORY_MODAL,
   SELECT_CATEGORY_MODAL,
+//Tag Modal
+  REQUEST_TAG_MODAL_PENDING,
+  REQUEST_TAG_MODAL_SUCCESS,
+  REQUEST_TAG_MODAL_FAILED,
+  CLOSE_TAG_MODAL,
+  SEARCH_TAG_MODAL_PENDING,
+  SEARCH_TAG_MODAL_SUCCESS,
+  SEARCH_TAG_MODAL_FAILED,
+  CLEAR_SEARCH_TAG_MODAL,
+  SELECT_TAG_MODAL,
 //Category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
@@ -147,6 +163,7 @@ import {
   SELECT_UPDATE_PARENT_MENU_NAME,
   CLEAR_CREATE_MENU2,
   SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME,
+  CLEAR_SELECT_PARENT_MENU,
   //Parent Menu Modal
   CLOSE_PARENT_MENU_MODAL,
   REQUEST_PARENT_MENU_PENDING,
@@ -236,7 +253,11 @@ const initialStateBlog = {
   blogContent:[],
   isShowCategoryModal:false,
   blogCategory:[],
-  selectedCategory:[]
+  selectedCategory:[],
+  isShowTagModal:false,
+  blogTag:[],
+  selectedTag:[]
+
 }
 
 export const blogRdc = (state=initialStateBlog, action={}) => {
@@ -297,12 +318,18 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
   case SELECT_CREATE_BLOG_C:
     return Object.assign({}, state, 
       {isCreateBlog: true, isCreateBlogByClick:true})
-  case CLICK_SAVE_BLOG:
-    return Object.assign({}, state, {blogContent: action.payload})
   case SELECT_UPDATE_BLOG_CATEGORY:
     return Object.assign({}, state, {isShowCategoryModal:true})
   case CLEAR_BLOG_CATEGORY:
     return Object.assign({},state, {selectedCategory:{}})
+  case CLEAR_SELECT_BLOG_CATEGORY:
+    return Object.assign({},state,{selectedCategory:{}})
+  case SELECT_ADD_BLOG_TAG:
+    return Object.assign({}, state, {isShowTagModal:true})
+  case DELETE_BLOG_TAG:
+    return Object.assign({},state,{selectedTag: action.payload}) 
+  case CLEAR_SELECT_BLOG_TAG:
+    return Object.assign({},state,{selectedTag:[]})
 //Blog Category Modal
   case REQUEST_CATEGORY_MODAL_PENDING:
     return Object.assign({}, state, {isRefreshCategoryNeeded:false})
@@ -323,6 +350,27 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
       {selectedCategory:action.payload, isShowCategoryModal:false})
   case CLOSE_CATEGORY_MODAL:
     return Object.assign({}, state, {isShowCategoryModal:false})
+//Tag Modal
+  case REQUEST_TAG_MODAL_PENDING:
+    return Object.assign({}, state, {isRefreshTagNeeded:false})
+  case REQUEST_TAG_MODAL_SUCCESS:
+    return Object.assign({}, state, {blogTag: action.payload})
+  case REQUEST_TAG_MODAL_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case SEARCH_TAG_MODAL_PENDING:
+    return Object.assign({}, state, {})
+  case SEARCH_TAG_MODAL_SUCCESS:
+    return Object.assign({}, state, {blogTag: action.payload})
+  case SEARCH_TAG_MODAL_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case CLEAR_SEARCH_TAG_MODAL:
+    return Object.assign({}, state, {isRefreshTagNeeded:true})
+  case SELECT_TAG_MODAL:
+    return Object.assign({}, state, 
+      {selectedTag: [...state.selectedTag, action.payload], isShowTagModal:false})
+  case CLOSE_TAG_MODAL:
+    return Object.assign({}, state, {isShowTagModal:false})
+  
 //TinyMCE Editor
   case INIT_TINY_EDITOR:
     return Object.assign({}, state, {})
@@ -609,6 +657,8 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
     return Object.assign({}, state, {})
   case SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME:
     return Object.assign({}, state, {isAllowUpdateParentMenuName:false})
+  case CLEAR_SELECT_PARENT_MENU:
+    return Object.assign({}, state, {createParentMenu:{},updateParentMenu:{}})
   default:
     return state
   }

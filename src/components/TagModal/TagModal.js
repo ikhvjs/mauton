@@ -15,9 +15,9 @@ import {Table, Form, Button, Col, Modal} from "react-bootstrap";
 
 const mapStateToProps = (state) => {
   return {
-  	blogCategory:state.blogRdc.blogCategory,
+  	blogTag:state.blogRdc.blogTag,
   	isShowTagModal:state.blogRdc.isShowTagModal,
-  	isRefreshCategoryNeeded:state.blogRdc.isRefreshCategoryNeeded
+  	isRefreshTagNeeded:state.blogRdc.isRefreshTagNeeded
   }
 }
 
@@ -43,7 +43,7 @@ class TagModal extends Component  {
 	}
 
 	componentDidUpdate() {
-		if (this.props.isRefreshCategoryNeeded === true) {
+		if (this.props.isRefreshTagNeeded === true) {
 			this.props.onRequestTagModal();
 		}
 	}
@@ -51,12 +51,10 @@ class TagModal extends Component  {
 	render() {
 		const { isShowTagModal,
 				onCloseTagModal,
-				blogCategory,
+				blogTag,
 				onSearchTagModal,
 				onClearSearchTagModal,
 				onSelectTagModal
-				// isCreateActionMenu2,
-				// onSelectUpdateTagModal
 			} = this.props;
 
 		return (
@@ -67,12 +65,8 @@ class TagModal extends Component  {
 		        <Modal.Body>
 			        <Form.Row>
 						<Col xs={3}>
-							<Form.Control size="sm" name="blog_category_name"
-								type="text" placeholder="Enter Category Name" />
-						</Col>
-						<Col xs={5}>
-							<Form.Control size="sm" name="blog_category_desc"
-								type="text" placeholder="Enter Category Description" />
+							<Form.Control size="sm" name="tag_name"
+								type="text" placeholder="Enter Tag Name" />
 						</Col>
 						<Col name='button' xs={0.3}>   
 							<Button size="sm" onClick={onSearchTagModal}>Search</Button>
@@ -88,19 +82,17 @@ class TagModal extends Component  {
 					<Table striped  hover size="sm" >
 					  <thead>
 					    <tr>
-					      <th width="20%">Category Name</th>
-					      <th width="30%">Category Description</th>
+					      <th width="20%">Tag Name</th>
 					      <th width="10%">Seq</th>
 					      <th width="20%">Action</th>
 					    </tr>
 					  </thead>
 					  <tbody>
-					  	{blogCategory.map((category)=>{
+					  	{blogTag.map((tag)=>{
 					  		return(
-					  			<tr id={category.blog_category_id} key={category.blog_category_id}>
-							      <td name='blog_category_name'>{category.blog_category_name}</td>
-							      <td name='blog_category_desc'>{category.blog_category_desc}</td>
-							      <td name='seq'>{category.seq}</td>
+					  			<tr id={tag.tag_id} key={tag.tag_id}>
+							      <td name='tag_name'>{tag.tag_name}</td>
+							      <td name='seq'>{tag.seq}</td>
 							      <td headers='button'>
 									<Button name="select" size="sm" 
 										onClick={onSelectTagModal} >

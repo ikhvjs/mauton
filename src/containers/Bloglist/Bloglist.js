@@ -103,7 +103,7 @@ class Bloglist extends Component  {
 			isCreateBlog
 			} = this.props;
 
-		
+		const { sidebarMenuPath }=this.props.match.params;
 		
 
 		return (
@@ -185,7 +185,7 @@ class Bloglist extends Component  {
 						<Route path={`${this.props.match.url}/blogcreate`}>
 							<Row name="createblog" 
 								className={isCreateBlog?null:"hidden-container"}>
-								<BlogCreate />
+								<BlogCreate sidebarMenuPath={sidebarMenuPath}/>
 							</Row>
 						</Route>
 						<Route path={`${this.props.match.url}/:blogPath`}>

@@ -17,7 +17,8 @@ import {
 	clearSearchMenu2Act,
 	selectCreateParentMenuNameAct,
 	selectUpdateParentMenuNameAct,
-	setNotAllowUpdateParentMenuNameAct
+	setNotAllowUpdateParentMenuNameAct,
+	clearSelectedParentMenuAct
 	// changeParentMenuNameAct
 } from './Menu2Action';
 
@@ -69,8 +70,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(selectUpdateParentMenuNameAct()),
 		setNotAllowUpdateParentMenuName:()=>
 			dispatch(setNotAllowUpdateParentMenuNameAct()),
-		// onChangeParentMenuName:(event)=>
-		// 	dispatch(changeParentMenuNameAct(event))
+		onClearSelectedParentMenu:()=>
+			dispatch(clearSelectedParentMenuAct())
 	}
 }
 
@@ -85,6 +86,10 @@ class Menu2 extends Component  {
 		if (this.props.isRefreshMenu2Needed === true) {
 			this.props.onRequestMenu2ByClick();
 		}
+	}
+
+	componentWillUnmount() {
+		this.props.onClearSelectedParentMenu();
 	}
 
 	render() {

@@ -23,7 +23,8 @@ import {
   SELECT_CREATE_PARENT_MENU_NAME,
   SELECT_UPDATE_PARENT_MENU_NAME,
   CLEAR_CREATE_MENU2,
-  SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME
+  SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME,
+  CLEAR_SELECT_PARENT_MENU
  } from '../../constants';
 
 export const requestMenu2Act = () => (dispatch) => {
@@ -396,12 +397,6 @@ export const setNotAllowUpdateParentMenuNameAct = () =>{
   return { type: SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME };
 }
 
-// export const changeParentMenuNameAct = (event) => {
-//   const updateParentMenu = {};
-//   const value = event.target.value;
-//   const id = event.target.parentNode.id;
-
-//   Object.assign(updateParentMenu,  {menu_id: id, menu_name:value});
-
-//   return { type: CHANGE_PARENT_MENU_NAME,  payload:updateParentMenu};
-// }
+export const clearSelectedParentMenuAct = () => {
+  return {type:CLEAR_SELECT_PARENT_MENU};
+}

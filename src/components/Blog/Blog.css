@@ -6,5 +6,6 @@
 	margin-right: 10px;
 }
 
-
-
+.x-mark {
+  vertical-align: bottom;
+}
