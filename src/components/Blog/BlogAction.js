@@ -13,7 +13,6 @@ import {
   REQUEST_BLOG_TAG_C_FAILED,
   SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
-  // CLICK_SAVE_BLOG,
   SELECT_UPDATE_BLOG_CATEGORY,
   CLEAR_BLOG_CATEGORY,
   CLEAR_SELECT_BLOG_CATEGORY,
@@ -22,7 +21,9 @@ import {
   CLEAR_SELECT_BLOG_TAG,
   POST_BLOG_PENDING,
   POST_BLOG_SUCCESS,
-  POST_BLOG_FAILED
+  POST_BLOG_FAILED,
+  UPDATE_BLOG,
+  EXIT_UPDATE_BLOG
  } from '../../constants';
 
 import tinymce from 'tinymce/tinymce';
@@ -117,7 +118,7 @@ export const clearSelectedBlogTagAct = () =>{
 
 export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =>{
   dispatch({ type: POST_BLOG_PENDING })
-  const newBlog = {tag:[]};
+  const newBlog = {};
 
   const formNode = event.target.parentNode;
   const inputNode = formNode.querySelectorAll('div > input');
@@ -126,7 +127,9 @@ export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =
   const blogTag = getState().blogRdc.selectedTag;
 
   Object.assign(newBlog, blogCategory);
-  Object.assign(newBlog.tag, blogTag);
+  Object.assign(newBlog, {tags:[...blogTag]});
+  Object.assign(newBlog, {menu_path:sidebarMenuPath});
+
   
 
   inputNode.forEach((node)=>{
@@ -136,22 +139,29 @@ export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =
     }
   })
 
+  const blogContent = tinymce.get('blogeditor').getContent();
+
+  Object.assign(newBlog,{blog_content:blogContent})
 
   console.log('newBlog',newBlog);
-
-  const blogContent = tinymce.get('blogeditor').getContent();
 
   fetch('http://localhost:3001/blog/create', {
         method: 'post',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
-        body: JSON.stringify({
-          blogContent: blogContent
-        })
+        body: JSON.stringify({newBlog})
       }
   )
   .then(response => response.json())
-  .then(data => dispatch({ type: POST_BLOG_SUCCESS }))
+  .then(data => dispatch({ type: POST_BLOG_SUCCESS}))
   .catch(error => dispatch({ type: POST_BLOG_FAILED, payload: error }))
 
+}
+
+export const updateBlogAct =()=>{
+  return ({type:UPDATE_BLOG});
+}
+
+export const exitUpdateBlogAct=()=>{
+  return({type:EXIT_UPDATE_BLOG});
 }

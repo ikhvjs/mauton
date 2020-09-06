@@ -49,6 +49,8 @@ import {
   POST_BLOG_PENDING,
   POST_BLOG_SUCCESS,
   POST_BLOG_FAILED,
+  UPDATE_BLOG,
+  EXIT_UPDATE_BLOG,
 //Category Modal
   REQUEST_CATEGORY_MODAL_PENDING,
   REQUEST_CATEGORY_MODAL_SUCCESS,
@@ -256,7 +258,8 @@ const initialStateBlog = {
   selectedCategory:[],
   isShowTagModal:false,
   blogTag:[],
-  selectedTag:[]
+  selectedTag:[],
+  isUpdateBlog:false
 
 }
 
@@ -330,6 +333,16 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({},state,{selectedTag: action.payload}) 
   case CLEAR_SELECT_BLOG_TAG:
     return Object.assign({},state,{selectedTag:[]})
+  case POST_BLOG_PENDING:
+    return Object.assign({}, state, {})
+  case POST_BLOG_SUCCESS:
+    return Object.assign({}, state, {})
+  case POST_BLOG_FAILED:
+    return Object.assign({}, state, {error: action.payload})
+  case UPDATE_BLOG:
+    return Object.assign({}, state, {isUpdateBlog:true})
+  case EXIT_UPDATE_BLOG:
+    return Object.assign({}, state, {isUpdateBlog:false})
 //Blog Category Modal
   case REQUEST_CATEGORY_MODAL_PENDING:
     return Object.assign({}, state, {isRefreshCategoryNeeded:false})
@@ -370,7 +383,6 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
       {selectedTag: [...state.selectedTag, action.payload], isShowTagModal:false})
   case CLOSE_TAG_MODAL:
     return Object.assign({}, state, {isShowTagModal:false})
-  
 //TinyMCE Editor
   case INIT_TINY_EDITOR:
     return Object.assign({}, state, {})

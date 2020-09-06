@@ -2,14 +2,9 @@ import React , { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import {  
-	withRouter 
-} from "react-router";
-
 // import { LinkContainer } from 'react-router-bootstrap';
 
 import { 
-	selectCreateBlogAct,
 	clickSaveBlogAct,
 	selectUpdateBlogCategoryAct,
 	clearBlogCategoryAct,
@@ -18,9 +13,8 @@ import {
 	deleteBlogTagAct,
 	clearSelectedBlogTagAct
 	} from '../../components/Blog/BlogAction';
-// import {
-// 	initTinyEditorAct
-// 	} from '../../components/TinyEditorComponent/TinyEditorComponentAction'
+
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row,Col,Form, Button, Badge,Container} from "react-bootstrap";
@@ -33,8 +27,6 @@ import TagModal from '../TagModal/TagModal';
 
 const mapStateToProps =(state) => {
 	return {
-	    isCreateBlogByClick:state.blogRdc.isCreateBlogByClick,
-	    isInitTinyEditorByClick:state.blogRdc.isInitTinyEditorByClick,
 	    selectedCategory:state.blogRdc.selectedCategory,
 	    selectedTag:state.blogRdc.selectedTag
   }
@@ -42,8 +34,6 @@ const mapStateToProps =(state) => {
 
 const mapDispatchToProps = (dispatch,ownProps) => {
 	return {
-		onSelectBlogCreate:()=>
-    		dispatch(selectCreateBlogAct()),
         onSelectUpdateBlogCategory:()=>
         	dispatch(selectUpdateBlogCategoryAct()),
         onClearBlogCategory:()=>
@@ -63,13 +53,10 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 
 }
 
-class BlogCreate extends Component  {
+class BlogUpdate extends Component  {
 
 	componentDidMount() {
 
-		if (this.props.isCreateBlogByClick === false) {
-			this.props.onSelectBlogCreate();
-		}
 	}
 
 	componentWillUnmount() {
@@ -92,13 +79,12 @@ class BlogCreate extends Component  {
 			onDeleteBlogTag
 			}=this.props;
 
-			console.log('match',this.props.match);
 
 
 		return(
 			<Container>
 			<Row>
-				<h1>Create Blog</h1>
+				<h1>Update Blog</h1>
 			</Row>
 			<Form>
 				<Form.Group as={Row}>
@@ -185,4 +171,4 @@ class BlogCreate extends Component  {
 	}
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BlogCreate));
+export default connect(mapStateToProps, mapDispatchToProps)(BlogUpdate);

@@ -5,7 +5,7 @@ import {
 	withRouter 
 } from "react-router";
 import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
 import { 
 	requestBloglistAct,
 	selectSearchBloglistAct,
