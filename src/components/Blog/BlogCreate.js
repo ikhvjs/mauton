@@ -9,14 +9,15 @@ import {
 // import { LinkContainer } from 'react-router-bootstrap';
 
 import { 
-	selectCreateBlogAct,
+	// selectCreateBlogAct,
 	clickSaveBlogAct,
 	selectUpdateBlogCategoryAct,
 	clearBlogCategoryAct,
 	clearSelectedBlogCategoryAct,
 	selectAddBlogTagAct,
 	deleteBlogTagAct,
-	clearSelectedBlogTagAct
+	clearSelectedBlogTagAct,
+	clearCreateBlogFlagAct
 	} from '../../components/Blog/BlogAction';
 // import {
 // 	initTinyEditorAct
@@ -42,8 +43,8 @@ const mapStateToProps =(state) => {
 
 const mapDispatchToProps = (dispatch,ownProps) => {
 	return {
-		onSelectBlogCreate:()=>
-    		dispatch(selectCreateBlogAct()),
+		// onSelectBlogCreate:()=>
+  //   		dispatch(selectCreateBlogAct()),
         onSelectUpdateBlogCategory:()=>
         	dispatch(selectUpdateBlogCategoryAct()),
         onClearBlogCategory:()=>
@@ -57,7 +58,9 @@ const mapDispatchToProps = (dispatch,ownProps) => {
         onClearSelectedBlogTag:()=>
         	dispatch(clearSelectedBlogTagAct()),
         onClickSaveBlog:(event)=>
-        	dispatch(clickSaveBlogAct(event,ownProps.sidebarMenuPath))
+        	dispatch(clickSaveBlogAct(event,ownProps.sidebarMenuPath)),
+        onClearCreateBlogFlag:()=>
+        	dispatch(clearCreateBlogFlagAct())
 
     }
 
@@ -67,14 +70,15 @@ class BlogCreate extends Component  {
 
 	componentDidMount() {
 
-		if (this.props.isCreateBlogByClick === false) {
-			this.props.onSelectBlogCreate();
-		}
+		// if (this.props.isCreateBlogByClick === false) {
+		// 	this.props.onSelectBlogCreate();
+		// }
 	}
 
 	componentWillUnmount() {
 		this.props.onClearSelectedBlogCategory();
 		this.props.onClearSelectedBlogTag();
+		this.props.onClearCreateBlogFlag();
 	}
 
 	
@@ -92,7 +96,7 @@ class BlogCreate extends Component  {
 			onDeleteBlogTag
 			}=this.props;
 
-			console.log('match',this.props.match);
+			// console.log('match',this.props.match);
 
 
 		return(

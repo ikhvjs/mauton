@@ -76,7 +76,8 @@ class BlogUpdate extends Component  {
 			onClearBlogCategory,
 			onSelectAddBlogTag,
 			selectedTag,
-			onDeleteBlogTag
+			onDeleteBlogTag,
+			blog
 			}=this.props;
 
 
@@ -91,32 +92,51 @@ class BlogUpdate extends Component  {
 					<Form.Label column sm="2">Blog Title:</Form.Label>
 					<Col sm="8">
 					      <Form.Control name="blog_title" size="sm" 
-					      	type="text" placeholder="Enter Blog Title" />
+					      	type="text" placeholder="Enter Blog Title" 
+					      	defaultValue={blog.blog_title}/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Description:</Form.Label>
 					<Col sm="8">
 					      <Form.Control name="blog_desc" size="sm" 
-					      	type="text" placeholder="Enter Blog Description" />
+					      	type="text" placeholder="Enter Blog Description" 
+					      	defaultValue={blog.blog_desc}/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Path:</Form.Label>
 					<Col sm="5">
 					      <Form.Control name="blog_path" size="sm" 
-					      	type="text" placeholder="Enter Blog Path" />
+					      	type="text" placeholder="Enter Blog Path" 
+					      	defaultValue={blog.blog_path}/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Category:</Form.Label>
-					<Col sm="5">
-					      <Form.Control readOnly size="sm" 
-					      	type="text" placeholder="Change Blog Category" 
-					      	name="blog_category_name"
-					      	id={selectedCategory.blog_category_id}
-					      	defaultValue={selectedCategory.blog_category_name}
-					      	/>
+					<Col sm="0.5">
+						{
+						  <div className="border border-light rounded"
+						  	id={selectedCategory.blog_category_id
+					      		?selectedCategory.blog_category_id
+					      		:blog.blog_category_id}>
+					      		{selectedCategory.blog_category_name
+					      					?selectedCategory.blog_category_name
+					      					:blog.blog_category_name}
+						  </div>
+						}
+						  {
+					      // <Form.Control readOnly size="sm" 
+					      // 	type="text" placeholder="Change Blog Category" 
+					      // 	name="blog_category_name"
+					      // 	id={selectedCategory.blog_category_id
+					      // 		?selectedCategory.blog_category_id
+					      // 		:blog.blog_category_id}
+					      // 	defaultValue={selectedCategory.blog_category_name
+					      // 					?selectedCategory.blog_category_name
+					      // 					:blog.blog_category_name}
+					      // 	/>
+					      }
 					</Col>
 					<Col sm="0.5">
 						<Button variant="link" size="sm" 

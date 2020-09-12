@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
 class CategoryModal extends Component  {
 
 	componentDidMount() {
-		this.props.onRequestCategoryModal();
+		// this.props.onRequestCategoryModal();
 	}
 
 	componentDidUpdate() {

@@ -11,7 +11,7 @@ import {
   REQUEST_BLOG_TAG_C_PENDING,
   REQUEST_BLOG_TAG_C_SUCCESS,
   REQUEST_BLOG_TAG_C_FAILED,
-  SELECT_CREATE_BLOG,
+  // SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
   SELECT_UPDATE_BLOG_CATEGORY,
   CLEAR_BLOG_CATEGORY,
@@ -23,7 +23,8 @@ import {
   POST_BLOG_SUCCESS,
   POST_BLOG_FAILED,
   UPDATE_BLOG,
-  EXIT_UPDATE_BLOG
+  EXIT_UPDATE_BLOG,
+  CLEAR_CREATE_BLOG_FLAG
  } from '../../constants';
 
 import tinymce from 'tinymce/tinymce';
@@ -78,9 +79,9 @@ export const selectCreateBlogByClickAct = ()  => {
   return ({type: SELECT_CREATE_BLOG_C})
 }
 
-export const selectCreateBlogAct =() => {
-  return ({type: SELECT_CREATE_BLOG})
-}
+// export const selectCreateBlogAct =() => {
+//   return ({type: SELECT_CREATE_BLOG})
+// }
 
 
 export const selectUpdateBlogCategoryAct = () =>{
@@ -164,4 +165,8 @@ export const updateBlogAct =()=>{
 
 export const exitUpdateBlogAct=()=>{
   return({type:EXIT_UPDATE_BLOG});
+}
+
+export const clearCreateBlogFlagAct=()=>{
+  return ({type:CLEAR_CREATE_BLOG_FLAG});
 }

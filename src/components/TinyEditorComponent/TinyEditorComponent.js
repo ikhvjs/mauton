@@ -12,7 +12,7 @@ import {
 
 const mapStateToProps =(state) => {
   return {
-      
+      isCreateBlog:state.blogRdc.isCreateBlog
   }
 }
 
@@ -29,9 +29,16 @@ const mapDispatchToProps = (dispatch) => {
 class TinyEditorComponent extends Component {
 
   componentDidMount() {
-    const { id, onInitTinyEditor } = this.props;
+    // const { id, onInitTinyEditor } = this.props;
     // console.log('tiny didMount id',id);
-    onInitTinyEditor(id);
+    // onInitTinyEditor(id);
+  }
+
+  componentDidUpdate() {
+    const { id, onInitTinyEditor,isCreateBlog } = this.props;
+    if (isCreateBlog === true) {
+      onInitTinyEditor(id);
+    }
   }
 
 

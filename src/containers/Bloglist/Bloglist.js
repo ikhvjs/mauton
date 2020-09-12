@@ -90,7 +90,6 @@ class Bloglist extends Component  {
 	}
 
 
-
 	render(){
 		const {
 			bloglist,
@@ -137,10 +136,14 @@ class Bloglist extends Component  {
 						<Col name='button' xs={1}>
 						</Col>
 						<Col name='button' xs={0.3}>
-							<LinkContainer to={`${this.props.match.url}/blogcreate`}>
-								<Button size="sm" variant="success" 
+							{
+							// <LinkContainer to={`${this.props.match.url}/blogcreate`}>
+							// 	<Button size="sm" variant="success" 
+							// 	onClick={onSelectCreateBlogByClick}>Create</Button>
+							// </LinkContainer>
+							}
+							<Button size="sm" variant="success" 
 								onClick={onSelectCreateBlogByClick}>Create</Button>
-							</LinkContainer>
 						</Col>
 					</Form.Row>
 					<br/>
@@ -180,14 +183,18 @@ class Bloglist extends Component  {
 						</CardColumns>
 					</Row>
 				</Container>
+				<Container name="createblog-wrapper" className={isCreateBlog?null:"hidden-container"}>
+					<Row name="createblog" >
+						<BlogCreate sidebarMenuPath={sidebarMenuPath}/>
+					</Row>
+				</Container>
 				<Container name="blog-content">
 					<Switch>
-						<Route path={`${this.props.match.url}/blogcreate`}>
-							<Row name="createblog" 
-								className={isCreateBlog?null:"hidden-container"}>
-								<BlogCreate sidebarMenuPath={sidebarMenuPath}/>
-							</Row>
-						</Route>
+						{
+						// <Route path={`${this.props.match.url}/blogcreate`}>
+							
+						// </Route>
+						}
 						<Route path={`${this.props.match.url}/:blogPath`}>
 							<Row name="showblog" 
 								className={(isCreateBlog)?"hidden-container":

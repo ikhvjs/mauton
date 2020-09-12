@@ -38,7 +38,7 @@ import {
   REQUEST_BLOG_TAG_C_PENDING,
   REQUEST_BLOG_TAG_C_SUCCESS,
   REQUEST_BLOG_TAG_C_FAILED,
-  SELECT_CREATE_BLOG,
+  // SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
   SELECT_UPDATE_BLOG_CATEGORY,
   CLEAR_BLOG_CATEGORY,
@@ -51,6 +51,7 @@ import {
   POST_BLOG_FAILED,
   UPDATE_BLOG,
   EXIT_UPDATE_BLOG,
+  CLEAR_CREATE_BLOG_FLAG,
 //Category Modal
   REQUEST_CATEGORY_MODAL_PENDING,
   REQUEST_CATEGORY_MODAL_SUCCESS,
@@ -251,7 +252,7 @@ const initialStateBlog = {
   tags:[],
   isCreateBlog:false,
   editorContent:[],
-  isCreateBlogByClick:false,
+  // isCreateBlogByClick:false,
   blogContent:[],
   isShowCategoryModal:false,
   blogCategory:[],
@@ -267,26 +268,24 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
   switch (action.type) {
 // Bloglist
 	case REQUEST_BLOGLIST_PENDING:
-	  return Object.assign({}, state, { blog:{} })
+	  return Object.assign({}, state, { blog:{}, isRefreshBloglistNeeded:false })
 	case REQUEST_BLOGLIST_SUCCESS:
 	  return Object.assign({}, state, 
-      {bloglist: action.payload,isRefreshBloglistNeeded:false})
+      {bloglist: action.payload})
 	case REQUEST_BLOGLIST_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
 	case REQUEST_BLOGLIST_C_PENDING:
 	  return Object.assign({}, state, 
-      {isPendingBloglistByClick: true,blog:{}, 
-      isCreateBlog:false, isCreateBlogByClick:false})
+      {isPendingBloglistByClick: true, blog:{}, isRefreshBloglistNeeded:false})
 	case REQUEST_BLOGLIST_C_SUCCESS:
 	  return Object.assign({}, state, 
-      {bloglist: action.payload, isPendingBloglistByClick: false,
-        isRefreshBloglistNeeded:false})
+      {bloglist: action.payload, isPendingBloglistByClick: false})
 	case REQUEST_BLOGLIST_C_FAILED:
 	  return Object.assign({}, state, {error: action.payload})
   case SEARCH_BLOGLIST_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshBloglistNeeded:false})
   case SEARCH_BLOGLIST_SUCCESS:
-    return Object.assign({}, state, {bloglist:action.payload,isRefreshBloglistNeeded:false})
+    return Object.assign({}, state, {bloglist:action.payload})
   case SEARCH_BLOGLIST_FAILED:
     return Object.assign({}, state, {error: action.payload}) 
   case CLEAR_SEARCH_BLOGLIST:
@@ -316,11 +315,12 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state,  {tags: action.payload})
   case REQUEST_BLOG_TAG_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
-  case SELECT_CREATE_BLOG:
-    return Object.assign({}, state, {isCreateBlog: true})
+  // case SELECT_CREATE_BLOG:
+  //   return Object.assign({}, state, {isCreateBlog: true})
   case SELECT_CREATE_BLOG_C:
-    return Object.assign({}, state, 
-      {isCreateBlog: true, isCreateBlogByClick:true})
+    return Object.assign({}, state, {isCreateBlog: true})
+  case CLEAR_CREATE_BLOG_FLAG:
+    return Object.assign({}, state, {isCreateBlog:false}) 
   case SELECT_UPDATE_BLOG_CATEGORY:
     return Object.assign({}, state, {isShowCategoryModal:true})
   case CLEAR_BLOG_CATEGORY:
@@ -336,7 +336,7 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
   case POST_BLOG_PENDING:
     return Object.assign({}, state, {})
   case POST_BLOG_SUCCESS:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isCreateBlog:false, isRefreshBloglistNeeded:true})
   case POST_BLOG_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case UPDATE_BLOG:
@@ -407,15 +407,15 @@ const initialStateCategory= {
 export const categoryRdc = (state=initialStateCategory, action={}) => {
   switch (action.type) {
   case REQUEST_CATEGORY_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshCategoryNeeded:false})
   case REQUEST_CATEGORY_SUCCESS:
-    return Object.assign({}, state, {categories: action.payload, isRefreshCategoryNeeded:false})
+    return Object.assign({}, state, {categories: action.payload})
   case REQUEST_CATEGORY_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case REQUEST_CATEGORY_C_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshCategoryNeeded:false})
   case REQUEST_CATEGORY_C_SUCCESS:
-    return Object.assign({}, state, {categories: action.payload, isRefreshCategoryNeeded:false})
+    return Object.assign({}, state, {categories: action.payload})
   case REQUEST_CATEGORY_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case POST_CATEGORY_PENDING:
@@ -469,15 +469,15 @@ const initialStateTag= {
 export const tagRdc = (state=initialStateTag, action={}) => {
   switch (action.type) {
   case REQUEST_TAG_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshTagNeeded:false})
   case REQUEST_TAG_SUCCESS:
-    return Object.assign({}, state, {tags: action.payload, isRefreshTagNeeded:false})
+    return Object.assign({}, state, {tags: action.payload})
   case REQUEST_TAG_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case REQUEST_TAG_C_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshTagNeeded:false})
   case REQUEST_TAG_C_SUCCESS:
-    return Object.assign({}, state, {tags: action.payload, isRefreshTagNeeded:false})
+    return Object.assign({}, state, {tags: action.payload})
   case REQUEST_TAG_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case POST_TAG_PENDING:
@@ -541,15 +541,15 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
     return Object.assign({}, state, {isDisableMenuTab:false})
   //Menu1
   case REQUEST_MENU1_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshMenu1Needed:false})
   case REQUEST_MENU1_SUCCESS:
-    return Object.assign({}, state, {menus1: action.payload, isRefreshMenu1Needed:false})
+    return Object.assign({}, state, {menus1: action.payload})
   case REQUEST_MENU1_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case REQUEST_MENU1_C_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshMenu1Needed:false})
   case REQUEST_MENU1_C_SUCCESS:
-    return Object.assign({}, state, {menus1: action.payload, isRefreshMenu1Needed:false})
+    return Object.assign({}, state, {menus1: action.payload})
   case REQUEST_MENU1_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case POST_MENU1_PENDING:
@@ -590,15 +590,15 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
     return Object.assign({}, state, {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:false})
   //Menu2
   case REQUEST_MENU2_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshMenu2Needed:false})
   case REQUEST_MENU2_SUCCESS:
-    return Object.assign({}, state, {menus2: action.payload, isRefreshMenu2Needed:false})
+    return Object.assign({}, state, {menus2: action.payload})
   case REQUEST_MENU2_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case REQUEST_MENU2_C_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isRefreshMenu2Needed:false})
   case REQUEST_MENU2_C_SUCCESS:
-    return Object.assign({}, state, {menus2: action.payload, isRefreshMenu2Needed:false})
+    return Object.assign({}, state, {menus2: action.payload})
   case REQUEST_MENU2_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case POST_MENU2_PENDING:

@@ -38,7 +38,7 @@ export const selectSearchCategoryModalAct = (event) => {
 }
 
 export const searchCategoryModalAct = (selectedCategory) => (dispatch) =>{
-   console.log('selectedCategory',selectedCategory);
+   // console.log('selectedCategory',selectedCategory);
   dispatch({ type: SEARCH_CATEGORY_MODAL_PENDING })
   fetch('http://localhost:3001/blog/category/search', {
         method: 'POST',

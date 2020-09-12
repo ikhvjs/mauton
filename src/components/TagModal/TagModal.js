@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
 class TagModal extends Component  {
 
 	componentDidMount() {
-		this.props.onRequestTagModal();
+		// this.props.onRequestTagModal();
 	}
 
 	componentDidUpdate() {
