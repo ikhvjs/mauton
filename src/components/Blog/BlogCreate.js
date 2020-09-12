@@ -19,9 +19,10 @@ import {
 	clearSelectedBlogTagAct,
 	clearCreateBlogFlagAct
 	} from '../../components/Blog/BlogAction';
-// import {
-// 	initTinyEditorAct
-// 	} from '../../components/TinyEditorComponent/TinyEditorComponentAction'
+
+import {
+	initTinyEditorAct
+	} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row,Col,Form, Button, Badge,Container} from "react-bootstrap";
@@ -35,7 +36,7 @@ import TagModal from '../TagModal/TagModal';
 const mapStateToProps =(state) => {
 	return {
 	    isCreateBlogByClick:state.blogRdc.isCreateBlogByClick,
-	    isInitTinyEditorByClick:state.blogRdc.isInitTinyEditorByClick,
+	    // isInitTinyEditorByClick:state.blogRdc.isInitTinyEditorByClick,
 	    selectedCategory:state.blogRdc.selectedCategory,
 	    selectedTag:state.blogRdc.selectedTag
   }
@@ -69,7 +70,7 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 class BlogCreate extends Component  {
 
 	componentDidMount() {
-
+		initTinyEditorAct('blogCreateEditor');
 		// if (this.props.isCreateBlogByClick === false) {
 		// 	this.props.onSelectBlogCreate();
 		// }
@@ -179,7 +180,7 @@ class BlogCreate extends Component  {
 			</Form>
 			<br/>
 			<Row>
-				<TinyEditorComponent id='blogeditor' />
+				<TinyEditorComponent id='blogCreateEditor' />
 			</Row>
 			<CategoryModal />
 			<TagModal />

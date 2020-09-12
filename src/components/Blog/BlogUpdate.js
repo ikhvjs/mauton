@@ -2,19 +2,24 @@ import React , { Component } from 'react';
 
 import { connect } from 'react-redux';
 
+import tinymce from 'tinymce/tinymce';
+
 // import { LinkContainer } from 'react-router-bootstrap';
 
 import { 
-	clickSaveBlogAct,
+	clickUpdateBlogAct,
 	selectUpdateBlogCategoryAct,
-	clearBlogCategoryAct,
 	clearSelectedBlogCategoryAct,
 	selectAddBlogTagAct,
 	deleteBlogTagAct,
-	clearSelectedBlogTagAct
+	clearSelectedBlogTagAct,
+	initSelectedBlogTagAct,
+	initSelectedBlogCategoryAct
 	} from '../../components/Blog/BlogAction';
 
-
+import {
+	initTinyEditorAct
+} from '../TinyEditorComponent/TinyEditorComponentAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row,Col,Form, Button, Badge,Container} from "react-bootstrap";
@@ -32,12 +37,10 @@ const mapStateToProps =(state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch,ownProps) => {
+const mapDispatchToProps = (dispatch) => {
 	return {
         onSelectUpdateBlogCategory:()=>
         	dispatch(selectUpdateBlogCategoryAct()),
-        onClearBlogCategory:()=>
-        	dispatch(clearBlogCategoryAct()),
         onClearSelectedBlogCategory:()=>
         	dispatch(clearSelectedBlogCategoryAct()),
         onSelectAddBlogTag:()=>
@@ -46,8 +49,12 @@ const mapDispatchToProps = (dispatch,ownProps) => {
         	dispatch(deleteBlogTagAct(event)),
         onClearSelectedBlogTag:()=>
         	dispatch(clearSelectedBlogTagAct()),
-        onClickSaveBlog:(event)=>
-        	dispatch(clickSaveBlogAct(event,ownProps.sidebarMenuPath))
+        onClickUpdateBlog:(event)=>
+        	dispatch(clickUpdateBlogAct(event)),
+        onInitSelectedBlogTag:()=>
+        	dispatch(initSelectedBlogTagAct()),
+        onInitSelectedBlogCategory:()=>
+        	dispatch(initSelectedBlogCategoryAct())
 
     }
 
@@ -56,12 +63,13 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 class BlogUpdate extends Component  {
 
 	componentDidMount() {
-
+		initTinyEditorAct('blogUpdateEditor');
+		tinymce.get('blogUpdateEditor').setContent(this.props.blog.blog_content);
+		this.props.onInitSelectedBlogTag();
+		this.props.onInitSelectedBlogCategory();
 	}
 
 	componentWillUnmount() {
-		this.props.onClearSelectedBlogCategory();
-		this.props.onClearSelectedBlogTag();
 	}
 
 	
@@ -70,14 +78,15 @@ class BlogUpdate extends Component  {
 	render(){
 
 		const {
-			onClickSaveBlog,
+			onClickUpdateBlog,
 			onSelectUpdateBlogCategory,
 			selectedCategory,
-			onClearBlogCategory,
 			onSelectAddBlogTag,
 			selectedTag,
 			onDeleteBlogTag,
-			blog
+			blog,
+			onInitSelectedBlogCategory,
+			onInitSelectedBlogTag
 			}=this.props;
 
 
@@ -116,35 +125,21 @@ class BlogUpdate extends Component  {
 					<Form.Label column sm="2">Blog Category:</Form.Label>
 					<Col sm="0.5">
 						{
-						  <div className="border border-light rounded"
-						  	id={selectedCategory.blog_category_id
-					      		?selectedCategory.blog_category_id
-					      		:blog.blog_category_id}>
-					      		{selectedCategory.blog_category_name
-					      					?selectedCategory.blog_category_name
-					      					:blog.blog_category_name}
+						  <div className="ml-3 pl-1 pr-1 pt-1 rounded border"
+						  	id={selectedCategory.blog_category_id}>
+					      		{selectedCategory.blog_category_name}
 						  </div>
 						}
-						  {
-					      // <Form.Control readOnly size="sm" 
-					      // 	type="text" placeholder="Change Blog Category" 
-					      // 	name="blog_category_name"
-					      // 	id={selectedCategory.blog_category_id
-					      // 		?selectedCategory.blog_category_id
-					      // 		:blog.blog_category_id}
-					      // 	defaultValue={selectedCategory.blog_category_name
-					      // 					?selectedCategory.blog_category_name
-					      // 					:blog.blog_category_name}
-					      // 	/>
-					      }
 					</Col>
 					<Col sm="0.5">
 						<Button variant="link" size="sm" 
 							onClick={onSelectUpdateBlogCategory}>Change</Button>
 					</Col>
 					<Col sm="1">
-						<Button variant="secondary" size="sm" onClick={onClearBlogCategory}>
-							Clear</Button>
+						<Button variant="secondary" size="sm" 
+							onClick={onInitSelectedBlogCategory}>
+							Reset
+						</Button>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
@@ -152,16 +147,17 @@ class BlogUpdate extends Component  {
 					<Col name="blogtag" sm="auto">
 						<Row className="pl-3">
 						{selectedTag.map((tag,index)=>{
-							return (
-								<Col className="px-0 mr-2" sm="auto" 
-									id={tag.tag_id} key={index} 
-									name={tag.tag_name} title={index}>
-									<Badge variant="primary">{`${tag.tag_name} `}</Badge>
-									<Button onClick={onDeleteBlogTag} 
-										className="pl-0 pb-0" variant="link">x</Button>
-								</Col>
-							)
-						})}
+								return (
+									<Col className="px-0 mr-2" sm="auto" 
+										id={tag.tag_id} key={index} 
+										name={tag.tag_name} title={index}>
+										<Badge pill variant="primary">{`${tag.tag_name} `}</Badge>
+										<Button onClick={onDeleteBlogTag} 
+											className="pl-0 pb-0" variant="link">x</Button>
+									</Col>
+								)
+							})
+						}
 						</Row>
 					</Col>
 					<Col sm="0.5">
@@ -169,19 +165,24 @@ class BlogUpdate extends Component  {
 							Add Tags
 						</Button>
 					</Col>
+					<Col sm="0.5">
+						<Button variant="secondary" size="sm" onClick={onInitSelectedBlogTag}>
+							Reset
+						</Button>
+					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Seq:</Form.Label>
 					<Col sm="2">
-					      <Form.Control name="seq" 
+					      <Form.Control name="seq" defaultValue={blog.seq}
 					      size="sm" type="text" placeholder="Enter Seq" />
 					</Col>
 				</Form.Group>
-				<Button variant="success" size="sm" onClick={onClickSaveBlog}>Save</Button>
+				<Button variant="success" size="sm" onClick={onClickUpdateBlog}>Update</Button>
 			</Form>
 			<br/>
 			<Row>
-				<TinyEditorComponent id='blogeditor' />
+				<TinyEditorComponent id='blogUpdateEditor' />
 			</Row>
 			<CategoryModal />
 			<TagModal />

@@ -32,12 +32,12 @@ import {
   REQUEST_BLOG_PENDING,
   REQUEST_BLOG_SUCCESS,
   REQUEST_BLOG_FAILED,
-  REQUEST_BLOG_TAG_PENDING,
-  REQUEST_BLOG_TAG_SUCCESS,
-  REQUEST_BLOG_TAG_FAILED,
-  REQUEST_BLOG_TAG_C_PENDING,
-  REQUEST_BLOG_TAG_C_SUCCESS,
-  REQUEST_BLOG_TAG_C_FAILED,
+  // REQUEST_BLOG_TAG_PENDING,
+  // REQUEST_BLOG_TAG_SUCCESS,
+  // REQUEST_BLOG_TAG_FAILED,
+  // REQUEST_BLOG_TAG_C_PENDING,
+  // REQUEST_BLOG_TAG_C_SUCCESS,
+  // REQUEST_BLOG_TAG_C_FAILED,
   // SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
   SELECT_UPDATE_BLOG_CATEGORY,
@@ -52,6 +52,8 @@ import {
   UPDATE_BLOG,
   EXIT_UPDATE_BLOG,
   CLEAR_CREATE_BLOG_FLAG,
+  INIT_SELECTED_BLOG_TAG,
+  INIT_SELECTED_BLOG_CATEGORY,
 //Category Modal
   REQUEST_CATEGORY_MODAL_PENDING,
   REQUEST_CATEGORY_MODAL_SUCCESS,
@@ -249,7 +251,7 @@ const initialStateBlog = {
   blog: [],
   isPendingBlogByClick: false,
   isRefreshBloglistNeeded:false,
-  tags:[],
+  // tags:[],
   isCreateBlog:false,
   editorContent:[],
   // isCreateBlogByClick:false,
@@ -303,18 +305,18 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state, {blog: action.payload})
   case REQUEST_BLOG_FAILED:
     return Object.assign({}, state, {error: action.payload}) 
-  case REQUEST_BLOG_TAG_PENDING:
-    return Object.assign({}, state, {})
-  case REQUEST_BLOG_TAG_SUCCESS:
-    return Object.assign({}, state,  {tags: action.payload})
-  case REQUEST_BLOG_TAG_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case REQUEST_BLOG_TAG_C_PENDING:
-    return Object.assign({}, state, {})
-  case REQUEST_BLOG_TAG_C_SUCCESS:
-    return Object.assign({}, state,  {tags: action.payload})
-  case REQUEST_BLOG_TAG_C_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+  // case REQUEST_BLOG_TAG_PENDING:
+  //   return Object.assign({}, state, {})
+  // case REQUEST_BLOG_TAG_SUCCESS:
+  //   return Object.assign({}, state,  {tags: action.payload})
+  // case REQUEST_BLOG_TAG_FAILED:
+  //   return Object.assign({}, state, {error: action.payload})
+  // case REQUEST_BLOG_TAG_C_PENDING:
+  //   return Object.assign({}, state, {})
+  // case REQUEST_BLOG_TAG_C_SUCCESS:
+  //   return Object.assign({}, state,  {tags: action.payload})
+  // case REQUEST_BLOG_TAG_C_FAILED:
+  //   return Object.assign({}, state, {error: action.payload})
   // case SELECT_CREATE_BLOG:
   //   return Object.assign({}, state, {isCreateBlog: true})
   case SELECT_CREATE_BLOG_C:
@@ -343,6 +345,10 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state, {isUpdateBlog:true})
   case EXIT_UPDATE_BLOG:
     return Object.assign({}, state, {isUpdateBlog:false})
+  case INIT_SELECTED_BLOG_TAG:
+    return Object.assign({}, state, {selectedTag:[...action.payload]})
+  case INIT_SELECTED_BLOG_CATEGORY:
+    return Object.assign({}, state, {selectedCategory:action.payload})
 //Blog Category Modal
   case REQUEST_CATEGORY_MODAL_PENDING:
     return Object.assign({}, state, {isRefreshCategoryNeeded:false})

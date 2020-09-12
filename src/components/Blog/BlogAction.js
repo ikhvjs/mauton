@@ -5,12 +5,12 @@ import {
   REQUEST_BLOG_C_PENDING,
   REQUEST_BLOG_C_SUCCESS,
   REQUEST_BLOG_C_FAILED,
-  REQUEST_BLOG_TAG_PENDING,
-  REQUEST_BLOG_TAG_SUCCESS,
-  REQUEST_BLOG_TAG_FAILED,
-  REQUEST_BLOG_TAG_C_PENDING,
-  REQUEST_BLOG_TAG_C_SUCCESS,
-  REQUEST_BLOG_TAG_C_FAILED,
+  // REQUEST_BLOG_TAG_PENDING,
+  // REQUEST_BLOG_TAG_SUCCESS,
+  // REQUEST_BLOG_TAG_FAILED,
+  // REQUEST_BLOG_TAG_C_PENDING,
+  // REQUEST_BLOG_TAG_C_SUCCESS,
+  // REQUEST_BLOG_TAG_C_FAILED,
   // SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
   SELECT_UPDATE_BLOG_CATEGORY,
@@ -24,7 +24,9 @@ import {
   POST_BLOG_FAILED,
   UPDATE_BLOG,
   EXIT_UPDATE_BLOG,
-  CLEAR_CREATE_BLOG_FLAG
+  CLEAR_CREATE_BLOG_FLAG,
+  INIT_SELECTED_BLOG_TAG,
+  INIT_SELECTED_BLOG_CATEGORY
  } from '../../constants';
 
 import tinymce from 'tinymce/tinymce';
@@ -53,27 +55,27 @@ export const requestBlogByClickAct = (blogPath) => (dispatch) =>{
     .catch(error => dispatch({ type: REQUEST_BLOG_C_FAILED, payload: error }))
 };
 
-export const requestBlogTagAct =(blogPath)=>(dispatch)=>{
-  dispatch({ type: REQUEST_BLOG_TAG_PENDING })
-    fetch(`http://localhost:3001/blog/tag/path/${blogPath}`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_BLOG_TAG_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_BLOG_TAG_FAILED, payload: error }))
-}
+// export const requestBlogTagAct =(blogPath)=>(dispatch)=>{
+//   dispatch({ type: REQUEST_BLOG_TAG_PENDING })
+//     fetch(`http://localhost:3001/blog/tag/path/${blogPath}`, {
+//           method: 'get',
+//           headers: {'Content-Type': 'text/plain'}
+//         })
+//     .then(response => response.json())
+//     .then(data => dispatch({ type: REQUEST_BLOG_TAG_SUCCESS, payload: data }))
+//     .catch(error => dispatch({ type: REQUEST_BLOG_TAG_FAILED, payload: error }))
+// }
 
-export const requestBlogTagByClickAct =(blogPath)=>(dispatch)=>{
-  dispatch({ type: REQUEST_BLOG_TAG_C_PENDING })
-    fetch(`http://localhost:3001/blog/tag/path/${blogPath}`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_BLOG_TAG_C_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_BLOG_TAG_C_FAILED, payload: error }))
-}
+// export const requestBlogTagByClickAct =(blogPath)=>(dispatch)=>{
+//   dispatch({ type: REQUEST_BLOG_TAG_C_PENDING })
+//     fetch(`http://localhost:3001/blog/tag/path/${blogPath}`, {
+//           method: 'get',
+//           headers: {'Content-Type': 'text/plain'}
+//         })
+//     .then(response => response.json())
+//     .then(data => dispatch({ type: REQUEST_BLOG_TAG_C_SUCCESS, payload: data }))
+//     .catch(error => dispatch({ type: REQUEST_BLOG_TAG_C_FAILED, payload: error }))
+// }
 
 export const selectCreateBlogByClickAct = ()  => {
   return ({type: SELECT_CREATE_BLOG_C})
@@ -118,7 +120,7 @@ export const clearSelectedBlogTagAct = () =>{
 
 
 export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =>{
-  dispatch({ type: POST_BLOG_PENDING })
+  dispatch({ type: POST_BLOG_PENDING });
   const newBlog = {};
 
   const formNode = event.target.parentNode;
@@ -140,7 +142,7 @@ export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =
     }
   })
 
-  const blogContent = tinymce.get('blogeditor').getContent();
+  const blogContent = tinymce.get('blogCreateEditor').getContent();
 
   Object.assign(newBlog,{blog_content:blogContent})
 
@@ -158,6 +160,32 @@ export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =
   .catch(error => dispatch({ type: POST_BLOG_FAILED, payload: error }))
 
 }
+
+export const clickUpdateBlogAct=(event)=>(dispatch,getState)=>{
+  
+
+
+}
+
+export const initSelectedBlogTagAct =()=>(dispatch,getState)=>{
+  
+  const currentTags = getState().blogRdc.blog[0].tags;
+  const cloneTags = [...currentTags];
+  // console.log('cloneTags', cloneTags);
+  dispatch({type:INIT_SELECTED_BLOG_TAG, payload:cloneTags});
+}
+
+export const initSelectedBlogCategoryAct =()=>(dispatch,getState)=>{
+
+  const currentCategoryName = getState().blogRdc.blog[0].blog_category_name;
+  const currentCategoryID = getState().blogRdc.blog[0].blog_category_id;
+  const currentCategory ={};
+  Object.assign(currentCategory,
+    {blog_category_id:currentCategoryID, blog_category_name:currentCategoryName});
+  dispatch({type:INIT_SELECTED_BLOG_CATEGORY, payload:currentCategory});
+
+}
+
 
 export const updateBlogAct =()=>{
   return ({type:UPDATE_BLOG});

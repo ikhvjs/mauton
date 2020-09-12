@@ -30,7 +30,6 @@ import 'tinymce/plugins/autoresize';
 
 export const initTinyEditorAct = (id)  => {
 
-  // console.log('initTiny id',id)
 
   tinymce.remove();
   // setTimeout(function () {

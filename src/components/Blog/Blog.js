@@ -10,7 +10,7 @@ import BlogUpdate from './BlogUpdate';
 
 import { 
 	requestBlogAct,
-	requestBlogTagAct,
+	// requestBlogTagAct,
 	updateBlogAct,
 	exitUpdateBlogAct
 } from './BlogAction';
@@ -26,7 +26,7 @@ import './Blog.css';
 const mapStateToProps = (state) => {
   return {
     blog:state.blogRdc.blog,
-    tags:state.blogRdc.tags,
+    // tags:state.blogRdc.tags,
     isPendingBlogByClick:state.blogRdc.isPendingBlogByClick,
     isUpdateBlog:state.blogRdc.isUpdateBlog
   }
@@ -36,8 +36,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onRequestBlog:(blogPath)=>
     	dispatch(requestBlogAct(blogPath)),
-    onRequestBlogTag:(blogPath)=>
-    	dispatch(requestBlogTagAct(blogPath)),
+    // onRequestBlogTag:(blogPath)=>
+    // 	dispatch(requestBlogTagAct(blogPath)),
     onUpdateBlog:()=>
     	dispatch(updateBlogAct()),
     onExitUpdateBlog:()=>
@@ -48,12 +48,12 @@ const mapDispatchToProps = (dispatch) => {
 class Blog extends Component  {
 
 	componentDidMount() {
-		const { isPendingBlogByClick, onRequestBlog, onRequestBlogTag } = this.props;
+		const { isPendingBlogByClick, onRequestBlog } = this.props;
 		const { blogPath } = this.props.match.params;
 		// console.log('DidMount blogPath',blogPath);
 		if (isPendingBlogByClick === false){
 	    	onRequestBlog(blogPath);
-	    	onRequestBlogTag(blogPath);
+	    	// onRequestBlogTag(blogPath);
 		}
 	}
 
@@ -66,7 +66,7 @@ class Blog extends Component  {
 	render(){
 		const {
 			blog,
-			tags,
+			// tags,
 			onUpdateBlog,
 			isUpdateBlog
 		}=this.props;
@@ -78,7 +78,7 @@ class Blog extends Component  {
 				((isUpdateBlog)
 					?(<BlogUpdate blog={blog[0]}/>
 					)
-					:(<React.Fragment>
+					:(<Container>
 						<Col className = "blog-container-wrapper">
 							<Container>
 							<h1>{blog[0].blog_title}</h1>
@@ -87,9 +87,9 @@ class Blog extends Component  {
 							<h4>{blog[0].blog_desc}</h4>
 			                <h5>Category: <Badge pill  variant="warning">{blog[0].blog_category_name}</Badge></h5>
 			                <p>Tags: 
-			                	{tags.map((tag,index)=>{
+			                	{blog[0].tags.map((tag,index)=>{
 			                		return(
-			                			<Badge  key={index} className="blog-tag"
+			                			<Badge pill key={index} className="blog-tag"
 			                				variant="primary">{tag.tag_name}</Badge>
 			                		)
 			                	})}
@@ -105,7 +105,7 @@ class Blog extends Component  {
 			                	{ ReactHtmlParser(blog[0].blog_content) }
 			                </Container>	
 		                </Col>
-					</React.Fragment>)
+					</Container>)
 				)
 			:null
 

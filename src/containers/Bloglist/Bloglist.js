@@ -15,7 +15,7 @@ import {
 
 import { 
 	requestBlogByClickAct,
-	requestBlogTagByClickAct,
+	// requestBlogTagByClickAct,
 	selectCreateBlogByClickAct
 	} from '../../components/Blog/BlogAction';
 
@@ -31,7 +31,7 @@ import BlogCreate from '../../components/Blog/BlogCreate';
 // import TinyEditorComponent from '../../components/TinyEditorComponent/TinyEditorComponent';
 // import Page404 from '../../components/Page404/Page404';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {CardColumns, Card, Button, Row, Form, Col,Container} from "react-bootstrap";
+import {CardColumns, Card, Button, Row, Form, Col,Container, Badge} from "react-bootstrap";
 import './Bloglist.css';
 
 const mapStateToProps = (state) => {
@@ -52,7 +52,7 @@ const mapDispatchToProps = (dispatch,ownProps) => {
     onRequestBlogByClick:(event)=>{
     //event.target.getAttribute('value') is blog_path
     	dispatch(requestBlogByClickAct(event.target.getAttribute('value')));
-    	dispatch(requestBlogTagByClickAct(event.target.getAttribute('value')));
+    	// dispatch(requestBlogTagByClickAct(event.target.getAttribute('value')));
     },
     onSearchBloglist:(event)=>
     	dispatch(searchBloglistAct(
@@ -151,18 +151,30 @@ class Bloglist extends Component  {
 						<CardColumns>
 							{ bloglist.map(blog =>{
 								return(
-									<Card bg="light" text="dark" border="primary"
+									<Card bg="dark" text="white" border="warning"
 										key={blog.blog_id} style={{ width: '18rem'}}
 										id={blog.blog_id} className='bloglist' >
-									  <Card.Header as="h5">{blog.blog_title}</Card.Header>
+									  <Card.Header as="h5">
+									  	{blog.blog_title}
+									  </Card.Header>
 									  <Card.Body>
-									    <Card.Title className="text-muted">{blog.blog_category_name}</Card.Title>
+									    <Card.Title as="h6">
+									    	Category:
+									    	<Badge pill variant="warning">
+									    		{blog.blog_category_name}
+									    	</Badge>
+									    </Card.Title>
 									    <Card.Text>
 									    	{blog.blog_desc}
-									    	{
-									    		// .substr(0, 100)+'...'
-									    	}
 									    </Card.Text>
+									    <Card.Text>Tags: 
+						                	{blog.tags.map((tag,index)=>{
+						                		return(
+						                			<Badge pill key={index} className="blog-tag"
+						                				variant="primary">{tag.tag_name}</Badge>
+						                		)
+						                	})}
+										</Card.Text>
 									    <LinkContainer to={`${this.props.match.url}/${blog.blog_path}`}>
 									    	<Button size="sm" variant="link" 
 										    	value={blog.blog_path}
@@ -172,7 +184,7 @@ class Bloglist extends Component  {
 										    </Button>
 									    </LinkContainer>
 									    <Card.Text>
-									    	<small className="text-muted">
+									    	<small >
 									  			{`last updated:${transformDate(blog.last_updated_date)}`}
 									  		</small>
 									    </Card.Text>
@@ -190,11 +202,6 @@ class Bloglist extends Component  {
 				</Container>
 				<Container name="blog-content">
 					<Switch>
-						{
-						// <Route path={`${this.props.match.url}/blogcreate`}>
-							
-						// </Route>
-						}
 						<Route path={`${this.props.match.url}/:blogPath`}>
 							<Row name="showblog" 
 								className={(isCreateBlog)?"hidden-container":

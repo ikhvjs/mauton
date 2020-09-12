@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
-import { 
-  initTinyEditorAct
-} from './TinyEditorComponentAction';
+// import { 
+//   initTinyEditorAct
+// } from './TinyEditorComponentAction';
 
 
 // import $ from 'jquery';
@@ -12,15 +12,16 @@ import {
 
 const mapStateToProps =(state) => {
   return {
-      isCreateBlog:state.blogRdc.isCreateBlog
+      // isCreateBlog:state.blogRdc.isCreateBlog,
+      // isUpdateBlog:state.blogRdc.isUpdateBlog
   }
 }
 
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onInitTinyEditor:(EditorID)=>
-      dispatch(initTinyEditorAct(EditorID))
+    // onInitTinyEditor:(EditorID)=>
+    //   dispatch(initTinyEditorAct(EditorID))
   }
 
 }
@@ -35,10 +36,13 @@ class TinyEditorComponent extends Component {
   }
 
   componentDidUpdate() {
-    const { id, onInitTinyEditor,isCreateBlog } = this.props;
-    if (isCreateBlog === true) {
-      onInitTinyEditor(id);
-    }
+    // const { id, onInitTinyEditor,isCreateBlog,isUpdateBlog } = this.props;
+    // if (isCreateBlog === true) {
+    //   onInitTinyEditor(id);
+    // }else if (isUpdateBlog === true) {
+    //   console.log('UpdateBlog init tiny');
+    //   onInitTinyEditor(id);
+    // }
   }
 
 
