@@ -26,10 +26,23 @@ import {
   EXIT_UPDATE_BLOG,
   CLEAR_CREATE_BLOG_FLAG,
   INIT_SELECTED_BLOG_TAG,
-  INIT_SELECTED_BLOG_CATEGORY
+  INIT_SELECTED_BLOG_CATEGORY,
+  ONCHANGE_UPDATE_BLOG_TITLE,
+  ONCHANGE_UPDATE_BLOG_DESC,
+  INIT_UPDATE_BLOG_TITLE,
+  INIT_UPDATE_BLOG_DESC,
+  INIT_UPDATE_BLOG_PATH,
+  INIT_UPDATE_BLOG_SEQ,
+  ONCHANGE_UPDATE_BLOG_PATH,
+  ONCHANGE_UPDATE_BLOG_SEQ,
+  UPDATE_BLOG_PENDING,
+  UPDATE_BLOG_SUCCESS,
+  UPDATE_BLOG_FAILED
  } from '../../constants';
 
 import tinymce from 'tinymce/tinymce';
+
+import { isTagArrayEqual } from '../../utility/utility';
 
 export const requestBlogAct = (blogPath) => (dispatch) =>{
   // console.log('normal blogPath',blogPath);
@@ -161,10 +174,118 @@ export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =
 
 }
 
-export const clickUpdateBlogAct=(event)=>(dispatch,getState)=>{
+export const clickUpdateBlogAct=()=>(dispatch,getState)=>{
   
 
+  const currentBlogTitle = getState().blogRdc.blog[0].blog_title;
+  const currentBlogDesc = getState().blogRdc.blog[0].blog_desc;
+  const currentBlogPath = getState().blogRdc.blog[0].blog_path;
+  const currentBlogSeq = getState().blogRdc.blog[0].seq;
+  const currentBlogCategoryID = getState().blogRdc.blog[0].blog_category_id;
+  const currentBlogTags = getState().blogRdc.blog[0].tags;
+  const currentBlogContent = getState().blogRdc.blog[0].blog_content;
 
+  const updateBlogTitle = getState().blogRdc.updateBlogTitle;
+  const updateBlogDesc = getState().blogRdc.updateBlogDesc;
+  const updateBlogPath = getState().blogRdc.updateBlogPath;
+  const updateBlogSeq = getState().blogRdc.updateBlogSeq;
+  const updateBlogCategoryID = getState().blogRdc.selectedCategory.blog_category_id;
+  const updateBlogTags = getState().blogRdc.selectedTag;
+  const updateBlogContent = tinymce.get('blogUpdateEditor').getContent();
+
+  let isBlogUpdated = false;
+
+
+  if (currentBlogTitle!==updateBlogTitle){
+    // console.log('currentBlogTitle',currentBlogTitle);
+    // console.log('updateBlogTitle',updateBlogTitle);
+    isBlogUpdated = true;
+  }else if (currentBlogDesc!==updateBlogDesc){
+    // console.log('currentBlogDesc',currentBlogDesc);
+    // console.log('updateBlogDesc',updateBlogDesc);
+    isBlogUpdated = true;
+  }else if (currentBlogPath!==updateBlogPath){
+    // console.log('currentBlogPath',currentBlogPath);
+    // console.log('updateBlogPath',updateBlogPath);
+    isBlogUpdated = true;
+  }else if (Number(currentBlogSeq)!==Number(updateBlogSeq)){
+    // console.log('currentBlogSeq',currentBlogSeq);
+    // console.log('updateBlogSeq',updateBlogSeq);
+    isBlogUpdated = true;
+  }else if (Number(currentBlogCategoryID)!==Number(updateBlogCategoryID)){
+    // console.log('currentBlogCategoryID',currentBlogCategoryID);
+    // console.log('updateBlogCategoryID',updateBlogCategoryID);
+    isBlogUpdated = true;
+  }else if (!isTagArrayEqual(currentBlogTags,updateBlogTags)){
+    // console.log('currentBlogTags',currentBlogTags);
+    // console.log('updateBlogTags',updateBlogTags);
+
+    isBlogUpdated = true;
+  }else if (currentBlogContent!==updateBlogContent){
+    isBlogUpdated = true;
+  }
+
+
+  if(isBlogUpdated){
+    dispatch({ type: UPDATE_BLOG_PENDING });
+    fetch('http://localhost:3001/blog/update', {
+        method: 'put',
+        headers: {'Content-Type': 'application/json',
+                  'Accept': 'application/json'},
+        body: JSON.stringify({
+          blog_title:updateBlogTitle,
+          blog_desc:updateBlogDesc,
+          blog_path:updateBlogPath,
+          blog_category_id:updateBlogCategoryID,
+          seq:updateBlogSeq,
+          blog_content:updateBlogContent
+        })
+      }
+    )
+    .then(response => response.json())
+    .then(data => dispatch({ type: UPDATE_BLOG_SUCCESS}))
+    .catch(error => dispatch({ type: UPDATE_BLOG_FAILED, payload: error }))
+    }
+
+}
+
+
+
+export const onChangeUpdateBlogTitleAct =(blogTitle)=>{
+  // console.log('blogTitle',blogTitle);
+  return ({type:ONCHANGE_UPDATE_BLOG_TITLE, payload:blogTitle})
+}
+
+export const onChangeUpdateBlogDescAct = (blogDesc)=>{
+  return ({type:ONCHANGE_UPDATE_BLOG_DESC, payload:blogDesc})
+}
+
+export const onChangeUpdateBlogPathAct = (blogPath)=>{
+  return ({type:ONCHANGE_UPDATE_BLOG_PATH, payload:blogPath})
+}
+
+export const onChangeUpdateBlogSeqAct = (blogSeq)=>{
+  return ({type:ONCHANGE_UPDATE_BLOG_SEQ, payload:blogSeq})
+}
+
+export const initUpdateBlogTitleAct=()=>(dispatch,getState)=>{
+  const currentBlogTitle = getState().blogRdc.blog[0].blog_title;
+  dispatch({type:INIT_UPDATE_BLOG_TITLE, payload:currentBlogTitle});
+}
+
+export const initUpdateBlogDescAct=()=>(dispatch,getState)=>{
+  const currentBlogDesc = getState().blogRdc.blog[0].blog_desc;
+  dispatch({type:INIT_UPDATE_BLOG_DESC, payload:currentBlogDesc});
+}
+
+export const initUpdateBlogPathAct=()=>(dispatch,getState)=>{
+  const currentBlogPath = getState().blogRdc.blog[0].blog_path;
+  dispatch({type:INIT_UPDATE_BLOG_PATH, payload:currentBlogPath});
+}
+
+export const initUpdateBlogSeqAct=()=>(dispatch,getState)=>{
+  const currentBlogSeq = getState().blogRdc.blog[0].seq;
+  dispatch({type:INIT_UPDATE_BLOG_SEQ, payload:currentBlogSeq});
 }
 
 export const initSelectedBlogTagAct =()=>(dispatch,getState)=>{

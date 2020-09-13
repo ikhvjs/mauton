@@ -14,7 +14,17 @@ import {
 	deleteBlogTagAct,
 	clearSelectedBlogTagAct,
 	initSelectedBlogTagAct,
-	initSelectedBlogCategoryAct
+	initSelectedBlogCategoryAct,
+	exitUpdateBlogAct,
+	// initUpdateBlogAct,
+	initUpdateBlogTitleAct,
+	initUpdateBlogDescAct,
+	onChangeUpdateBlogTitleAct,
+	onChangeUpdateBlogDescAct,
+	initUpdateBlogPathAct,
+	initUpdateBlogSeqAct,
+	onChangeUpdateBlogPathAct,
+	onChangeUpdateBlogSeqAct
 	} from '../../components/Blog/BlogAction';
 
 import {
@@ -33,7 +43,11 @@ import TagModal from '../TagModal/TagModal';
 const mapStateToProps =(state) => {
 	return {
 	    selectedCategory:state.blogRdc.selectedCategory,
-	    selectedTag:state.blogRdc.selectedTag
+	    selectedTag:state.blogRdc.selectedTag,
+	    updateBlogTitle:state.blogRdc.updateBlogTitle,
+	    updateBlogDesc:state.blogRdc.updateBlogDesc,
+	    updateBlogPath:state.blogRdc.updateBlogPath,
+	    updateBlogSeq:state.blogRdc.updateBlogSeq
   }
 }
 
@@ -49,12 +63,30 @@ const mapDispatchToProps = (dispatch) => {
         	dispatch(deleteBlogTagAct(event)),
         onClearSelectedBlogTag:()=>
         	dispatch(clearSelectedBlogTagAct()),
-        onClickUpdateBlog:(event)=>
-        	dispatch(clickUpdateBlogAct(event)),
+        onClickUpdateBlog:()=>
+        	dispatch(clickUpdateBlogAct()),
+        onCancelUpdateBlog:()=>
+        	dispatch(exitUpdateBlogAct()),
         onInitSelectedBlogTag:()=>
         	dispatch(initSelectedBlogTagAct()),
         onInitSelectedBlogCategory:()=>
-        	dispatch(initSelectedBlogCategoryAct())
+        	dispatch(initSelectedBlogCategoryAct()),
+        onInitUpdateBlog:()=>{
+        	dispatch(initSelectedBlogTagAct());
+        	dispatch(initSelectedBlogCategoryAct());
+        	dispatch(initUpdateBlogTitleAct());
+        	dispatch(initUpdateBlogDescAct());
+        	dispatch(initUpdateBlogPathAct());
+        	dispatch(initUpdateBlogSeqAct());
+        },
+        onChangeUpdateBlogTitle: (event)=>
+        	dispatch(onChangeUpdateBlogTitleAct(event.target.value)),
+        onChangeUpdateBlogDesc: (event)=>
+        	dispatch(onChangeUpdateBlogDescAct(event.target.value)),
+        onChangeUpdateBlogPath:(event)=>
+        	dispatch(onChangeUpdateBlogPathAct(event.target.value)),
+        onChangeUpdateBlogSeq:(event)=>
+        	dispatch(onChangeUpdateBlogSeqAct(event.target.value))
 
     }
 
@@ -64,9 +96,10 @@ class BlogUpdate extends Component  {
 
 	componentDidMount() {
 		initTinyEditorAct('blogUpdateEditor');
-		tinymce.get('blogUpdateEditor').setContent(this.props.blog.blog_content);
-		this.props.onInitSelectedBlogTag();
-		this.props.onInitSelectedBlogCategory();
+		tinymce.get('blogUpdateEditor').setContent(this.props.blogContent);
+		// this.props.onInitSelectedBlogTag();
+		// this.props.onInitSelectedBlogCategory();
+		this.props.onInitUpdateBlog();
 	}
 
 	componentWillUnmount() {
@@ -84,9 +117,17 @@ class BlogUpdate extends Component  {
 			onSelectAddBlogTag,
 			selectedTag,
 			onDeleteBlogTag,
-			blog,
 			onInitSelectedBlogCategory,
-			onInitSelectedBlogTag
+			onInitSelectedBlogTag,
+			onCancelUpdateBlog,
+			onChangeUpdateBlogTitle,
+			onChangeUpdateBlogDesc,
+			onChangeUpdateBlogPath,
+			onChangeUpdateBlogSeq,
+			updateBlogTitle,
+			updateBlogDesc,
+			updateBlogPath,
+			updateBlogSeq
 			}=this.props;
 
 
@@ -102,7 +143,8 @@ class BlogUpdate extends Component  {
 					<Col sm="8">
 					      <Form.Control name="blog_title" size="sm" 
 					      	type="text" placeholder="Enter Blog Title" 
-					      	defaultValue={blog.blog_title}/>
+					      	value={updateBlogTitle}
+					      	onChange={onChangeUpdateBlogTitle}/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
@@ -110,7 +152,8 @@ class BlogUpdate extends Component  {
 					<Col sm="8">
 					      <Form.Control name="blog_desc" size="sm" 
 					      	type="text" placeholder="Enter Blog Description" 
-					      	defaultValue={blog.blog_desc}/>
+					      	value={updateBlogDesc}
+					      	onChange={onChangeUpdateBlogDesc}/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
@@ -118,7 +161,8 @@ class BlogUpdate extends Component  {
 					<Col sm="5">
 					      <Form.Control name="blog_path" size="sm" 
 					      	type="text" placeholder="Enter Blog Path" 
-					      	defaultValue={blog.blog_path}/>
+					      	value={updateBlogPath}
+					      	onChange={onChangeUpdateBlogPath}/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
@@ -174,11 +218,24 @@ class BlogUpdate extends Component  {
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Seq:</Form.Label>
 					<Col sm="2">
-					      <Form.Control name="seq" defaultValue={blog.seq}
-					      size="sm" type="text" placeholder="Enter Seq" />
+					      <Form.Control name="seq" size="sm" type="text" 
+					     	placeholder="Enter Seq" 
+					      	value={updateBlogSeq}
+					      	onChange={onChangeUpdateBlogSeq}/>
 					</Col>
 				</Form.Group>
-				<Button variant="success" size="sm" onClick={onClickUpdateBlog}>Update</Button>
+				<Row>
+					<Col sm="1">
+						<Button variant="success" size="sm" onClick={onClickUpdateBlog}>
+							Update
+						</Button>
+					</Col>
+					<Col sm="0.3">
+						<Button variant="secondary" size="sm" onClick={onCancelUpdateBlog}>
+							Cancel
+						</Button>
+					</Col>
+				</Row>
 			</Form>
 			<br/>
 			<Row>

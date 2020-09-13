@@ -76,7 +76,7 @@ class Blog extends Component  {
 		return(
 			(blog.length === 1)?
 				((isUpdateBlog)
-					?(<BlogUpdate blog={blog[0]}/>
+					?(<BlogUpdate blogContent={blog[0].blog_content}/>
 					)
 					:(<Container>
 						<Col className = "blog-container-wrapper">
