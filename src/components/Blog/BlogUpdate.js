@@ -19,12 +19,12 @@ import {
 	// initUpdateBlogAct,
 	initUpdateBlogTitleAct,
 	initUpdateBlogDescAct,
-	onChangeUpdateBlogTitleAct,
-	onChangeUpdateBlogDescAct,
 	initUpdateBlogPathAct,
 	initUpdateBlogSeqAct,
-	onChangeUpdateBlogPathAct,
-	onChangeUpdateBlogSeqAct
+	onChangeBlogTitleAct,
+	onChangeBlogDescAct,
+	onChangeBlogPathAct,
+	onChangeBlogSeqAct
 	} from '../../components/Blog/BlogAction';
 
 import {
@@ -44,10 +44,10 @@ const mapStateToProps =(state) => {
 	return {
 	    selectedCategory:state.blogRdc.selectedCategory,
 	    selectedTag:state.blogRdc.selectedTag,
-	    updateBlogTitle:state.blogRdc.updateBlogTitle,
-	    updateBlogDesc:state.blogRdc.updateBlogDesc,
-	    updateBlogPath:state.blogRdc.updateBlogPath,
-	    updateBlogSeq:state.blogRdc.updateBlogSeq
+	    onChangeBlogTitle:state.blogRdc.onChangeBlogTitle,
+	    onChangeBlogDesc:state.blogRdc.onChangeBlogDesc,
+	    onChangeBlogPath:state.blogRdc.onChangeBlogPath,
+	    onChangeBlogSeq:state.blogRdc.onChangeBlogSeq
   }
 }
 
@@ -80,13 +80,13 @@ const mapDispatchToProps = (dispatch) => {
         	dispatch(initUpdateBlogSeqAct());
         },
         onChangeUpdateBlogTitle: (event)=>
-        	dispatch(onChangeUpdateBlogTitleAct(event.target.value)),
+        	dispatch(onChangeBlogTitleAct(event.target.value)),
         onChangeUpdateBlogDesc: (event)=>
-        	dispatch(onChangeUpdateBlogDescAct(event.target.value)),
+        	dispatch(onChangeBlogDescAct(event.target.value)),
         onChangeUpdateBlogPath:(event)=>
-        	dispatch(onChangeUpdateBlogPathAct(event.target.value)),
+        	dispatch(onChangeBlogPathAct(event.target.value)),
         onChangeUpdateBlogSeq:(event)=>
-        	dispatch(onChangeUpdateBlogSeqAct(event.target.value))
+        	dispatch(onChangeBlogSeqAct(event.target.value))
 
     }
 
@@ -95,11 +95,12 @@ const mapDispatchToProps = (dispatch) => {
 class BlogUpdate extends Component  {
 
 	componentDidMount() {
-		initTinyEditorAct('blogUpdateEditor');
+		this.props.onInitUpdateBlog();
+		initTinyEditorAct('blogUpdateEditor','UPDATE');
 		tinymce.get('blogUpdateEditor').setContent(this.props.blogContent);
 		// this.props.onInitSelectedBlogTag();
 		// this.props.onInitSelectedBlogCategory();
-		this.props.onInitUpdateBlog();
+		
 	}
 
 	componentWillUnmount() {
@@ -124,10 +125,10 @@ class BlogUpdate extends Component  {
 			onChangeUpdateBlogDesc,
 			onChangeUpdateBlogPath,
 			onChangeUpdateBlogSeq,
-			updateBlogTitle,
-			updateBlogDesc,
-			updateBlogPath,
-			updateBlogSeq
+			onChangeBlogTitle,
+			onChangeBlogDesc,
+			onChangeBlogPath,
+			onChangeBlogSeq
 			}=this.props;
 
 
@@ -143,7 +144,7 @@ class BlogUpdate extends Component  {
 					<Col sm="8">
 					      <Form.Control name="blog_title" size="sm" 
 					      	type="text" placeholder="Enter Blog Title" 
-					      	value={updateBlogTitle}
+					      	value={onChangeBlogTitle}
 					      	onChange={onChangeUpdateBlogTitle}/>
 					</Col>
 				</Form.Group>
@@ -152,7 +153,7 @@ class BlogUpdate extends Component  {
 					<Col sm="8">
 					      <Form.Control name="blog_desc" size="sm" 
 					      	type="text" placeholder="Enter Blog Description" 
-					      	value={updateBlogDesc}
+					      	value={onChangeBlogDesc}
 					      	onChange={onChangeUpdateBlogDesc}/>
 					</Col>
 				</Form.Group>
@@ -161,7 +162,7 @@ class BlogUpdate extends Component  {
 					<Col sm="5">
 					      <Form.Control name="blog_path" size="sm" 
 					      	type="text" placeholder="Enter Blog Path" 
-					      	value={updateBlogPath}
+					      	value={onChangeBlogPath}
 					      	onChange={onChangeUpdateBlogPath}/>
 					</Col>
 				</Form.Group>
@@ -220,7 +221,7 @@ class BlogUpdate extends Component  {
 					<Col sm="2">
 					      <Form.Control name="seq" size="sm" type="text" 
 					     	placeholder="Enter Seq" 
-					      	value={updateBlogSeq}
+					      	value={onChangeBlogSeq}
 					      	onChange={onChangeUpdateBlogSeq}/>
 					</Col>
 				</Form.Group>

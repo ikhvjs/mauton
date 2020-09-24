@@ -64,27 +64,23 @@ export const requestSidebarRdc = (state=initialStateSidebar, action={}) => {
 
 
 const initialStateBlog = {
-  bloglist: [],
   isPendingBloglistByClick: false,
-  blog: [],
   isPendingBlogByClick: false,
   isRefreshBloglistNeeded:false,
-  // tags:[],
   isCreateBlog:false,
-  editorContent:[],
-  // isCreateBlogByClick:false,
-  blogContent:[],
   isShowCategoryModal:false,
-  blogCategory:[],
-  selectedCategory:[],
   isShowTagModal:false,
-  blogTag:[],
-  selectedTag:[],
   isUpdateBlog:false,
-  updateBlogTitle:[],
-  updateBlogDesc:[],
-  updateBlogPath:[],
-  updateBlogSeq:[]
+  blogCategory:[],
+  blogTag:[],
+  blog: [],
+  bloglist: [],
+  selectedTag:[],
+  selectedCategory:[],
+  onChangeBlogTitle:[],
+  onChangeBlogDesc:[],
+  onChangeBlogPath:[],
+  onChangeBlogSeq:[]
 
 }
 
@@ -100,7 +96,7 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
 	  return Object.assign({}, state, {error: action.payload})
 	case constants.REQUEST_BLOGLIST_C_PENDING:
 	  return Object.assign({}, state, 
-      {isPendingBloglistByClick: true, blog:{}, isRefreshBloglistNeeded:false})
+      {isPendingBloglistByClick: true, blog:{}, isRefreshBloglistNeeded:false, isCreateBlog:false})
 	case constants.REQUEST_BLOGLIST_C_SUCCESS:
 	  return Object.assign({}, state, 
       {bloglist: action.payload, isPendingBloglistByClick: false})
@@ -127,28 +123,12 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state, {blog: action.payload})
   case constants.REQUEST_BLOG_FAILED:
     return Object.assign({}, state, {error: action.payload}) 
-  // case constants.REQUEST_BLOG_TAG_PENDING:
-  //   return Object.assign({}, state, {})
-  // case constants.REQUEST_BLOG_TAG_SUCCESS:
-  //   return Object.assign({}, state,  {tags: action.payload})
-  // case constants.REQUEST_BLOG_TAG_FAILED:
-  //   return Object.assign({}, state, {error: action.payload})
-  // case constants.REQUEST_BLOG_TAG_C_PENDING:
-  //   return Object.assign({}, state, {})
-  // case constants.REQUEST_BLOG_TAG_C_SUCCESS:
-  //   return Object.assign({}, state,  {tags: action.payload})
-  // case constants.REQUEST_BLOG_TAG_C_FAILED:
-  //   return Object.assign({}, state, {error: action.payload})
-  // case constants.SELECT_CREATE_BLOG:
-  //   return Object.assign({}, state, {isCreateBlog: true})
   case constants.SELECT_CREATE_BLOG_C:
-    return Object.assign({}, state, {isCreateBlog: true})
+    return Object.assign({}, state, { isCreateBlog: true })
   case constants.CLEAR_CREATE_BLOG_FLAG:
     return Object.assign({}, state, {isCreateBlog:false}) 
   case constants.SELECT_UPDATE_BLOG_CATEGORY:
     return Object.assign({}, state, {isShowCategoryModal:true})
-  case constants.CLEAR_BLOG_CATEGORY:
-    return Object.assign({},state, {selectedCategory:{}})
   case constants.CLEAR_SELECT_BLOG_CATEGORY:
     return Object.assign({},state,{selectedCategory:{}})
   case constants.SELECT_ADD_BLOG_TAG:
@@ -171,27 +151,40 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state, {selectedTag:[...action.payload]})
   case constants.INIT_SELECTED_BLOG_CATEGORY:
     return Object.assign({}, state, {selectedCategory:action.payload})
-  case constants.ONCHANGE_UPDATE_BLOG_TITLE:
-    return Object.assign({}, state, {updateBlogTitle:action.payload})
-  case constants.ONCHANGE_UPDATE_BLOG_DESC:
-    return Object.assign({}, state, {updateBlogDesc:action.payload})
-  case constants.ONCHANGE_UPDATE_BLOG_PATH:
-    return Object.assign({}, state, {updateBlogPath:action.payload})
-  case constants.ONCHANGE_UPDATE_BLOG_SEQ:
-    return Object.assign({}, state, {updateBlogSeq:action.payload})
+  case constants.ONCHANGE_BLOG_TITLE:
+    return Object.assign({}, state, {onChangeBlogTitle:action.payload})
+  case constants.ONCHANGE_BLOG_DESC:
+    return Object.assign({}, state, {onChangeBlogDesc:action.payload})
+  case constants.ONCHANGE_BLOG_PATH:
+    return Object.assign({}, state, {onChangeBlogPath:action.payload})
+  case constants.ONCHANGE_BLOG_SEQ:
+    return Object.assign({}, state, {onChangeBlogSeq:action.payload})
+  case constants.CLEAR_ONCHANGE_BLOG:
+    return Object.assign({}, state, { selectedTag:[],
+                                      selectedCategory:{},
+                                      onChangeBlogTitle:"",
+                                      onChangeBlogDesc:"",
+                                      onChangeBlogPath:"",
+                                      onChangeBlogSeq:""})
   case constants.INIT_UPDATE_BLOG_TITLE:
-    return Object.assign({}, state, {updateBlogTitle:action.payload});
+    return Object.assign({}, state, {onChangeBlogTitle:action.payload});
   case constants.INIT_UPDATE_BLOG_DESC:
-    return Object.assign({}, state, {updateBlogDesc:action.payload});
+    return Object.assign({}, state, {onChangeBlogDesc:action.payload});
   case constants.INIT_UPDATE_BLOG_PATH:
-    return Object.assign({}, state, {updateBlogPath:action.payload});
+    return Object.assign({}, state, {onChangeBlogPath:action.payload});
   case constants.INIT_UPDATE_BLOG_SEQ:
-    return Object.assign({}, state, {updateBlogSeq:action.payload});
+    return Object.assign({}, state, {onChangeBlogSeq:action.payload});
   case constants.UPDATE_BLOG_PENDING:
     return Object.assign({}, state, {});
   case constants.UPDATE_BLOG_SUCCESS:
-    return Object.assign({}, state, {});
+    return Object.assign({}, state, {isUpdateBlog:false});
   case constants.UPDATE_BLOG_FAILED:
+    return Object.assign({}, state, {error: action.payload});
+  case constants.DELETE_BLOG_PENDING:
+    return Object.assign({}, state, {});
+  case constants.DELETE_BLOG_SUCCESS:
+    return Object.assign({}, state, {blog:[],isRefreshBloglistNeeded:true});
+  case constants.DELETE_BLOG_FAILED:
     return Object.assign({}, state, {error: action.payload});
 //Blog Category Modal
   case constants.REQUEST_CATEGORY_MODAL_PENDING:

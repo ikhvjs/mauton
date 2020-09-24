@@ -5,16 +5,8 @@ import {
   REQUEST_BLOG_C_PENDING,
   REQUEST_BLOG_C_SUCCESS,
   REQUEST_BLOG_C_FAILED,
-  // REQUEST_BLOG_TAG_PENDING,
-  // REQUEST_BLOG_TAG_SUCCESS,
-  // REQUEST_BLOG_TAG_FAILED,
-  // REQUEST_BLOG_TAG_C_PENDING,
-  // REQUEST_BLOG_TAG_C_SUCCESS,
-  // REQUEST_BLOG_TAG_C_FAILED,
-  // SELECT_CREATE_BLOG,
   SELECT_CREATE_BLOG_C,
   SELECT_UPDATE_BLOG_CATEGORY,
-  CLEAR_BLOG_CATEGORY,
   CLEAR_SELECT_BLOG_CATEGORY,
   SELECT_ADD_BLOG_TAG,
   DELETE_BLOG_TAG,
@@ -27,17 +19,21 @@ import {
   CLEAR_CREATE_BLOG_FLAG,
   INIT_SELECTED_BLOG_TAG,
   INIT_SELECTED_BLOG_CATEGORY,
-  ONCHANGE_UPDATE_BLOG_TITLE,
-  ONCHANGE_UPDATE_BLOG_DESC,
   INIT_UPDATE_BLOG_TITLE,
   INIT_UPDATE_BLOG_DESC,
   INIT_UPDATE_BLOG_PATH,
   INIT_UPDATE_BLOG_SEQ,
-  ONCHANGE_UPDATE_BLOG_PATH,
-  ONCHANGE_UPDATE_BLOG_SEQ,
+  ONCHANGE_BLOG_TITLE,
+  ONCHANGE_BLOG_DESC,
+  ONCHANGE_BLOG_PATH,
+  ONCHANGE_BLOG_SEQ,
   UPDATE_BLOG_PENDING,
   UPDATE_BLOG_SUCCESS,
-  UPDATE_BLOG_FAILED
+  UPDATE_BLOG_FAILED,
+  CLEAR_ONCHANGE_BLOG,
+  DELETE_BLOG_PENDING,
+  DELETE_BLOG_SUCCESS,
+  DELETE_BLOG_FAILED
  } from '../../constants';
 
 import tinymce from 'tinymce/tinymce';
@@ -103,11 +99,6 @@ export const selectUpdateBlogCategoryAct = () =>{
   return { type: SELECT_UPDATE_BLOG_CATEGORY };
 }
 
-export const clearBlogCategoryAct = () =>{
-  return ({ type:CLEAR_BLOG_CATEGORY });
-}
-
-
 export const clearSelectedBlogCategoryAct = () =>{
   return ({ type:CLEAR_SELECT_BLOG_CATEGORY });
 }
@@ -134,38 +125,32 @@ export const clearSelectedBlogTagAct = () =>{
 
 export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =>{
   dispatch({ type: POST_BLOG_PENDING });
-  const newBlog = {};
-
-  const formNode = event.target.parentNode;
-  const inputNode = formNode.querySelectorAll('div > input');
-
-  const blogCategory = getState().blogRdc.selectedCategory;
-  const blogTag = getState().blogRdc.selectedTag;
-
-  Object.assign(newBlog, blogCategory);
-  Object.assign(newBlog, {tags:[...blogTag]});
-  Object.assign(newBlog, {menu_path:sidebarMenuPath});
-
   
+  const blogTitle     =  getState().blogRdc.onChangeBlogTitle;
+  const blogDesc      =  getState().blogRdc.onChangeBlogDesc;
+  const blogPath      =  getState().blogRdc.onChangeBlogPath;
+  const blogSeq       =  getState().blogRdc.onChangeBlogSeq;
+  const blogContent   =  tinymce.get('blogCreateEditor').getContent();
+  const blogCategory  =  getState().blogRdc.selectedCategory;
+  const blogTag       =  getState().blogRdc.selectedTag;
 
-  inputNode.forEach((node)=>{
-    const nodeAttribute = node.getAttribute('name');
-    if (nodeAttribute!=='blog_category_name'){
-      Object.assign(newBlog,{[nodeAttribute]:node.value});
-    }
-  })
 
-  const blogContent = tinymce.get('blogCreateEditor').getContent();
-
-  Object.assign(newBlog,{blog_content:blogContent})
-
-  console.log('newBlog',newBlog);
+  // console.log('newBlog',newBlog);
 
   fetch('http://localhost:3001/blog/create', {
-        method: 'post',
+        method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
-        body: JSON.stringify({newBlog})
+        body: JSON.stringify({
+          blog_title:blogTitle,
+          blog_desc: blogDesc,
+          blog_path: blogPath,
+          seq: Number(blogSeq),
+          blog_content:blogContent,
+          blog_category_id: Number(blogCategory.blog_category_id),
+          tags:[...blogTag],
+          menu_path:sidebarMenuPath
+        })
       }
   )
   .then(response => response.json())
@@ -175,71 +160,70 @@ export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =
 }
 
 export const clickUpdateBlogAct=()=>(dispatch,getState)=>{
+
+  const currentBlog = getState().blogRdc.blog[0];
   
+  const currentBlogTitle      = currentBlog.blog_title;
+  const currentBlogDesc       = currentBlog.blog_desc;
+  const currentBlogPath       = currentBlog.blog_path;
+  const currentBlogSeq        = currentBlog.seq;
+  const currentBlogCategoryID = currentBlog.blog_category_id;
+  const currentBlogTags       = currentBlog.tags;
+  const currentBlogContent    = currentBlog.blog_content;
 
-  const currentBlogTitle = getState().blogRdc.blog[0].blog_title;
-  const currentBlogDesc = getState().blogRdc.blog[0].blog_desc;
-  const currentBlogPath = getState().blogRdc.blog[0].blog_path;
-  const currentBlogSeq = getState().blogRdc.blog[0].seq;
-  const currentBlogCategoryID = getState().blogRdc.blog[0].blog_category_id;
-  const currentBlogTags = getState().blogRdc.blog[0].tags;
-  const currentBlogContent = getState().blogRdc.blog[0].blog_content;
-
-  const updateBlogTitle = getState().blogRdc.updateBlogTitle;
-  const updateBlogDesc = getState().blogRdc.updateBlogDesc;
-  const updateBlogPath = getState().blogRdc.updateBlogPath;
-  const updateBlogSeq = getState().blogRdc.updateBlogSeq;
-  const updateBlogCategoryID = getState().blogRdc.selectedCategory.blog_category_id;
-  const updateBlogTags = getState().blogRdc.selectedTag;
-  const updateBlogContent = tinymce.get('blogUpdateEditor').getContent();
+  const updateBlogTitle       = getState().blogRdc.updateBlogTitle;
+  const updateBlogDesc        = getState().blogRdc.updateBlogDesc;
+  const updateBlogPath        = getState().blogRdc.updateBlogPath;
+  const updateBlogSeq         = getState().blogRdc.updateBlogSeq;
+  const updateBlogCategoryID  = getState().blogRdc.selectedCategory.blog_category_id;
+  const updateBlogTags        = getState().blogRdc.selectedTag;
+  const updateBlogContent     = tinymce.get('blogUpdateEditor').getContent();
 
   let isBlogUpdated = false;
 
+  const updateBlog = {};
+
+  Object.assign(updateBlog, currentBlog);
+
 
   if (currentBlogTitle!==updateBlogTitle){
-    // console.log('currentBlogTitle',currentBlogTitle);
-    // console.log('updateBlogTitle',updateBlogTitle);
     isBlogUpdated = true;
-  }else if (currentBlogDesc!==updateBlogDesc){
-    // console.log('currentBlogDesc',currentBlogDesc);
-    // console.log('updateBlogDesc',updateBlogDesc);
+    Object.assign(updateBlog,{blog_title:updateBlogTitle});
+  }
+  if (currentBlogDesc!==updateBlogDesc){
     isBlogUpdated = true;
-  }else if (currentBlogPath!==updateBlogPath){
-    // console.log('currentBlogPath',currentBlogPath);
-    // console.log('updateBlogPath',updateBlogPath);
+    Object.assign(updateBlog,{blog_desc:updateBlogDesc});
+  } 
+  if (currentBlogPath!==updateBlogPath){
     isBlogUpdated = true;
-  }else if (Number(currentBlogSeq)!==Number(updateBlogSeq)){
-    // console.log('currentBlogSeq',currentBlogSeq);
-    // console.log('updateBlogSeq',updateBlogSeq);
+    Object.assign(updateBlog,{blog_path:updateBlogPath});
+  }
+  if (Number(currentBlogSeq)!==Number(updateBlogSeq)){
     isBlogUpdated = true;
-  }else if (Number(currentBlogCategoryID)!==Number(updateBlogCategoryID)){
-    // console.log('currentBlogCategoryID',currentBlogCategoryID);
-    // console.log('updateBlogCategoryID',updateBlogCategoryID);
+    Object.assign(updateBlog,{seq:updateBlogSeq});
+  }
+  if (Number(currentBlogCategoryID)!==Number(updateBlogCategoryID)){
     isBlogUpdated = true;
-  }else if (!isTagArrayEqual(currentBlogTags,updateBlogTags)){
-    // console.log('currentBlogTags',currentBlogTags);
-    // console.log('updateBlogTags',updateBlogTags);
-
+    Object.assign(updateBlog,{blog_category_id:updateBlogCategoryID});
+  }
+  if (!isTagArrayEqual(currentBlogTags,updateBlogTags)){
     isBlogUpdated = true;
-  }else if (currentBlogContent!==updateBlogContent){
+    Object.assign(updateBlog,{tags:[...updateBlogTags]});
+  }
+  if (currentBlogContent!==updateBlogContent){
     isBlogUpdated = true;
+    Object.assign(updateBlog,{blog_content:updateBlogContent});
   }
 
+  // console.log('updateBlog',updateBlog);
 
   if(isBlogUpdated){
     dispatch({ type: UPDATE_BLOG_PENDING });
     fetch('http://localhost:3001/blog/update', {
-        method: 'put',
+        method: 'PUT',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
-        body: JSON.stringify({
-          blog_title:updateBlogTitle,
-          blog_desc:updateBlogDesc,
-          blog_path:updateBlogPath,
-          blog_category_id:updateBlogCategoryID,
-          seq:updateBlogSeq,
-          blog_content:updateBlogContent
-        })
+        body: JSON.stringify({updateBlog})
       }
     )
     .then(response => response.json())
@@ -247,25 +231,30 @@ export const clickUpdateBlogAct=()=>(dispatch,getState)=>{
     .catch(error => dispatch({ type: UPDATE_BLOG_FAILED, payload: error }))
     }
 
+
 }
 
 
+export const clearCreatedBlogAct = (event) => {
+  return ({type:CLEAR_ONCHANGE_BLOG})
+}
 
-export const onChangeUpdateBlogTitleAct =(blogTitle)=>{
+
+export const onChangeBlogTitleAct =(blogTitle)=>{
   // console.log('blogTitle',blogTitle);
-  return ({type:ONCHANGE_UPDATE_BLOG_TITLE, payload:blogTitle})
+  return ({type:ONCHANGE_BLOG_TITLE, payload:blogTitle})
 }
 
-export const onChangeUpdateBlogDescAct = (blogDesc)=>{
-  return ({type:ONCHANGE_UPDATE_BLOG_DESC, payload:blogDesc})
+export const onChangeBlogDescAct = (blogDesc)=>{
+  return ({type:ONCHANGE_BLOG_DESC, payload:blogDesc})
 }
 
-export const onChangeUpdateBlogPathAct = (blogPath)=>{
-  return ({type:ONCHANGE_UPDATE_BLOG_PATH, payload:blogPath})
+export const onChangeBlogPathAct = (blogPath)=>{
+  return ({type:ONCHANGE_BLOG_PATH, payload:blogPath})
 }
 
-export const onChangeUpdateBlogSeqAct = (blogSeq)=>{
-  return ({type:ONCHANGE_UPDATE_BLOG_SEQ, payload:blogSeq})
+export const onChangeBlogSeqAct = (blogSeq)=>{
+  return ({type:ONCHANGE_BLOG_SEQ, payload:blogSeq})
 }
 
 export const initUpdateBlogTitleAct=()=>(dispatch,getState)=>{
@@ -318,4 +307,23 @@ export const exitUpdateBlogAct=()=>{
 
 export const clearCreateBlogFlagAct=()=>{
   return ({type:CLEAR_CREATE_BLOG_FLAG});
+}
+
+export const deleteBlogAct =()=>(dispatch,getState)=>{
+  dispatch({ type: DELETE_BLOG_PENDING })
+
+  const blogID = getState().blogRdc.blog[0].blog_id;
+  
+  fetch('http://localhost:3001/blog/delete', {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json',
+                  'Accept': 'application/json'},
+        body: JSON.stringify({
+          blog_id: blogID
+        })
+      }
+  )
+  .then(response => response.json())
+  .then(data => dispatch({ type: DELETE_BLOG_SUCCESS}))
+  .catch(error => dispatch({ type: DELETE_BLOG_FAILED, payload: error }))
 }

@@ -13,15 +13,16 @@ import {
 	clearSearchBloglistAct
 } from './BloglistAction';
 
+import {
+	initTinyEditorAct
+	} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
+
 import { 
 	requestBlogByClickAct,
 	// requestBlogTagByClickAct,
 	selectCreateBlogByClickAct
 	} from '../../components/Blog/BlogAction';
 
-// import {
-// 	initTinyEditorAct
-// 	} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
 
 import { transformDate } from '../../utility/utility';
 
@@ -49,11 +50,9 @@ const mapDispatchToProps = (dispatch,ownProps) => {
   return {
     onRequestBloglist:(sidebarMenuPath) => 
     	dispatch(requestBloglistAct(sidebarMenuPath)),
-    onRequestBlogByClick:(event)=>{
+    onRequestBlogByClick:(event)=>
     //event.target.getAttribute('value') is blog_path
-    	dispatch(requestBlogByClickAct(event.target.getAttribute('value')));
-    	// dispatch(requestBlogTagByClickAct(event.target.getAttribute('value')));
-    },
+    	dispatch(requestBlogByClickAct(event.target.getAttribute('value'))),
     onSearchBloglist:(event)=>
     	dispatch(searchBloglistAct(
     		selectSearchBloglistAct(event,ownProps.match.params.sidebarMenuPath))),
@@ -61,6 +60,7 @@ const mapDispatchToProps = (dispatch,ownProps) => {
     	dispatch(clearSearchBloglistAct(event)),
     onSelectCreateBlogByClick:()=> {
     	dispatch(selectCreateBlogByClickAct());
+    	dispatch(initTinyEditorAct('blogCreateEditor','CREATE'));
     }
   }
 }
@@ -136,19 +136,14 @@ class Bloglist extends Component  {
 						<Col name='button' xs={1}>
 						</Col>
 						<Col name='button' xs={0.3}>
-							{
-							// <LinkContainer to={`${this.props.match.url}/blogcreate`}>
-							// 	<Button size="sm" variant="success" 
-							// 	onClick={onSelectCreateBlogByClick}>Create</Button>
-							// </LinkContainer>
-							}
 							<Button size="sm" variant="success" 
 								onClick={onSelectCreateBlogByClick}>Create</Button>
 						</Col>
 					</Form.Row>
 					<br/>
 					<Row name="bloglist-container" >
-						<CardColumns>
+						{(bloglist.length > 0)
+						?<CardColumns>
 							{ bloglist.map(blog =>{
 								return(
 									<Card bg="dark" text="white" border="warning"
@@ -193,6 +188,8 @@ class Bloglist extends Component  {
 								)
 							})}
 						</CardColumns>
+						:null
+						}
 					</Row>
 				</Container>
 				<Container name="createblog-wrapper" className={isCreateBlog?null:"hidden-container"}>

@@ -10,15 +10,15 @@ import BlogUpdate from './BlogUpdate';
 
 import { 
 	requestBlogAct,
-	// requestBlogTagAct,
 	updateBlogAct,
-	exitUpdateBlogAct
+	exitUpdateBlogAct,
+	deleteBlogAct
 } from './BlogAction';
 
 import { transformDate } from '../../utility/utility';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Badge, Container,Button} from "react-bootstrap";
+import {Col, Badge, Container,Button, Row} from "react-bootstrap";
 import './Blog.css';
 
 
@@ -41,7 +41,9 @@ const mapDispatchToProps = (dispatch) => {
     onUpdateBlog:()=>
     	dispatch(updateBlogAct()),
     onExitUpdateBlog:()=>
-    	dispatch(exitUpdateBlogAct())
+    	dispatch(exitUpdateBlogAct()),
+    onDeleteBlog:()=>
+    	dispatch(deleteBlogAct())
   }
 }
 
@@ -57,6 +59,17 @@ class Blog extends Component  {
 		}
 	}
 
+	componentDidUpdate(prevProps) {
+		const {isUpdateBlog, onRequestBlog} = this.props;
+		const { blogPath } = this.props.match.params;
+
+		if (isUpdateBlog !== prevProps.isUpdateBlog) {
+			if (isUpdateBlog === false){
+				onRequestBlog(blogPath);
+			}
+		}
+	}
+
 	componentWillUnmount() {
 		if (this.props.isUpdateBlog === true) {
 			this.props.onExitUpdateBlog();
@@ -66,8 +79,8 @@ class Blog extends Component  {
 	render(){
 		const {
 			blog,
-			// tags,
 			onUpdateBlog,
+			onDeleteBlog,
 			isUpdateBlog
 		}=this.props;
 
@@ -95,10 +108,22 @@ class Blog extends Component  {
 			                	})}
 							</p>
 			                <p>{`Last updated on ${transformDate(blog[0].last_updated_date)}`}</p>
-			                <Button variant="success" size="sm" onClick={onUpdateBlog}>
-			                	Update
-			                </Button>{" "}
-							<Button variant="danger" size="sm">Delete</Button>
+			                <Row>
+				                <Col>
+					                <Button variant="success" size="sm" 
+					                	onClick={onUpdateBlog}>
+					                	Update
+					                </Button>
+				                </Col>
+				                <Col xs={10}>
+				                </Col>
+				                <Col>
+									<Button variant="danger" size="sm"
+										onClick={onDeleteBlog}>
+										Delete
+									</Button>
+								</Col>
+							</Row>
 							<hr></hr>
 							</Container>
 							<Container>

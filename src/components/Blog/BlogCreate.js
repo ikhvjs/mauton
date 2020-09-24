@@ -12,17 +12,21 @@ import {
 	// selectCreateBlogAct,
 	clickSaveBlogAct,
 	selectUpdateBlogCategoryAct,
-	clearBlogCategoryAct,
 	clearSelectedBlogCategoryAct,
 	selectAddBlogTagAct,
 	deleteBlogTagAct,
-	clearSelectedBlogTagAct,
-	clearCreateBlogFlagAct
+	// clearSelectedBlogTagAct,
+	clearCreateBlogFlagAct,
+	clearCreatedBlogAct,
+	onChangeBlogTitleAct,
+	onChangeBlogDescAct,
+	onChangeBlogPathAct,
+	onChangeBlogSeqAct
 	} from '../../components/Blog/BlogAction';
 
-import {
-	initTinyEditorAct
-	} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
+// import {
+// 	initTinyEditorAct
+// 	} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row,Col,Form, Button, Badge,Container} from "react-bootstrap";
@@ -35,10 +39,14 @@ import TagModal from '../TagModal/TagModal';
 
 const mapStateToProps =(state) => {
 	return {
-	    isCreateBlogByClick:state.blogRdc.isCreateBlogByClick,
+	    // isCreateBlogByClick:state.blogRdc.isCreateBlogByClick,
 	    // isInitTinyEditorByClick:state.blogRdc.isInitTinyEditorByClick,
 	    selectedCategory:state.blogRdc.selectedCategory,
-	    selectedTag:state.blogRdc.selectedTag
+	    selectedTag:state.blogRdc.selectedTag,
+	    onChangeBlogTitle:state.blogRdc.onChangeBlogTitle,
+	    onChangeBlogDesc:state.blogRdc.onChangeBlogDesc,
+	    onChangeBlogPath:state.blogRdc.onChangeBlogPath,
+	    onChangeBlogSeq:state.blogRdc.onChangeBlogSeq
   }
 }
 
@@ -48,20 +56,29 @@ const mapDispatchToProps = (dispatch,ownProps) => {
   //   		dispatch(selectCreateBlogAct()),
         onSelectUpdateBlogCategory:()=>
         	dispatch(selectUpdateBlogCategoryAct()),
-        onClearBlogCategory:()=>
-        	dispatch(clearBlogCategoryAct()),
         onClearSelectedBlogCategory:()=>
         	dispatch(clearSelectedBlogCategoryAct()),
         onSelectAddBlogTag:()=>
         	dispatch(selectAddBlogTagAct()),
         onDeleteBlogTag:(event)=>
         	dispatch(deleteBlogTagAct(event)),
-        onClearSelectedBlogTag:()=>
-        	dispatch(clearSelectedBlogTagAct()),
-        onClickSaveBlog:(event)=>
-        	dispatch(clickSaveBlogAct(event,ownProps.sidebarMenuPath)),
+        // onClearSelectedBlogTag:()=>
+        // 	dispatch(clearSelectedBlogTagAct()),
+        onClickSaveBlog:(event)=>{
+        	dispatch(clickSaveBlogAct(event,ownProps.sidebarMenuPath));
+        	dispatch(clearCreatedBlogAct(event));
+        },
         onClearCreateBlogFlag:()=>
-        	dispatch(clearCreateBlogFlagAct())
+        	dispatch(clearCreateBlogFlagAct()),
+        onChangeCreateBlogTitle: (event)=>
+        	dispatch(onChangeBlogTitleAct(event.target.value)),
+        onChangeCreateBlogDesc: (event)=>
+        	dispatch(onChangeBlogDescAct(event.target.value)),
+        onChangeCreateBlogPath:(event)=>
+        	dispatch(onChangeBlogPathAct(event.target.value)),
+        onChangeCreateBlogSeq:(event)=>
+        	dispatch(onChangeBlogSeqAct(event.target.value)),
+        
 
     }
 
@@ -70,15 +87,22 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 class BlogCreate extends Component  {
 
 	componentDidMount() {
-		initTinyEditorAct('blogCreateEditor');
-		// if (this.props.isCreateBlogByClick === false) {
-		// 	this.props.onSelectBlogCreate();
-		// }
+		// initTinyEditorAct('blogCreateEditor');\
 	}
 
+
+	// componentDidUpdate(prevProps) {
+	// 	if (this.props.isCreateBlog !== prevProps.isCreateBlog){
+	// 		if (this.props.isCreateBlog === false) {
+	// 			this.props.onRemoveTinyEditor();
+	// 		}
+	// 	}
+		
+	// }
+
 	componentWillUnmount() {
-		this.props.onClearSelectedBlogCategory();
-		this.props.onClearSelectedBlogTag();
+		// this.props.onClearSelectedBlogCategory();
+		// this.props.onClearSelectedBlogTag();
 		this.props.onClearCreateBlogFlag();
 	}
 
@@ -91,10 +115,18 @@ class BlogCreate extends Component  {
 			onClickSaveBlog,
 			onSelectUpdateBlogCategory,
 			selectedCategory,
-			onClearBlogCategory,
+			onClearSelectedBlogCategory,
 			onSelectAddBlogTag,
 			selectedTag,
-			onDeleteBlogTag
+			onDeleteBlogTag,
+			onChangeCreateBlogTitle,
+			onChangeCreateBlogDesc,
+			onChangeCreateBlogPath,
+			onChangeCreateBlogSeq,
+			onChangeBlogTitle,
+			onChangeBlogDesc,
+			onChangeBlogPath,
+			onChangeBlogSeq
 			}=this.props;
 
 			// console.log('match',this.props.match);
@@ -110,21 +142,30 @@ class BlogCreate extends Component  {
 					<Form.Label column sm="2">Blog Title:</Form.Label>
 					<Col sm="8">
 					      <Form.Control name="blog_title" size="sm" 
-					      	type="text" placeholder="Enter Blog Title" />
+					      	type="text" placeholder="Enter Blog Title" 
+					      	value={onChangeBlogTitle}
+					      	onChange={onChangeCreateBlogTitle}
+					      	/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Description:</Form.Label>
 					<Col sm="8">
 					      <Form.Control name="blog_desc" size="sm" 
-					      	type="text" placeholder="Enter Blog Description" />
+					      	type="text" placeholder="Enter Blog Description" 
+					      	value={onChangeBlogDesc}
+					      	onChange={onChangeCreateBlogDesc}
+					      	/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
 					<Form.Label column sm="2">Blog Path:</Form.Label>
 					<Col sm="5">
 					      <Form.Control name="blog_path" size="sm" 
-					      	type="text" placeholder="Enter Blog Path" />
+					      	type="text" placeholder="Enter Blog Path" 
+					      	value={onChangeBlogPath}
+					      	onChange={onChangeCreateBlogPath}
+					      	/>
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row}>
@@ -142,7 +183,7 @@ class BlogCreate extends Component  {
 							onClick={onSelectUpdateBlogCategory}>Change</Button>
 					</Col>
 					<Col sm="1">
-						<Button variant="secondary" size="sm" onClick={onClearBlogCategory}>
+						<Button variant="secondary" size="sm" onClick={onClearSelectedBlogCategory}>
 							Clear</Button>
 					</Col>
 				</Form.Group>
@@ -173,7 +214,10 @@ class BlogCreate extends Component  {
 					<Form.Label column sm="2">Seq:</Form.Label>
 					<Col sm="2">
 					      <Form.Control name="seq" 
-					      size="sm" type="text" placeholder="Enter Seq" />
+					      size="sm" type="text" placeholder="Enter Seq" 
+					      value={onChangeBlogSeq}
+					      onChange={onChangeCreateBlogSeq}
+					      	/>
 					</Col>
 				</Form.Group>
 				<Button variant="success" size="sm" onClick={onClickSaveBlog}>Save</Button>
