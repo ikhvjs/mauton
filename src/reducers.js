@@ -71,6 +71,7 @@ const initialStateBlog = {
   isShowCategoryModal:false,
   isShowTagModal:false,
   isUpdateBlog:false,
+  isShowDeleteBlogAlert:false,
   blogCategory:[],
   blogTag:[],
   blog: [],
@@ -231,6 +232,11 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
     return Object.assign({}, state, {})
   default:
     return state  
+//Delete Blog Alert
+  case constants.CLOSE_DELETE_BLOG_ALERT:
+    return Object.assign({}, state, {isShowDeleteBlogAlert:false})
+  case constants.SHOW_DELETE_BLOG_ALERT:
+    return Object.assign({}, state, {isShowDeleteBlogAlert:true})
   }
 }
 

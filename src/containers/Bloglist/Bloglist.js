@@ -86,6 +86,12 @@ class Bloglist extends Component  {
 		if (isRefreshBloglistNeeded === true) {
 			onRequestBloglist(sidebarMenuPath);
 		}
+
+
+		//scroll to top when click a blog
+		if (this.props.location.pathname !== prevProps.location.pathname) {
+	      window.scrollTo(0, 0);
+	    }
 		
 	}
 

@@ -11,9 +11,15 @@ import BlogUpdate from './BlogUpdate';
 import { 
 	requestBlogAct,
 	updateBlogAct,
-	exitUpdateBlogAct,
-	deleteBlogAct
+	exitUpdateBlogAct
+	// deleteBlogAct
 } from './BlogAction';
+
+import {
+	showDeleteBlogAlertAct
+} from '../DeleteBlogAlert/DeleteBlogAlertAction';
+
+import DeleteBlogAlert from '../DeleteBlogAlert/DeleteBlogAlert';
 
 import { transformDate } from '../../utility/utility';
 
@@ -26,7 +32,6 @@ import './Blog.css';
 const mapStateToProps = (state) => {
   return {
     blog:state.blogRdc.blog,
-    // tags:state.blogRdc.tags,
     isPendingBlogByClick:state.blogRdc.isPendingBlogByClick,
     isUpdateBlog:state.blogRdc.isUpdateBlog
   }
@@ -36,14 +41,14 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onRequestBlog:(blogPath)=>
     	dispatch(requestBlogAct(blogPath)),
-    // onRequestBlogTag:(blogPath)=>
-    // 	dispatch(requestBlogTagAct(blogPath)),
     onUpdateBlog:()=>
     	dispatch(updateBlogAct()),
     onExitUpdateBlog:()=>
     	dispatch(exitUpdateBlogAct()),
-    onDeleteBlog:()=>
-    	dispatch(deleteBlogAct())
+    // onDeleteBlog:()=>
+    // 	dispatch(deleteBlogAct()),
+    onShowDeleteBlogAlert:()=>
+    	dispatch(showDeleteBlogAlertAct())
   }
 }
 
@@ -68,6 +73,7 @@ class Blog extends Component  {
 				onRequestBlog(blogPath);
 			}
 		}
+		
 	}
 
 	componentWillUnmount() {
@@ -80,8 +86,9 @@ class Blog extends Component  {
 		const {
 			blog,
 			onUpdateBlog,
-			onDeleteBlog,
-			isUpdateBlog
+			// onDeleteBlog,
+			isUpdateBlog,
+			onShowDeleteBlogAlert
 		}=this.props;
 
 		// const html = blog[0].blog_content ;
@@ -91,46 +98,51 @@ class Blog extends Component  {
 				((isUpdateBlog)
 					?(<BlogUpdate blogContent={blog[0].blog_content}/>
 					)
-					:(<Container>
-						<Col className = "blog-container-wrapper">
-							<Container>
-							<h1>{blog[0].blog_title}</h1>
-							
-							<hr></hr>
-							<h4>{blog[0].blog_desc}</h4>
-			                <h5>Category: <Badge pill  variant="warning">{blog[0].blog_category_name}</Badge></h5>
-			                <p>Tags: 
-			                	{blog[0].tags.map((tag,index)=>{
-			                		return(
-			                			<Badge pill key={index} className="blog-tag"
-			                				variant="primary">{tag.tag_name}</Badge>
-			                		)
-			                	})}
-							</p>
-			                <p>{`Last updated on ${transformDate(blog[0].last_updated_date)}`}</p>
-			                <Row>
-				                <Col>
-					                <Button variant="success" size="sm" 
-					                	onClick={onUpdateBlog}>
-					                	Update
-					                </Button>
-				                </Col>
-				                <Col xs={10}>
-				                </Col>
-				                <Col>
-									<Button variant="danger" size="sm"
-										onClick={onDeleteBlog}>
-										Delete
-									</Button>
-								</Col>
-							</Row>
-							<hr></hr>
-							</Container>
-							<Container>
-			                	{ ReactHtmlParser(blog[0].blog_content) }
-			                </Container>	
-		                </Col>
-					</Container>)
+					:(<React.Fragment>
+						<DeleteBlogAlert />
+						<Container>
+							<Col className = "blog-container-wrapper">
+								<Container>
+								<h1>{blog[0].blog_title}</h1>
+								
+								<hr></hr>
+								<h4>{blog[0].blog_desc}</h4>
+				                <h5>Category: <Badge pill  variant="warning">{blog[0].blog_category_name}</Badge></h5>
+				                <p>Tags: 
+				                	{blog[0].tags.map((tag,index)=>{
+				                		return(
+				                			<Badge pill key={index} className="blog-tag"
+				                				variant="primary">{tag.tag_name}</Badge>
+				                		)
+				                	})}
+								</p>
+				                <p>{`Last updated on ${transformDate(blog[0].last_updated_date)}`}</p>
+				                <Row>
+					                <Col xs="auto">
+						                <Button variant="success" size="sm" 
+						                	onClick={onUpdateBlog}>
+						                	Update
+						                </Button>
+					                </Col>
+					                <Col xs="auto">
+										<Button variant="danger" size="sm"
+											onClick={onShowDeleteBlogAlert}>
+											Delete
+										</Button>
+									</Col>
+					                <Col xs="auto">
+					                </Col>
+								</Row>
+								<hr></hr>
+								</Container>
+								<Container>
+				                	{ ReactHtmlParser(blog[0].blog_content) }
+				                </Container>	
+			                </Col>
+						</Container>
+
+					</React.Fragment>
+					)
 				)
 			:null
 
