@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
   REQUEST_CATEGORY_FAILED,
@@ -24,7 +25,7 @@ import {
 
 export const requestCategoryAct = () => (dispatch) => {
   dispatch({ type: REQUEST_CATEGORY_PENDING })
-  fetch('http://localhost:3001/category/get', {
+  fetch(`${API_PORT}/category/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -35,7 +36,7 @@ export const requestCategoryAct = () => (dispatch) => {
 
 export const requestCategoryByClickAct = () => (dispatch) => {
   dispatch({ type: REQUEST_CATEGORY_C_PENDING })
-  fetch('http://localhost:3001/category/get', {
+  fetch(`${API_PORT}/category/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -57,7 +58,7 @@ export const selectCreateCategoryAct = (event) => {
 
 export const postCategoryAct = (category) => (dispatch) =>{
   dispatch({ type: POST_CATEGORY_PENDING })
-  fetch('http://localhost:3001/category/create', {
+  fetch(`${API_PORT}/category/create`, {
         method: 'post',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -80,7 +81,7 @@ export const selectDeleteCategoryAct = (event) => {
 
 export const deleteCategoryAct = (categoryID) => (dispatch) =>{
   dispatch({ type: DELETE_CATEGORY_PENDING })
-  fetch('http://localhost:3001/category/delete', {
+  fetch(`${API_PORT}/category/delete`, {
         method: 'delete',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -109,7 +110,7 @@ export const selectSearchCategoryAct = (event) => {
 
 export const searchCategoryAct = (category) => (dispatch) =>{
   dispatch({ type: SEARCH_CATEGORY_PENDING })
-  fetch('http://localhost:3001/category/search', {
+  fetch(`${API_PORT}/category/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -277,7 +278,7 @@ export const updateCategoryAct = (afterUpdateCategory)  => (dispatch, getState) 
   if (JSON.stringify(afterUpdateCategory) !==
     JSON.stringify(beforeUpdateCategory)) {
     dispatch({ type: UPDATE_CATEGORY_PENDING })
-    fetch('http://localhost:3001/category/update', {
+    fetch(`${API_PORT}/category/update`, {
           method: 'PUT',
           headers: {'Content-Type': 'application/json',
                     'Accept': 'application/json'},

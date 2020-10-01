@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_MENU1_PENDING,
   REQUEST_MENU1_SUCCESS,
   REQUEST_MENU1_FAILED,
@@ -24,7 +25,7 @@ import {
 
 export const requestMenu1Act = () => (dispatch) => {
   dispatch({ type: REQUEST_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/get', {
+  fetch(`${API_PORT}/menu1/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -35,7 +36,7 @@ export const requestMenu1Act = () => (dispatch) => {
 
 export const requestMenu1ByClickAct = () => (dispatch) => {
   dispatch({ type: REQUEST_MENU1_C_PENDING })
-  fetch('http://localhost:3001/menu1/get', {
+  fetch(`${API_PORT}/menu1/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -57,7 +58,7 @@ export const selectCreateMenu1Act = (event) => {
 
 export const postMenu1Act = (menu1) => (dispatch) =>{
   dispatch({ type: POST_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/create', {
+  fetch(`${API_PORT}/menu1/create`, {
         method: 'post',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -80,7 +81,7 @@ export const selectDeleteMenu1Act = (event) => {
 
 export const deleteMenu1Act = (menuID) => (dispatch) =>{
   dispatch({ type: DELETE_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/delete', {
+  fetch(`${API_PORT}/menu1/delete`, {
         method: 'delete',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -109,7 +110,7 @@ export const selectSearchMenu1Act = (event) => {
 
 export const searchMenu1Act = (menu) => (dispatch) =>{
   dispatch({ type: SEARCH_MENU1_PENDING })
-  fetch('http://localhost:3001/menu1/search', {
+  fetch(`${API_PORT}/menu1/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -277,7 +278,7 @@ export const updateMenu1Act = (afterUpdateMenu1)  => (dispatch, getState) =>{
   if (JSON.stringify(afterUpdateMenu1) !==
     JSON.stringify(beforeUpdateMenu1)) {
     dispatch({ type: UPDATE_MENU1_PENDING })
-    fetch('http://localhost:3001/menu1/update', {
+    fetch(`${API_PORT}/menu1/update`, {
           method: 'PUT',
           headers: {'Content-Type': 'application/json',
                     'Accept': 'application/json'},

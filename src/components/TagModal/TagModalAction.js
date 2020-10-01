@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_TAG_MODAL_PENDING,
   REQUEST_TAG_MODAL_SUCCESS,
   REQUEST_TAG_MODAL_FAILED,
@@ -12,7 +13,7 @@ import {
 
 export const requestTagModalAct = () => (dispatch) => {
 	dispatch({ type: REQUEST_TAG_MODAL_PENDING })
-	fetch('http://localhost:3001/blog/tag/get', {
+	fetch(`${API_PORT}/blog/tag/get`, {
 	      method: 'get',
 	      headers: {'Content-Type': 'text/plain'}
 	    })
@@ -40,7 +41,7 @@ export const selectSearchTagModalAct = (event) => {
 export const searchTagModalAct = (selectedTag) => (dispatch) =>{
    // console.log('selectedTag',selectedTag);
   dispatch({ type: SEARCH_TAG_MODAL_PENDING })
-  fetch('http://localhost:3001/blog/tag/search', {
+  fetch(`${API_PORT}/blog/tag/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},

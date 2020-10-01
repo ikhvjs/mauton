@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_CATEGORY_MODAL_PENDING,
   REQUEST_CATEGORY_MODAL_SUCCESS,
   REQUEST_CATEGORY_MODAL_FAILED,
@@ -12,7 +13,7 @@ import {
 
 export const requestCategoryModalAct = () => (dispatch) => {
 	dispatch({ type: REQUEST_CATEGORY_MODAL_PENDING })
-	fetch('http://localhost:3001/blog/category/get', {
+	fetch(`${API_PORT}/blog/category/get`, {
 	      method: 'get',
 	      headers: {'Content-Type': 'text/plain'}
 	    })
@@ -40,7 +41,7 @@ export const selectSearchCategoryModalAct = (event) => {
 export const searchCategoryModalAct = (selectedCategory) => (dispatch) =>{
    // console.log('selectedCategory',selectedCategory);
   dispatch({ type: SEARCH_CATEGORY_MODAL_PENDING })
-  fetch('http://localhost:3001/blog/category/search', {
+  fetch(`${API_PORT}/blog/category/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},

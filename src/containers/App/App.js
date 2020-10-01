@@ -63,7 +63,6 @@ class App extends Component {
 				onRequestSidebarByClick,
 				isPendingSidebarByClick
 			} = this.props;
-
 						    
 		return (
 			<Router>

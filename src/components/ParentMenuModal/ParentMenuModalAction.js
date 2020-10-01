@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_PARENT_MENU_PENDING,
   REQUEST_PARENT_MENU_SUCCESS,
   REQUEST_PARENT_MENU_FAILED,
@@ -13,7 +14,7 @@ import {
 
 export const requestParentMenuModalAct = () => (dispatch) => {
   dispatch({ type: REQUEST_PARENT_MENU_PENDING })
-  fetch('http://localhost:3001/menu1/get', {
+  fetch(`${API_PORT}/menu1/get`, {
         method: 'get',
         headers: {'Content-Type': 'text/plain'}
       })
@@ -40,7 +41,7 @@ export const selectSearchParentMenuModalAct = (event) => {
 
 export const searchParentMenuModalAct = (menu) => (dispatch) =>{
   dispatch({ type: SEARCH_PARENT_MENU_PENDING })
-  fetch('http://localhost:3001/menu1/search', {
+  fetch(`${API_PORT}/menu1/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},

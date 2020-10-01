@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_BLOGLIST_PENDING,
   REQUEST_BLOGLIST_SUCCESS,
   REQUEST_BLOGLIST_FAILED,
@@ -14,7 +15,7 @@ import {
 
 export const requestBloglistAct = (sidebarMenuPath) => (dispatch) =>{
   dispatch({ type: REQUEST_BLOGLIST_PENDING })
-    fetch(`http://localhost:3001/bloglist/path/${sidebarMenuPath}`, {
+    fetch(`${API_PORT}/bloglist/path/${sidebarMenuPath}`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -27,7 +28,7 @@ export const requestBloglistAct = (sidebarMenuPath) => (dispatch) =>{
 
 export const requestBloglistByClickAct = (sidebarMenuPath) => (dispatch) =>{
   dispatch({ type: REQUEST_BLOGLIST_C_PENDING })
-    fetch(`http://localhost:3001/bloglist/path/${sidebarMenuPath}`, {
+    fetch(`${API_PORT}/bloglist/path/${sidebarMenuPath}`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -53,7 +54,7 @@ export const selectSearchBloglistAct = (event,sidebarMenuPath) => {
 export const searchBloglistAct = (searchBloglist) => (dispatch) => {
   console.log('searchBloglist ',searchBloglist);
   dispatch({ type: SEARCH_BLOGLIST_PENDING })
-    fetch(`http://localhost:3001/bloglist/search`, {
+    fetch(`${API_PORT}/bloglist/search`, {
         method: 'post',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},

@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_MENU2_PENDING,
   REQUEST_MENU2_SUCCESS,
   REQUEST_MENU2_FAILED,
@@ -29,7 +30,7 @@ import {
 
 export const requestMenu2Act = () => (dispatch) => {
   dispatch({ type: REQUEST_MENU2_PENDING })
-  fetch('http://localhost:3001/menu2/get', {
+  fetch(`${API_PORT}/menu2/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -40,7 +41,7 @@ export const requestMenu2Act = () => (dispatch) => {
 
 export const requestMenu2ByClickAct = () => (dispatch) => {
   dispatch({ type: REQUEST_MENU2_C_PENDING })
-  fetch('http://localhost:3001/menu2/get', {
+  fetch(`${API_PORT}/menu2/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -65,13 +66,13 @@ export const selectCreateMenu2Act = (event) => {
   trNode.querySelector("td[id]").querySelector('div.row > div[name="parent_menu_name"]')
     .querySelector("div[name]").innerHTML = "";
 
-  console.log('create menu2',menu2);
+  // console.log('create menu2',menu2);
   return menu2;
 }
 
 export const postMenu2Act = (menu2) => (dispatch) =>{
   dispatch({ type: POST_MENU2_PENDING })
-  fetch('http://localhost:3001/menu2/create', {
+  fetch(`${API_PORT}/menu2/create`, {
         method: 'post',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -111,7 +112,7 @@ export const selectDeleteMenu2Act = (event) => {
 
 export const deleteMenu2Act = (menuID) => (dispatch) =>{
   dispatch({ type: DELETE_MENU2_PENDING })
-  fetch('http://localhost:3001/menu2/delete', {
+  fetch(`${API_PORT}/menu2/delete`, {
         method: 'delete',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -139,7 +140,7 @@ export const selectSearchMenu2Act = (event) => {
 
 export const searchMenu2Act = (menu) => (dispatch) =>{
   dispatch({ type: SEARCH_MENU2_PENDING })
-  fetch('http://localhost:3001/menu2/search', {
+  fetch(`${API_PORT}/menu2/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -175,7 +176,7 @@ const toggleDisplayMenu2Button = (selectedNode) => {
   const notSelectedNodes =  selectedNode.parentNode
     .querySelectorAll(`tr[id]:not([id=${CSS.escape(selectedMenuID)}])`);
 
-    console.log('notSelectedNodes',notSelectedNodes);
+    // console.log('notSelectedNodes',notSelectedNodes);
 
   const createMenuInputNode = selectedNode.parentNode
     .querySelector('tr[id="new"]').querySelectorAll('td > input');
@@ -247,7 +248,7 @@ export const beforeUpdateMenu2Act = (event) => {
 
     //Add inline edit when click 'Update' Button
   tdNode.forEach((node)=>{
-    console.log('Node',node);
+    // console.log('Node',node);
     let nodeAttribute = node.getAttribute('name');
     let nodeValue;
 
@@ -278,7 +279,7 @@ export const beforeUpdateMenu2Act = (event) => {
 
   toggleDisplayMenu2Button(trNode);
 
-  console.log('beforeUpdate ',beforeUpdateMenu2);
+  // console.log('beforeUpdate ',beforeUpdateMenu2);
   return {type: SELECT_UPDATE_MENU2, payload: beforeUpdateMenu2 };
 
 }
@@ -352,7 +353,7 @@ export const updateMenu2Act = (afterUpdateMenu2)  => (dispatch, getState) =>{
   if (JSON.stringify(afterUpdateMenu2) !==
     JSON.stringify(beforeUpdateMenu2)) {
     dispatch({ type: UPDATE_MENU2_PENDING })
-    fetch('http://localhost:3001/menu2/update', {
+    fetch(`${API_PORT}/menu2/update`, {
           method: 'PUT',
           headers: {'Content-Type': 'application/json',
                     'Accept': 'application/json'},

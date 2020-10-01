@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_TAG_PENDING,
   REQUEST_TAG_SUCCESS,
   REQUEST_TAG_FAILED,
@@ -24,7 +25,7 @@ import {
 
 export const requestTagAct = () => (dispatch) => {
   dispatch({ type: REQUEST_TAG_PENDING })
-  fetch('http://localhost:3001/tag/get', {
+  fetch(`${API_PORT}/tag/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -35,7 +36,7 @@ export const requestTagAct = () => (dispatch) => {
 
 export const requestTagByClickAct = () => (dispatch) => {
   dispatch({ type: REQUEST_TAG_C_PENDING })
-  fetch('http://localhost:3001/tag/get', {
+  fetch(`${API_PORT}/tag/get`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -57,7 +58,7 @@ export const selectCreateTagAct = (event) => {
 
 export const postTagAct = (tag) => (dispatch) =>{
   dispatch({ type: POST_TAG_PENDING })
-  fetch('http://localhost:3001/tag/create', {
+  fetch(`${API_PORT}/tag/create`, {
         method: 'post',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -79,7 +80,7 @@ export const selectDeleteTagAct = (event) => {
 
 export const deleteTagAct = (tagID) => (dispatch) =>{
   dispatch({ type: DELETE_TAG_PENDING })
-  fetch('http://localhost:3001/tag/delete', {
+  fetch(`${API_PORT}/tag/delete`, {
         method: 'delete',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -108,7 +109,7 @@ export const selectSearchTagAct = (event) => {
 
 export const searchTagAct = (tag) => (dispatch) =>{
   dispatch({ type: SEARCH_TAG_PENDING })
-  fetch('http://localhost:3001/tag/search', {
+  fetch(`${API_PORT}/tag/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -274,7 +275,7 @@ export const updateTagAct = (afterUpdateTag)  => (dispatch, getState) =>{
   if (JSON.stringify(afterUpdateTag) !==
     JSON.stringify(beforeUpdateTag)) {
     dispatch({ type: UPDATE_TAG_PENDING })
-    fetch('http://localhost:3001/tag/update', {
+    fetch(`${API_PORT}/tag/update`, {
           method: 'PUT',
           headers: {'Content-Type': 'application/json',
                     'Accept': 'application/json'},

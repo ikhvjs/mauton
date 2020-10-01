@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_TOPBAR_PENDING,
   REQUEST_TOPBAR_SUCCESS,
   REQUEST_TOPBAR_FAILED,
@@ -12,7 +13,7 @@ import {
 
 export const requestTopbarAct = () => (dispatch) => {
 	dispatch({ type: REQUEST_TOPBAR_PENDING })
-	fetch('http://localhost:3001/topbar', {
+	fetch(`${API_PORT}/topbar`, {
 	        method: 'get',
 	        headers: {'Content-Type': 'text/plain'}
         })
@@ -23,7 +24,7 @@ export const requestTopbarAct = () => (dispatch) => {
 
 export const requestSidebarAct = (topbarMenuID) => (dispatch) =>{
   dispatch({ type: REQUEST_SIDEBAR_PENDING })
-    fetch(`http://localhost:3001/sidebar/id/${topbarMenuID}`, {
+    fetch(`${API_PORT}/sidebar/id/${topbarMenuID}`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -34,7 +35,7 @@ export const requestSidebarAct = (topbarMenuID) => (dispatch) =>{
 
 export const requestSidebarByClickAct = (topbarMenuPath) => (dispatch) =>{
   dispatch({ type: REQUEST_SIDEBAR_C_PENDING })
-    fetch(`http://localhost:3001/sidebar/path${topbarMenuPath}`, {
+    fetch(`${API_PORT}/sidebar/path${topbarMenuPath}`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })

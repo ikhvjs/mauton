@@ -1,3 +1,6 @@
+//API PORT
+export const API_PORT = 'https://floating-depths-39554.herokuapp.com';
+
 //HOME
 export const SELECT_HOME_INDEX = 'SELECT_HOME_INDEX';
 

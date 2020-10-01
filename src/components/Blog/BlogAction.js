@@ -1,4 +1,5 @@
 import {
+  API_PORT,
   REQUEST_BLOG_PENDING,
   REQUEST_BLOG_SUCCESS,
   REQUEST_BLOG_FAILED,
@@ -43,7 +44,7 @@ import { isTagArrayEqual } from '../../utility/utility';
 export const requestBlogAct = (blogPath) => (dispatch) =>{
   // console.log('normal blogPath',blogPath);
   dispatch({ type: REQUEST_BLOG_PENDING })
-    fetch(`http://localhost:3001/blog/path/${blogPath}`, {
+    fetch(`${API_PORT}/blog/path/${blogPath}`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -55,7 +56,7 @@ export const requestBlogAct = (blogPath) => (dispatch) =>{
 export const requestBlogByClickAct = (blogPath) => (dispatch) =>{
   // console.log('BY click blogPath',blogPath);
   dispatch({ type: REQUEST_BLOG_C_PENDING })
-    fetch(`http://localhost:3001/blog/path/${blogPath}`, {
+    fetch(`${API_PORT}/blog/path/${blogPath}`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
@@ -137,7 +138,7 @@ export const clickSaveBlogAct = (event,sidebarMenuPath) => (dispatch,getState) =
 
   // console.log('newBlog',newBlog);
 
-  fetch('http://localhost:3001/blog/create', {
+  fetch(`${API_PORT}/blog/create`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -219,7 +220,7 @@ export const clickUpdateBlogAct=()=>(dispatch,getState)=>{
 
   if(isBlogUpdated){
     dispatch({ type: UPDATE_BLOG_PENDING });
-    fetch('http://localhost:3001/blog/update', {
+    fetch(`${API_PORT}/blog/update`, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
@@ -314,7 +315,7 @@ export const deleteBlogAct =()=>(dispatch,getState)=>{
 
   const blogID = getState().blogRdc.blog[0].blog_id;
   
-  fetch('http://localhost:3001/blog/delete', {
+  fetch(`${API_PORT}/blog/delete`, {
         method: 'DELETE',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json'},
