@@ -46,7 +46,7 @@ class Home extends Component  {
 				          alt="First slide"
 				        />
 				        <Carousel.Caption>
-				          <h1>No worry, you are fine</h1>
+				          <h1>Welcome</h1>
 				        </Carousel.Caption>
 				      </Carousel.Item>
 				      <Carousel.Item>
@@ -57,7 +57,7 @@ class Home extends Component  {
 				        />
 
 				        <Carousel.Caption>
-				          <h1>No worry, you are fine</h1>
+				          <h1>Enjoy Blogging</h1>
 				        </Carousel.Caption>
 				      </Carousel.Item>
 				      <Carousel.Item>
@@ -68,7 +68,7 @@ class Home extends Component  {
 				        />
 
 				        <Carousel.Caption>
-				          <h1>No worry, you are fine</h1>
+				          <h1>Share your blog</h1>
 				        </Carousel.Caption>
 				      </Carousel.Item>
 				    </Carousel>

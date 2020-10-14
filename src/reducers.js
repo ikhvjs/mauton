@@ -3,6 +3,61 @@ import { combineReducers } from 'redux';
 import * as constants from './constants';
 
 
+const initialStateAuth= {
+  isAuth: false,
+  onChangeUserName:"",
+  onChangeEmail:"",
+  onChangePassword:"",
+  isPendingPostUser: false,
+  token: null,
+  userID: null,
+}
+
+export const authRdc = (state=initialStateAuth, action={}) => {
+  switch (action.type) {
+    case constants.ONCHANGE_REG_USER_NAME:
+      return Object.assign({}, state, {onChangeUserName: action.payload})
+    case constants.ONCHANGE_REG_EMAIL:
+      return Object.assign({}, state, {onChangeEmail: action.payload})
+    case constants.ONCHANGE_REG_PASSWORD:
+      return Object.assign({}, state, {onChangePassword: action.payload})
+    case constants.POST_USER_PENDING:
+        return Object.assign({}, state, {})
+    case constants.POST_USER_SUCCESS:
+      return Object.assign({}, state, 
+        { isAuth:true, 
+          token:action.payload.access_token, 
+          userID:action.payload.info.userID})
+    case constants.POST_USER_FAILED:
+      return Object.assign({}, state, {error: action.payload})
+    case constants.CLEAR_REG_USER:
+      return Object.assign({}, state, 
+        { onChangeUserName: "", 
+          onChangeEmail: "",
+          onChangePassword:""})
+    case constants.ONCHANGE_LOGIN_EMAIL:
+      return Object.assign({}, state, {onChangeEmail: action.payload})
+    case constants.ONCHANGE_LOGIN_PASSWORD:
+      return Object.assign({}, state, {onChangePassword: action.payload})
+    case constants.GET_USER_PENDING:
+        return Object.assign({}, state, {})
+    case constants.GET_USER_SUCCESS:
+      return Object.assign({}, state, 
+        { isAuth:true, 
+          token:action.payload.access_token, 
+          userID:action.payload.info.userID})
+    case constants.GET_USER_FAILED:
+      return Object.assign({}, state, {error: action.payload})
+    case constants.CLEAR_LOGIN_USER:
+      return Object.assign({}, state, 
+        { onChangeEmail: "",
+          onChangePassword:""})
+    default:
+      return state
+  }
+}
+
+
 
 const initialStateHome= {
   homeIndex: 0
@@ -529,6 +584,7 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
 
 
 const rootReducer = combineReducers({
+  authRdc,
   homeRdc,
 	requestTopbarRdc,
 	requestSidebarRdc,

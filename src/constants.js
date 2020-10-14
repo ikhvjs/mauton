@@ -1,5 +1,7 @@
 //API PORT
-export const API_PORT = 'https://floating-depths-39554.herokuapp.com';
+// export const API_PORT = 'https://floating-depths-39554.herokuapp.com';
+export const API_PORT = 'http://localhost:3001';
+
 
 //HOME
 export const SELECT_HOME_INDEX = 'SELECT_HOME_INDEX';
@@ -284,3 +286,23 @@ export const SELECT_TAG_MODAL			= 'SELECT_TAG_MODAL';
 //ALERT
 export const SHOW_DELETE_BLOG_ALERT = 'SHOW_DELETE_BLOG_ALERT';
 export const CLOSE_DELETE_BLOG_ALERT = 'CLOSE_DELETE_BLOG_ALERT'; 
+
+//AUTH
+export const ONCHANGE_REG_USER_NAME = 'ONCHANGE_REG_USER_NAME';
+export const ONCHANGE_REG_EMAIL = 'ONCHANGE_REG_EMAIL';
+export const ONCHANGE_REG_PASSWORD = 'ONCHANGE_REG_PASSWORD';
+
+export const POST_USER_PENDING = 'POST_USER_PENDING';
+export const POST_USER_SUCCESS = 'POST_USER_SUCCESS';
+export const POST_USER_FAILED = 'POST_USER_FAILED';
+
+export const CLEAR_REG_USER = 'CLEAR_REG_USER';
+
+export const ONCHANGE_LOGIN_EMAIL = 'ONCHANGE_LOGIN_EMAIL';
+export const ONCHANGE_LOGIN_PASSWORD = 'ONCHANGE_LOGIN_PASSWORD';
+
+export const GET_USER_PENDING = 'GET_USER_PENDING';
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
+export const GET_USER_FAILED =  'GET_USER_FAILED';
+
+export const CLEAR_LOGIN_USER = 'CLEAR_LOGIN_USER';

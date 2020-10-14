@@ -30,6 +30,7 @@ class Topbar extends Component {
 						return(
 							<LinkContainer key={topbar.menu_id} to={`/${topbar.menu_path}`}>
 			    				<Nav.Link key={topbar.menu_id}
+			    					id = {topbar.menu_id}
 			    					value={topbar.menu_path}	
 			    					onClick={onRequestSidebarByClick}>
 			    					{topbar.menu_name}
