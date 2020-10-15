@@ -11,6 +11,8 @@ const initialStateAuth= {
   isPendingPostUser: false,
   token: null,
   userID: null,
+  isShowAlert:false,
+  alertMessage:""
 }
 
 export const authRdc = (state=initialStateAuth, action={}) => {
@@ -29,7 +31,9 @@ export const authRdc = (state=initialStateAuth, action={}) => {
           token:action.payload.access_token, 
           userID:action.payload.info.userID})
     case constants.POST_USER_FAILED:
-      return Object.assign({}, state, {error: action.payload})
+      return Object.assign({}, state, {isAuth:false, alertMessage: action.payload, isShowAlert:true})
+    case constants.CLOSE_REG_ALERT:
+      return Object.assign({}, state, {isShowAlert:false})
     case constants.CLEAR_REG_USER:
       return Object.assign({}, state, 
         { onChangeUserName: "", 

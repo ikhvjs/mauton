@@ -306,3 +306,5 @@ export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
 export const GET_USER_FAILED =  'GET_USER_FAILED';
 
 export const CLEAR_LOGIN_USER = 'CLEAR_LOGIN_USER';
+
+export const CLOSE_REG_ALERT = 'CLOSE_REG_ALERT';

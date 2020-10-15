@@ -28,6 +28,7 @@ export const postUserAct = (event) => (dispatch, getState) =>{
     const username = getState().authRdc.onChangeUserName;
     const email  = getState().authRdc.onChangeEmail;
     const password  = getState().authRdc.onChangePassword;
+    let resStatus = 0;
 
     dispatch({ type: POST_USER_PENDING });
     fetch(`${API_PORT}/register`, {
@@ -41,8 +42,24 @@ export const postUserAct = (event) => (dispatch, getState) =>{
         })
       }
     )
-    .then(response => response.json())
-    .then(data => dispatch({ type: POST_USER_SUCCESS, payload:data}))
+    // .then(response => response.json())
+    .then(res => {
+        resStatus = res.status
+        return res.json()
+      })
+    .then(res => {
+        switch (resStatus) {
+            case 200:
+                return dispatch({ type: POST_USER_SUCCESS, payload:res})
+            case 400:
+                return dispatch({ type: POST_USER_FAILED, payload: res.errMessage })
+            case 500:
+                return dispatch({ type: POST_USER_FAILED, payload: res.errMessage })
+            default:
+                return dispatch({ type: POST_USER_FAILED, payload: 'Exceptional Error' })
+        }
+    })
+    // .then(data => dispatch({ type: POST_USER_SUCCESS, payload:data}))
     .catch(error => dispatch({ type: POST_USER_FAILED, payload: error }))
 }
 
