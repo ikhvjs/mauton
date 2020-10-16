@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import './Login.css';
+import ValidationAlert from '../ValidationAlert/ValidationAlert';
 
 import { 
     onChangeLoginEmailAct,
@@ -79,7 +80,7 @@ class Login extends Component {
                                             */
                                         }
                                         
-
+                                        <ValidationAlert />
                                         <button type="submit" className="btn btn-primary btn-block"
                                             onClick={onGetUser}>
                                             Submit

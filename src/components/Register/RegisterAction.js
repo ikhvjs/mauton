@@ -23,7 +23,7 @@ export const onChangeRegPasswordAct =(password)=>{
 }
 
 export const postUserAct = (event) => (dispatch, getState) =>{
-    // console.log('history',history);
+
     event.preventDefault();
     const username = getState().authRdc.onChangeUserName;
     const email  = getState().authRdc.onChangeEmail;
@@ -42,7 +42,6 @@ export const postUserAct = (event) => (dispatch, getState) =>{
         })
       }
     )
-    // .then(response => response.json())
     .then(res => {
         resStatus = res.status
         return res.json()
@@ -56,11 +55,10 @@ export const postUserAct = (event) => (dispatch, getState) =>{
             case 500:
                 return dispatch({ type: POST_USER_FAILED, payload: res.errMessage })
             default:
-                return dispatch({ type: POST_USER_FAILED, payload: 'Exceptional Error' })
+                return dispatch({ type: POST_USER_FAILED, payload: 'Exceptional Error, please try again' })
         }
     })
-    // .then(data => dispatch({ type: POST_USER_SUCCESS, payload:data}))
-    .catch(error => dispatch({ type: POST_USER_FAILED, payload: error }))
+    .catch( () => dispatch({ type: POST_USER_FAILED, payload: 'Internal Server Error, please try again' }))
 }
 
 export const clearRegUserAct =()=>{

@@ -31,7 +31,8 @@ export const authRdc = (state=initialStateAuth, action={}) => {
           token:action.payload.access_token, 
           userID:action.payload.info.userID})
     case constants.POST_USER_FAILED:
-      return Object.assign({}, state, {isAuth:false, alertMessage: action.payload, isShowAlert:true})
+      return Object.assign({}, state, 
+        {isAuth:false, alertMessage: action.payload, isShowAlert:true})
     case constants.CLOSE_REG_ALERT:
       return Object.assign({}, state, {isShowAlert:false})
     case constants.CLEAR_REG_USER:
@@ -49,9 +50,10 @@ export const authRdc = (state=initialStateAuth, action={}) => {
       return Object.assign({}, state, 
         { isAuth:true, 
           token:action.payload.access_token, 
-          userID:action.payload.info.userID})
+          userID:action.payload.info.userID
+          })
     case constants.GET_USER_FAILED:
-      return Object.assign({}, state, {error: action.payload})
+      return Object.assign({}, state, {isAuth:false, alertMessage: action.payload, isShowAlert:true})
     case constants.CLEAR_LOGIN_USER:
       return Object.assign({}, state, 
         { onChangeEmail: "",

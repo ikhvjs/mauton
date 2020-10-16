@@ -22,6 +22,7 @@ export const getUserAct = (event) => (dispatch, getState) =>{
     event.preventDefault();
     const email  = getState().authRdc.onChangeEmail;
     const password  = getState().authRdc.onChangePassword;
+    let resStatus = 0;
 
     dispatch({ type: GET_USER_PENDING });
     fetch(`${API_PORT}/login`, {
@@ -35,9 +36,26 @@ export const getUserAct = (event) => (dispatch, getState) =>{
         })
       }
     )
-    .then(response => response.json())
-    .then(data => dispatch({ type: GET_USER_SUCCESS, payload:data}))
-    .catch(error => dispatch({ type: GET_USER_FAILED, payload: error }))
+    // .then(response => response.json())
+    .then(res => {
+        resStatus = res.status
+        return res.json()
+      })
+    .then(res => {
+        switch (resStatus) {
+            case 200:
+                return dispatch({ type: GET_USER_SUCCESS, payload:res})
+            case 400:
+                return dispatch({ type: GET_USER_FAILED, payload: res.errMessage })
+            case 500:
+                return dispatch({ type: GET_USER_FAILED, payload: res.errMessage })
+            default:
+                return dispatch({ type: GET_USER_FAILED, payload: 'Exceptional Error, please try again' })
+        }
+    })
+    .catch( () => dispatch({ type: GET_USER_FAILED, payload: 'Internal Server Error, please try again' }))
+    // .then(data => dispatch({ type: GET_USER_SUCCESS, payload:data}))
+    // .catch(error => dispatch({ type: GET_USER_FAILED, payload: error }))
 }
 
 export const clearLoginUserAct =()=>{
