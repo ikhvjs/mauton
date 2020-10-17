@@ -2,6 +2,10 @@
 // export const API_PORT = 'https://floating-depths-39554.herokuapp.com';
 export const API_PORT = 'http://localhost:3001';
 
+//ReCaptchat
+export const RECAPTCHAT_KEY = '6LcqXdgZAAAAAFoX6zuxeUH39LsB8JbFdd9TiVv0';
+export const GET_CAPTCHA_TOKEN_SUCCESS = 'GET_CAPTCHA_TOKEN_SUCCESS';
+export const GET_CAPTCHA_TOKEN_FAILED = 'GET_CAPTCHA_TOKEN_FAILED';
 
 //HOME
 export const SELECT_HOME_INDEX = 'SELECT_HOME_INDEX';

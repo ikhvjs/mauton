@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+import { RECAPTCHAT_KEY } from '../../constants';
 
 import Register from '../../components/Register/Register';
 
@@ -19,7 +21,11 @@ const mapDispatchToProps = () => {
 class RegisterContainer extends Component {
     render() {
         const { isAuth } = this.props;
-        return isAuth? <Redirect to='/' />:<Register />;
+        return isAuth
+                ? <Redirect to='/' />
+                :(<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHAT_KEY}>
+                    <Register />
+                </GoogleReCaptchaProvider>);
     }
 }
   

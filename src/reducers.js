@@ -12,11 +12,16 @@ const initialStateAuth= {
   token: null,
   userID: null,
   isShowAlert:false,
-  alertMessage:""
+  alertMessage:"",
+  captchaToken:null
 }
 
 export const authRdc = (state=initialStateAuth, action={}) => {
   switch (action.type) {
+    case constants.GET_CAPTCHA_TOKEN_SUCCESS:
+      return Object.assign({}, state, {captchaToken: action.payload})
+    case constants.GET_CAPTCHA_TOKEN_FAILED:
+      return Object.assign({}, state, {isAuth:false, alertMessage: action.payload, isShowAlert:true})
     case constants.ONCHANGE_REG_USER_NAME:
       return Object.assign({}, state, {onChangeUserName: action.payload})
     case constants.ONCHANGE_REG_EMAIL:

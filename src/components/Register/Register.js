@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { withGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 import './Register.css';
 import { 
@@ -12,6 +13,7 @@ import {
 
 import ValidationAlert from '../ValidationAlert/ValidationAlert';
 
+
 const mapStateToProps = (state) => {
     return {
       onChangeUserName:     state.authRdc.onChangeUserName,
@@ -20,7 +22,7 @@ const mapStateToProps = (state) => {
     }
   }
   
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch,ownProps) => {
     return {
         onChangeRegUserName: (event)=>
             dispatch(onChangeRegUserNameAct(event.target.value)),
@@ -29,7 +31,7 @@ const mapDispatchToProps = (dispatch) => {
         onChangeRegPassword:(event)=>
             dispatch(onChangeRegPasswordAct(event.target.value)),
         onPostUser: (event) => 
-            dispatch(postUserAct(event)),
+            dispatch(postUserAct(event,ownProps)),
         onClearRegUser :() =>
             dispatch(clearRegUserAct())
     }
@@ -38,8 +40,15 @@ const mapDispatchToProps = (dispatch) => {
 class Register extends Component {
 
     componentWillUnmount(){
-        const {onClearRegUser} = this.props;
+        const { onClearRegUser } = this.props;
         onClearRegUser();
+    }
+
+    componentDidUpdate(){
+       
+    }
+
+    componentDidMount() {
     }
 
     render() {
@@ -105,4 +114,4 @@ class Register extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register)
+export default withGoogleReCaptcha(connect(mapStateToProps, mapDispatchToProps)(Register))
