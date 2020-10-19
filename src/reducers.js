@@ -5,14 +5,15 @@ import * as constants from './constants';
 
 const initialStateAuth= {
   isAuth: false,
-  onChangeUserName:"",
-  onChangeEmail:"",
-  onChangePassword:"",
+  onChangeUserName:null,
+  onChangeEmail:null,
+  onChangePassword:null,
   isPendingPostUser: false,
+  isPendingGetUser: false,
   token: null,
   userID: null,
   isShowAlert:false,
-  alertMessage:"",
+  alertMessage:null,
   captchaToken:null
 }
 
@@ -21,7 +22,22 @@ export const authRdc = (state=initialStateAuth, action={}) => {
     case constants.GET_CAPTCHA_TOKEN_SUCCESS:
       return Object.assign({}, state, {captchaToken: action.payload})
     case constants.GET_CAPTCHA_TOKEN_FAILED:
-      return Object.assign({}, state, {isAuth:false, alertMessage: action.payload, isShowAlert:true})
+      switch (action.payload.actionCode){
+        case 'Login':
+          return Object.assign({}, state, 
+            {isAuth:false, 
+              isPendingGetUser:false,
+              alertMessage: action.payload.errMessage,
+              isShowAlert:true})
+        case 'Register':
+          return Object.assign({}, state, 
+            {isAuth:false, 
+              isPendingPostUser:false,
+              alertMessage: action.payload.errMessage,
+              isShowAlert:true})
+        default:
+          return state
+      }  
     case constants.ONCHANGE_REG_USER_NAME:
       return Object.assign({}, state, {onChangeUserName: action.payload})
     case constants.ONCHANGE_REG_EMAIL:
@@ -29,40 +45,53 @@ export const authRdc = (state=initialStateAuth, action={}) => {
     case constants.ONCHANGE_REG_PASSWORD:
       return Object.assign({}, state, {onChangePassword: action.payload})
     case constants.POST_USER_PENDING:
-        return Object.assign({}, state, {})
+        return Object.assign({}, state, {isPendingPostUser:true, isShowAlert:false})
     case constants.POST_USER_SUCCESS:
       return Object.assign({}, state, 
-        { isAuth:true, 
+        { isAuth:true,
+          isPendingPostUser:false,
           token:action.payload.access_token, 
           userID:action.payload.info.userID})
     case constants.POST_USER_FAILED:
       return Object.assign({}, state, 
-        {isAuth:false, alertMessage: action.payload, isShowAlert:true})
+        {isAuth:false, 
+          isPendingPostUser:false,
+          alertMessage: action.payload,
+          onChangeUserName: null,
+          onChangeEmail: null,
+          onChangePassword: null, 
+          isShowAlert:true})
     case constants.CLOSE_REG_ALERT:
       return Object.assign({}, state, {isShowAlert:false})
     case constants.CLEAR_REG_USER:
       return Object.assign({}, state, 
-        { onChangeUserName: "", 
-          onChangeEmail: "",
-          onChangePassword:""})
+        { onChangeUserName: null, 
+          onChangeEmail: null,
+          onChangePassword:null})
     case constants.ONCHANGE_LOGIN_EMAIL:
       return Object.assign({}, state, {onChangeEmail: action.payload})
     case constants.ONCHANGE_LOGIN_PASSWORD:
       return Object.assign({}, state, {onChangePassword: action.payload})
     case constants.GET_USER_PENDING:
-        return Object.assign({}, state, {})
+        return Object.assign({}, state, {isPendingGetUser:true, isShowAlert:false})
     case constants.GET_USER_SUCCESS:
       return Object.assign({}, state, 
         { isAuth:true, 
+          isPendingGetUser:false,
           token:action.payload.access_token, 
           userID:action.payload.info.userID
           })
     case constants.GET_USER_FAILED:
-      return Object.assign({}, state, {isAuth:false, alertMessage: action.payload, isShowAlert:true})
+      return Object.assign({}, state, 
+        {isAuth:false, 
+          isPendingGetUser:false,
+          alertMessage: action.payload,
+          onChangePassword: null,
+          isShowAlert:true})
     case constants.CLEAR_LOGIN_USER:
       return Object.assign({}, state, 
-        { onChangeEmail: "",
-          onChangePassword:""})
+        { onChangeEmail: null,
+          onChangePassword:null})
     default:
       return state
   }

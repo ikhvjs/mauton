@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { withGoogleReCaptcha } from 'react-google-recaptcha-v3';
+
 import './Login.css';
 import ValidationAlert from '../ValidationAlert/ValidationAlert';
+
+import { Spinner, Button } from  "react-bootstrap";
 
 import { 
     onChangeLoginEmailAct,
@@ -13,18 +17,19 @@ import {
 const mapStateToProps = (state) => {
     return {
       onChangeEmail:        state.authRdc.onChangeEmail,
-      onChangePassword:     state.authRdc.onChangePassword
+      onChangePassword:     state.authRdc.onChangePassword,
+      isPendingGetUser:     state.authRdc.isPendingGetUser
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch,ownProps) => {
     return {
         onChangeLoginEmail:(event)=>
             dispatch(onChangeLoginEmailAct(event.target.value)),
         onChangeLoginPassword:(event)=>
             dispatch(onChangeLoginPasswordAct(event.target.value)),
         onGetUser: (event) => 
-            dispatch(getUserAct(event)),
+            dispatch(getUserAct(event,ownProps)),
         onClearLoginUser :() =>
             dispatch(clearLoginUserAct())
     }
@@ -43,7 +48,8 @@ class Login extends Component {
         const {
             onGetUser,
             onChangeLoginEmail,
-            onChangeLoginPassword
+            onChangeLoginPassword,
+            isPendingGetUser
             }=this.props;
 
         return (
@@ -81,10 +87,22 @@ class Login extends Component {
                                         }
                                         
                                         <ValidationAlert />
-                                        <button type="submit" className="btn btn-primary btn-block"
-                                            onClick={onGetUser}>
-                                            Submit
-                                        </button>
+                                        <Button type="submit" disabled={isPendingGetUser} block
+                                            onClick = {onGetUser} className='d-flex align-items-center justify-content-center'
+                                        >
+                                            {(isPendingGetUser)
+                                            ?(<Spinner className ='mr-1'
+                                                    as="span"
+                                                    animation="border"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />
+                                            )
+                                            :null
+                                            }
+                                            Sign in
+                                        </Button>
                                         <p className="forgot-password text-right">
                                             {/*
                                             Forgot <a href="/forgot">password</a>? Or 
@@ -103,4 +121,4 @@ class Login extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default withGoogleReCaptcha(connect(mapStateToProps, mapDispatchToProps)(Login))

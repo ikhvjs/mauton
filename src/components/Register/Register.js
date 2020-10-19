@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 import './Register.css';
+
 import { 
     onChangeRegUserNameAct,
     onChangeRegEmailAct,
@@ -13,12 +14,15 @@ import {
 
 import ValidationAlert from '../ValidationAlert/ValidationAlert';
 
+import { Spinner, Button } from  "react-bootstrap";
+
 
 const mapStateToProps = (state) => {
     return {
       onChangeUserName:     state.authRdc.onChangeUserName,
       onChangeEmail:        state.authRdc.onChangeEmail,
-      onChangePassword:     state.authRdc.onChangePassword
+      onChangePassword:     state.authRdc.onChangePassword,
+      isPendingPostUser:    state.authRdc.isPendingPostUser
     }
   }
   
@@ -44,20 +48,14 @@ class Register extends Component {
         onClearRegUser();
     }
 
-    componentDidUpdate(){
-       
-    }
-
-    componentDidMount() {
-    }
-
     render() {
 
         const {
             onPostUser,
             onChangeRegUserName,
             onChangeRegEmail,
-            onChangeRegPassword
+            onChangeRegPassword,
+            isPendingPostUser
             }=this.props;
 
         return (
@@ -94,12 +92,23 @@ class Register extends Component {
                                             />
                                         </div>
                                         <ValidationAlert />
-                                        <button type="submit" 
-                                            className="btn btn-primary btn-block"
-                                            onClick = {onPostUser}
+                                        <Button type="submit" disabled={isPendingPostUser} block
+                                            onClick = {onPostUser} className='d-flex align-items-center justify-content-center'
                                         >
+                                            {(isPendingPostUser)
+                                            ?(<Spinner className ='mr-1'
+                                                    as="span"
+                                                    animation="border"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />
+                                            )
+                                            :null
+                                            }
                                             Sign Up
-                                        </button>
+                                        </Button>
+                                        
                                         <p className="forgot-password text-right">
                                             Already registered <a href="/mauton/login">sign in?</a>
                                         </p>

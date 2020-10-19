@@ -70,38 +70,9 @@ export const postUserAct =  (event,ownProps) => async (dispatch, getState) =>{
         })
         .catch( () => dispatch({ type: POST_USER_FAILED, payload: 'Internal Server Error, please try again' }))
     }catch(err){
-        dispatch({ type: GET_CAPTCHA_TOKEN_FAILED,payload: 'Captcha Error, please try again'});
+        dispatch({ type: GET_CAPTCHA_TOKEN_FAILED,
+            payload:{actionCode:'Register',errMessage:'Captcha Error, please try again'}});
     }
-
-    
-    // fetch(`${API_PORT}/register`, {
-    //     method: 'POST',
-    //     headers: {'Content-Type': 'application/json',
-    //               'Accept': 'application/json'},
-    //     body: JSON.stringify({
-    //         username: username,
-    //         email: email,
-    //         password: password
-    //     })
-    //   }
-    // )
-    // .then(res => {
-    //     resStatus = res.status
-    //     return res.json()
-    //   })
-    // .then(res => {
-    //     switch (resStatus) {
-    //         case 200:
-    //             return dispatch({ type: POST_USER_SUCCESS, payload:res})
-    //         case 400:
-    //             return dispatch({ type: POST_USER_FAILED, payload: res.errMessage })
-    //         case 500:
-    //             return dispatch({ type: POST_USER_FAILED, payload: res.errMessage })
-    //         default:
-    //             return dispatch({ type: POST_USER_FAILED, payload: 'Exceptional Error, please try again' })
-    //     }
-    // })
-    // .catch( () => dispatch({ type: POST_USER_FAILED, payload: 'Internal Server Error, please try again' }))
 }
 
 export const clearRegUserAct =()=>{
