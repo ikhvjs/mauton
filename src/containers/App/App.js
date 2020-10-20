@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route
-  // Redirect
 } from "react-router-dom";
 
 import AuthApp from '../AuthApp/AuthApp';
@@ -20,8 +19,7 @@ import { PrivateRoute } from '../../components/PrivateRoute/PrivateRoute';
 
 const mapStateToProps = (state) => {
   return {
-	isAuth: 			state.authRdc.isAuth,
-	isPendingPostUser:  state.authRdc.isPendingPostUser
+	isAuth: state.authRdc.isAuth
   }
 }
 
@@ -39,11 +37,12 @@ class App extends Component {
 	}
 
 	render() {
-		const { isAuth
+		const { 
+			isAuth
 			} = this.props;
 						    
 		return (
-			<Router basename="/mauton">
+			<Router basename="mauton">
 				<Switch>
 					<Route path="/login">
 						<LoginContainer />
@@ -51,10 +50,9 @@ class App extends Component {
 					<Route path="/register">
 						<RegisterContainer />
 					</Route>
-					<PrivateRoute isAuth={isAuth} path="/">
+					<PrivateRoute isAuth={isAuth} path={`/`}>
 						<AuthApp />
 					</PrivateRoute>
-					
 				</Switch>
 			</Router>
 		);

@@ -5,9 +5,9 @@ import * as constants from './constants';
 
 const initialStateAuth= {
   isAuth: false,
-  onChangeUserName:null,
-  onChangeEmail:null,
-  onChangePassword:null,
+  onChangeUserName:"",
+  onChangeEmail:"",
+  onChangePassword:"",
   isPendingPostUser: false,
   isPendingGetUser: false,
   token: null,
@@ -28,12 +28,14 @@ export const authRdc = (state=initialStateAuth, action={}) => {
             {isAuth:false, 
               isPendingGetUser:false,
               alertMessage: action.payload.errMessage,
+              onChangePassword:"",
               isShowAlert:true})
         case 'Register':
           return Object.assign({}, state, 
             {isAuth:false, 
               isPendingPostUser:false,
               alertMessage: action.payload.errMessage,
+              onChangePassword:"",
               isShowAlert:true})
         default:
           return state
@@ -57,17 +59,15 @@ export const authRdc = (state=initialStateAuth, action={}) => {
         {isAuth:false, 
           isPendingPostUser:false,
           alertMessage: action.payload,
-          onChangeUserName: null,
-          onChangeEmail: null,
-          onChangePassword: null, 
+          onChangePassword: "", 
           isShowAlert:true})
     case constants.CLOSE_REG_ALERT:
       return Object.assign({}, state, {isShowAlert:false})
     case constants.CLEAR_REG_USER:
       return Object.assign({}, state, 
-        { onChangeUserName: null, 
-          onChangeEmail: null,
-          onChangePassword:null})
+        { onChangeUserName: "", 
+          onChangeEmail: "",
+          onChangePassword:""})
     case constants.ONCHANGE_LOGIN_EMAIL:
       return Object.assign({}, state, {onChangeEmail: action.payload})
     case constants.ONCHANGE_LOGIN_PASSWORD:
@@ -86,12 +86,12 @@ export const authRdc = (state=initialStateAuth, action={}) => {
         {isAuth:false, 
           isPendingGetUser:false,
           alertMessage: action.payload,
-          onChangePassword: null,
+          onChangePassword: "",
           isShowAlert:true})
     case constants.CLEAR_LOGIN_USER:
       return Object.assign({}, state, 
-        { onChangeEmail: null,
-          onChangePassword:null})
+        { onChangeEmail: "",
+          onChangePassword:""})
     default:
       return state
   }

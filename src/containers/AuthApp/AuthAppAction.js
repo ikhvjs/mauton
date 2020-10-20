@@ -11,13 +11,14 @@ import {
   REQUEST_SIDEBAR_C_FAILED
  } from '../../constants';
 
+
 export const requestTopbarAct = () => (dispatch,getState) => {
 	dispatch({ type: REQUEST_TOPBAR_PENDING })
 	fetch(`${API_PORT}/topbar`, {
     method: 'post',
     headers: {'Content-Type': 'application/json',
               'Accept': 'application/json',
-              'Authorization': `Beare ${getState().authRdc.token}`
+              'Authorization': `Bearer ${getState().authRdc.token}`
             }
   })
     .then(response => response.json())

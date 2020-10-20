@@ -47,6 +47,8 @@ class Login extends Component {
     render() {
         const {
             onGetUser,
+            onChangeEmail,
+            onChangePassword,
             onChangeLoginEmail,
             onChangeLoginPassword,
             isPendingGetUser
@@ -66,6 +68,7 @@ class Login extends Component {
                                             <label>Email Address</label>
                                             <input type="email" className="form-control" 
                                             placeholder="Enter email" 
+                                            value={onChangeEmail}
                                             onChange={onChangeLoginEmail}/>
                                         </div>
 
@@ -73,6 +76,7 @@ class Login extends Component {
                                             <label>Password</label>
                                             <input type="password" className="form-control" 
                                             placeholder="Enter password" 
+                                            value={onChangePassword}
                                             onChange={onChangeLoginPassword}/>
                                         </div>
                                         {
