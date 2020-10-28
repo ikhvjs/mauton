@@ -5,13 +5,9 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-
 import AuthApp from '../AuthApp/AuthApp';
 import LoginContainer from '../LoginContainer/LoginContainer';
 import RegisterContainer from '../RegisterContainer/RegisterContainer';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
 import { PrivateRoute } from '../../components/PrivateRoute/PrivateRoute';
 
 // import $ from 'jquery';
@@ -23,24 +19,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    
-  }
-}
-
-
 class App extends Component {
 
-	componentDidMount() {
-		
-	}
-
 	render() {
-		const { 
-			isAuth
-			} = this.props;
-						    
+
 		return (
 			<Router basename="mauton">
 				<Switch>
@@ -50,7 +32,7 @@ class App extends Component {
 					<Route path="/register">
 						<RegisterContainer />
 					</Route>
-					<PrivateRoute isAuth={isAuth} path={`/`}>
+					<PrivateRoute isAuth={this.props.isAuth} path='/'>
 						<AuthApp />
 					</PrivateRoute>
 				</Switch>
@@ -61,6 +43,5 @@ class App extends Component {
 	
 }
 
-// action done from mapDispatchToProps will channge state from mapStateToProps
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, null)(App)
 

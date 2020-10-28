@@ -22,16 +22,9 @@ import {
 	// requestBlogTagByClickAct,
 	selectCreateBlogByClickAct
 	} from '../../components/Blog/BlogAction';
-
-
 import { transformDate } from '../../utility/utility';
-
 import Blog from '../../components/Blog/Blog';
 import BlogCreate from '../../components/Blog/BlogCreate';
-
-// import TinyEditorComponent from '../../components/TinyEditorComponent/TinyEditorComponent';
-// import Page404 from '../../components/Page404/Page404';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {CardColumns, Card, Button, Row, Form, Col,Container, Badge} from "react-bootstrap";
 import './Bloglist.css';
 

@@ -1,49 +1,24 @@
 import React,{ Component } from 'react';
 import { connect } from 'react-redux';
-import { 
-	requestTopbarAct,
-	requestSidebarAct,
-	requestSidebarByClickAct
-} from './AuthAppAction';
-import {
-  Switch,
-  Route
-  // Redirect
-} from "react-router-dom";
-
+import {  requestTopbarAct } from './AuthAppAction';
+import { Switch,  Route } from "react-router-dom";
 import Home from '../Home/Home';
 import Topbar from '../Topbar/Topbar';
 import Content from '../Content/Content';
 import Dashboard from '../Dashboard/Dashboard';
-// import Page404 from '../../components/Page404/Page404';
-import Footer from '../Footer/Footer';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Footer from '../../components/Footer/Footer';
 import {Container, Row} from "react-bootstrap";
-import './AuthApp.css';
-
-// import $ from 'jquery';
-// import Popper from 'popper.js';
 
 const mapStateToProps = (state) => {
   return {
-    topbars: state.requestTopbarRdc.topbars,
-    isPendingTopbar: state.requestTopbarRdc.isPendingTopbar,
-    sidebars:state.requestSidebarRdc.sidebars,
-    isPendingSidebar:state.requestSidebarRdc.isPendingSidebar,
-    isPendingSidebarByClick:state.requestSidebarRdc.isPendingSidebarByClick
+    topbars: state.topbarRdc.topbars
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onRequestTopbar: () => 
-    	dispatch(requestTopbarAct()),
-    onRequestSidebar:(topbarMenuID) => 
-    	dispatch(requestSidebarAct(topbarMenuID)),
-    onRequestSidebarByClick:(event) => 
-    	dispatch(requestSidebarByClickAct(event.target.getAttribute('id')))
-    
+    	dispatch(requestTopbarAct())
   }
 }
 
@@ -56,20 +31,15 @@ class AuthApp extends Component {
 
 	render() {
 		const { topbars,
-				sidebars,
-				onRequestTopbar,
-				onRequestSidebar,
-				onRequestSidebarByClick,
-				isPendingSidebarByClick
+				onRequestTopbar
 			} = this.props;
 						    
 		return (
-			<Container fluid className = "main_container">
-				<Row className = "topbar_container">
-					<Topbar topbars={topbars} 
-						onRequestSidebarByClick={onRequestSidebarByClick}/>
+			<Container fluid >
+				<Row id="topbar-container">
+					<Topbar />
 				</Row>	
-				<Row className = "content_container">
+				<Row id="content-container" className="min-vh-100">
 					<Switch>
 			          	<Route exact path="/">
 			           		<Home />
@@ -77,10 +47,7 @@ class AuthApp extends Component {
 			          	{topbars.map((topbar)=>{
 								return(
 									<Route key={topbar.menu_id} path={`/${topbar.menu_path}`}>
-										<Content sidebars={sidebars} 
-											topbarMenuID={topbar.menu_id}
-											onRequestSidebar={onRequestSidebar}
-											isPendingSidebarByClick={isPendingSidebarByClick}
+										<Content topbarMenuID={topbar.menu_id}
 										/>
 					    			</Route>
 								)
@@ -89,14 +56,9 @@ class AuthApp extends Component {
 			          	<Route path="/dashboard">
 			           		<Dashboard onRequestTopbar={onRequestTopbar} />
 			          	</Route>
-			          	{
-				         //  	<Route path="*">
-					        //     <Page404 />
-					        // </Route>
-				    	}
 					</Switch>
 				</Row>	
-				<Row className = "footer_container">
+				<Row id="footer-container">
 					<Footer />
 				</Row>
 			</Container>
@@ -104,6 +66,5 @@ class AuthApp extends Component {
 	}	
 }
 
-// action done from mapDispatchToProps will channge state from mapStateToProps
 export default connect(mapStateToProps, mapDispatchToProps)(AuthApp)
 

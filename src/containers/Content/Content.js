@@ -1,55 +1,42 @@
-import React from 'react';
-import {
-  Switch,
-  Route,
-  useRouteMatch
-} from "react-router-dom";
-
+import React, {Component} from 'react';
+import { Switch, Route, withRouter } from "react-router-dom";
 import Bloglist from '../Bloglist/Bloglist';
 import Sidebar from '../Sidebar/Sidebar';
-import Page404 from '../../components/Page404/Page404';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col} from "react-bootstrap";
-import './Content.css';
+import { Col} from "react-bootstrap";
 
+class Content extends Component {
 
+	render() {
+		
+		const match = this.props.match;
+		const { topbarMenuID } = this.props;
 
-
-const Content = ({ sidebars, 
-		topbarMenuID,
-		onRequestSidebar,
-		isPendingSidebarByClick
-	}) => {
-	
-	//userRouteMatch only be allowed to use in function.
-	//Content component need to be a function
-	const match = useRouteMatch();
-	return (
-		<React.Fragment>
-			<Col sm={1} md={2} lg={2} className="sidebar_container">
-				<Sidebar url={match.url} 
-					sidebars={sidebars}
-					topbarMenuID={topbarMenuID}
-					onRequestSidebar={onRequestSidebar}
-					isPendingSidebarByClick={isPendingSidebarByClick}
+		return (
+			<React.Fragment>
+				<Col sm={2} id="sidebar-container" className="align-items-start mx-2 p-0" >
+					<Sidebar url={match.url}
+						topbarMenuID={topbarMenuID}
 					/>
-			</Col>
-			<Col className="bloglist_container">
-			    <Switch>
-			        <Route exact path={match.path}>
-			          <h3>Please select a topic.</h3>
-			        </Route>
-			        <Route path={`${match.path}/:sidebarMenuPath`}>
-			        	<Bloglist />
-			        </Route>
-			        <Route path="*">
-					    <Page404 />
-					 </Route>
-			    </Switch>
-			</Col>     
-		</React.Fragment>
-	  );
-	
+				</Col>
+				<Col id="blog-container" className="min-vh-100" >
+					<Switch>
+						<Route exact path={match.path}>
+							<h3>Please select a topic in the blue menu</h3>
+						</Route>
+						<Route path={`${match.path}/:sidebarMenuPath`}>
+							<Bloglist/>
+						</Route>
+						{/* <Route path="*">
+							<Page404 />
+						</Route> */}
+					</Switch>
+				</Col>
+			</React.Fragment>
+		);
+	}
+
+
+
 }
 
-export default Content;
+export default withRouter(Content);

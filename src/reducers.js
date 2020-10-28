@@ -4,7 +4,7 @@ import * as constants from './constants';
 
 
 const initialStateAuth= {
-  isAuth: false,
+  isAuth: true,
   onChangeUserName:"",
   onChangeEmail:"",
   onChangePassword:"",
@@ -118,7 +118,7 @@ const initialStateTopbar = {
   isPendingTopbar: true
 }
 
-export const requestTopbarRdc = (state=initialStateTopbar, action={}) => {
+export const topbarRdc = (state=initialStateTopbar, action={}) => {
   switch (action.type) {
   	case constants.REQUEST_TOPBAR_PENDING:
       return Object.assign({}, state, {isPendingTopbar: true})
@@ -138,7 +138,7 @@ const initialStateSidebar = {
   isPendingSidebarByClick: false
 }
 
-export const requestSidebarRdc = (state=initialStateSidebar, action={}) => {
+export const sidebarRdc = (state=initialStateSidebar, action={}) => {
   switch (action.type) {
 	case constants.REQUEST_SIDEBAR_PENDING:
 	  return Object.assign({}, state, {isPendingSidebar: true})
@@ -626,8 +626,8 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
 const rootReducer = combineReducers({
   authRdc,
   homeRdc,
-	requestTopbarRdc,
-	requestSidebarRdc,
+	topbarRdc,
+	sidebarRdc,
 	blogRdc,
   categoryRdc,
   tagRdc,

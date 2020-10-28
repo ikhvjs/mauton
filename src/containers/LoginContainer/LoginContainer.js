@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { RECAPTCHAT_KEY } from '../../constants';
-
 import Login from '../../components/Login/Login';
-
 
 const mapStateToProps = (state) => {
     return {
@@ -13,20 +11,14 @@ const mapStateToProps = (state) => {
     }
   }
   
-const mapDispatchToProps = () => {
-    return {
-    }
-}
 
 class LoginContainer extends Component {
     render() {
-        const { isAuth } = this.props;
-        return isAuth 
-        ?<Redirect to='/' />
+        return this.props.isAuth ? <Redirect to='/' />
         :(<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHAT_KEY}>
             <Login />
-          </GoogleReCaptchaProvider>);
+          </GoogleReCaptchaProvider>)
     }
 }
   
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)
+export default connect(mapStateToProps, null)(LoginContainer)

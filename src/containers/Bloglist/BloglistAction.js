@@ -26,9 +26,9 @@ export const requestBloglistAct = (sidebarMenuPath) => (dispatch) =>{
 
 
 
-export const requestBloglistByClickAct = (sidebarMenuPath) => (dispatch) =>{
+export const requestBloglistByClickAct = (sidebarMenuID) => (dispatch) =>{
   dispatch({ type: REQUEST_BLOGLIST_C_PENDING })
-    fetch(`${API_PORT}/bloglist/path/${sidebarMenuPath}`, {
+    fetch(`${API_PORT}/bloglist/id/${sidebarMenuID}`, {
           method: 'get',
           headers: {'Content-Type': 'text/plain'}
         })
