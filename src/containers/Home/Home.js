@@ -1,29 +1,29 @@
 import React , { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { 
-	selectHomeIndexAct
-} from './HomeAction';
+// import { 
+// 	selectHomeIndexAct
+// } from './HomeAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
-import image1 from "../../img/cat1.png";
-import image2 from "../../img/cat2.png";
-import image3 from "../../img/cat3.png";
+// import image1 from "../../img/cat1.png";
+// import image2 from "../../img/cat2.png";
+// import image3 from "../../img/cat3.png";
 
-import {Carousel, Container} from "react-bootstrap";
+import { Container} from "react-bootstrap";
 
 
 const mapStateToProps = (state) => {
   return {
-    homeIndex:state.homeRdc.homeIndex
+    // homeIndex:state.homeRdc.homeIndex
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSelectHomeIndex:(selectedIndex) => 
-    	dispatch(selectHomeIndexAct(selectedIndex))
+    // onSelectHomeIndex:(selectedIndex) => 
+    // 	dispatch(selectHomeIndexAct(selectedIndex))
   }
 }
 
@@ -32,17 +32,18 @@ class Home extends Component  {
 
 	render(){
 
-		const {	homeIndex,
-				onSelectHomeIndex
-			} = this.props;
+		// const {	
+		// 		homeIndex,
+		// 		onSelectHomeIndex
+		// 	} = this.props;
 		
 		return (
 				<Container className="home_container">
-					<Carousel activeIndex={homeIndex} onSelect={onSelectHomeIndex}>
+					{/* <Carousel activeIndex={homeIndex} onSelect={onSelectHomeIndex}>
 				      <Carousel.Item>
 				        <img
 				          className="d-block w-100 img-fluid"
-				          src={image1}
+				        //   src={image1}
 				          alt="First slide"
 				        />
 				        <Carousel.Caption>
@@ -52,7 +53,7 @@ class Home extends Component  {
 				      <Carousel.Item>
 				        <img
 				          className="d-block w-100 img-fluid"
-				          src={image2}
+				        //   src={image2}
 				          alt="Second slide"
 				        />
 
@@ -63,7 +64,7 @@ class Home extends Component  {
 				      <Carousel.Item>
 				        <img
 				          className="d-block w-100 img-fluid"
-				          src={image3}
+				        //   src={image3}
 				          alt="Third slide"
 				        />
 
@@ -71,7 +72,7 @@ class Home extends Component  {
 				          <h1>Share your blog</h1>
 				        </Carousel.Caption>
 				      </Carousel.Item>
-				    </Carousel>
+				    </Carousel> */}
 			    </Container>
 		)
 	}

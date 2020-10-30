@@ -20,57 +20,100 @@ import {
   UPDATE_TAG_SUCCESS,
   UPDATE_TAG_FAILED ,
   CANCEL_UPDATE_TAG,
-  CLEAR_SEARCH_TAG 
+  CLEAR_SEARCH_TAG, 
+  ONCHANGE_CREATE_TAG_NAME,
+  ONCHANGE_CREATE_TAG_SEQ
  } from '../../constants';
 
-export const requestTagAct = () => (dispatch) => {
+export const requestTagAct = () => (dispatch,getState) => {
   dispatch({ type: REQUEST_TAG_PENDING })
-  fetch(`${API_PORT}/tag/get`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_TAG_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_TAG_FAILED, payload: error }))
-}
-
-export const requestTagByClickAct = () => (dispatch) => {
-  dispatch({ type: REQUEST_TAG_C_PENDING })
-  fetch(`${API_PORT}/tag/get`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_TAG_C_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_TAG_C_FAILED, payload: error }))
-}
-
-export const selectCreateTagAct = (event) => {
-  const tag ={};
-  const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
-  childrenNode.forEach((node)=>{
-    Object.assign(tag,  {[node.name]: node.value})
-    node.value = "";
+  fetch(`${API_PORT}/tag/request`, {
+          method: 'post',
+          headers: {'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${getState().authRdc.token}`
+                  },
+          body: JSON.stringify({
+            userID: getState().authRdc.userID
+          })
   })
-  
-  return tag;
+  .then(response => response.json())
+  .then(data => dispatch({ type: REQUEST_TAG_SUCCESS, payload: data }))
+  .catch(error => dispatch({ type: REQUEST_TAG_FAILED, payload: error }))
 }
 
-export const postTagAct = (tag) => (dispatch) =>{
-  dispatch({ type: POST_TAG_PENDING })
+export const requestTagByClickAct = () => (dispatch,getState) => {
+  dispatch({ type: REQUEST_TAG_C_PENDING })
+  fetch(`${API_PORT}/tag/request`, {
+          method: 'post',
+          headers: {'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${getState().authRdc.token}`
+                  },
+          body: JSON.stringify({
+            userID: getState().authRdc.userID
+          })
+  })
+  .then(response => response.json())
+  .then(data => dispatch({ type: REQUEST_TAG_C_SUCCESS, payload: data }))
+  .catch(error => dispatch({ type: REQUEST_TAG_C_FAILED, payload: error }))
+}
+
+// export const selectCreateTagAct = (event) => {
+//   const tag ={};
+//   const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
+//   childrenNode.forEach((node)=>{
+//     Object.assign(tag,  {[node.name]: node.value})
+//     node.value = "";
+//   })
+  
+//   return tag;
+// }
+
+export const postTagAct = (tag) => (dispatch,getState) =>{
+  let resStatus = "";
+  dispatch({ type: POST_TAG_PENDING });
   fetch(`${API_PORT}/tag/create`, {
         method: 'post',
         headers: {'Content-Type': 'application/json',
-                  'Accept': 'application/json'},
+                  'Accept': 'application/json',
+                  'Authorization': `Bearer ${getState().authRdc.token}`},
         body: JSON.stringify({
-          tag_name: tag.tag_name,
-          seq:tag.seq
+          tag_name: getState().tagRdc.createTagName,
+          seq: getState().tagRdc.createTagSeq,
+          user_id:getState().authRdc.userID
         })
       }
   )
   .then(response => response.json())
-  .then(data => dispatch({ type: POST_TAG_SUCCESS }))
-  .catch(error => dispatch({ type: POST_TAG_FAILED, payload: error }))
+  .then(res => {
+    console.log('tag config res.status',res.status);
+    resStatus = res.status
+    return res.json()
+  })
+  .then(res => {
+      switch (resStatus) {
+          case 200:
+              return dispatch({ type: POST_TAG_SUCCESS, payload:res})
+          case 400:
+              return dispatch({ type: POST_TAG_FAILED, payload: res.errMessage })
+          case 500:
+              return dispatch({ type: POST_TAG_FAILED, payload: res.errMessage })
+          default:
+              return dispatch({ type: POST_TAG_FAILED, payload: 'Exceptional Error, please try again' })
+      }
+  })
+  .catch( 
+    (error) =>{
+      if (!error.response) {
+        dispatch({ type: POST_TAG_FAILED, payload: 'Internal Server Error1, please try again' })
+      } else {
+        dispatch({ type: POST_TAG_FAILED, payload: 'Internal Server Error2, please try again' })
+      }
+    }
+  )
+  // .then(data => dispatch({ type: POST_TAG_SUCCESS }))
+  // .catch(error => dispatch({ type: POST_TAG_FAILED, payload: error }))
 
 }
 
@@ -142,7 +185,7 @@ const toggleDisplayTagButton = (selectedNode) => {
   // console.log('beforeUpdateCategoryAct notSelectedNodes',notSelectedNodes);
 
   const createTagInputNode = selectedNode.parentNode
-    .querySelector('tr[id="new"]').querySelectorAll('td > input');
+    .querySelector('tr[id="newTag"]').querySelectorAll('td > input');
 
   const selectedButtonNodes = selectedNode.querySelector("td[headers]").querySelectorAll('button[name]');
   // console.log('beforeUpdateCategoryAct selectedButtonNodes',selectedButtonNodes);
@@ -305,3 +348,41 @@ export const clearSearchTagAct = (event) => {
 
 }
 
+const checkTagName = (tagName) => {
+  if (!tagName){
+    return {isValid:false, errorMsg: `Please enter tag name`}
+  }else if (tagName.length > 20){
+    return {isValid:false, errorMsg: `Tag name cannot be more than 20 characters`}
+  }
+
+  return {isValid:true};
+}
+
+export const onchangeCreateTagNameAct = (event) => {
+  const tagName = event.target.value;
+  const result = checkTagName(tagName);
+  if (!result.isValid){
+    return { type: ONCHANGE_CREATE_TAG_NAME, payload: {tagName:tagName,isValid:false, errorMsg:result.errorMsg}};
+  }
+  return { type: ONCHANGE_CREATE_TAG_NAME, payload: {tagName:tagName,isValid:true}};
+}
+
+
+const checkTagSeq = (tagSeq) => {
+  if (!tagSeq){
+    return {isValid:false, errorMsg: `Please enter seq`}
+  }else if (isNaN(Number(tagSeq))){
+    return {isValid:false, errorMsg: `Seq must be a number`}
+  }
+
+  return {isValid:true};
+}
+
+export const onchangeCreateTagSeqAct = (event) => {
+  const tagSeq = event.target.value;
+  const result = checkTagSeq(tagSeq);
+  if (!result.isValid){
+    return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:false, errorMsg:result.errorMsg}};
+  }
+  return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:true}};
+}

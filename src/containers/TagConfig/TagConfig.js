@@ -4,7 +4,7 @@ import {
 	requestTagAct,
 	requestTagByClickAct,
 	postTagAct,
-	selectCreateTagAct,
+	// selectCreateTagAct,
 	deleteTagAct,
 	selectDeleteTagAct,
 	selectSearchTagAct,
@@ -13,18 +13,30 @@ import {
 	afterUpdateTagAct,
 	updateTagAct,
 	updateCancelTagAct,
-	clearSearchTagAct
+	clearSearchTagAct,
+	onchangeCreateTagNameAct,
+	onchangeCreateTagSeqAct
 } from './TagConfigAction';
 
-import { Table, Form, Button, Col, Row } from "react-bootstrap";
-import './TagConfig.css'
+import { Table, Form, Button, Col, Row,Spinner } from "react-bootstrap";
+import './TagConfig.css';
+
+import ValidationAlert from '../../components/ValidationAlert/ValidationAlert';
 
 
 const mapStateToProps = (state) => {
 	return {
 		tags: state.tagRdc.tags,
 		beforeUpdateTag: state.tagRdc.beforeUpdateTag,
-		isRefreshTagNeeded: state.tagRdc.isRefreshTagNeeded
+		isRefreshTagNeeded: state.tagRdc.isRefreshTagNeeded,
+		createTagName: state.tagRdc.createTagName,
+		isCreateTagNameValid: state.tagRdc.isCreateTagNameValid,
+		createTagNameErrMsg: state.tagRdc.createTagNameErrMsg,
+		createTagSeq: state.tagRdc.createTagSeq,
+		isCreateTagSeqValid: state.tagRdc.isCreateTagSeqValid,
+		createTagSeqErrMsg: state.tagRdc.createTagSeqErrMsg,
+		isPendingPostTag:state.tagRdc.isPendingPostTag,
+		error:state.tagRdc.error
 	}
 }
 
@@ -32,8 +44,12 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestTag: () =>
 			dispatch(requestTagAct()),
-		onCreateTag: (event) =>
-			dispatch(postTagAct(selectCreateTagAct(event))),
+		onChangeCreateTagName: (event)=>
+			dispatch(onchangeCreateTagNameAct(event)),
+		onChangeCreateTagSeq: (event)=>
+			dispatch(onchangeCreateTagSeqAct(event)),
+		onCreateTag: () =>
+			dispatch(postTagAct()),
 		onRequestTagByClick: () =>
 			dispatch(requestTagByClickAct()),
 		onDeleteTag: (event) =>
@@ -75,7 +91,17 @@ class TagConfig extends Component {
 			onSelectToUpdateTag,
 			onUpdateTag,
 			onCancelUpdateTag,
-			onClearSearchTag
+			onClearSearchTag,
+			createTagName,
+			onChangeCreateTagName,
+			createTagNameErrMsg,
+			isCreateTagNameValid,
+			createTagSeq,
+			onChangeCreateTagSeq,
+			createTagSeqErrMsg,
+			isCreateTagSeqValid,
+			isPendingPostTag
+
 		} = this.props;
 
 		return (
@@ -89,12 +115,15 @@ class TagConfig extends Component {
 							<Form.Control size="sm" name="tag_name"
 								type="text" placeholder="Enter Tag Name" />
 						</Col>
-						<Col name='button' xs={3} sm={2} className="mb-1 px-1">
+						<Col name='button' xs={3} sm={1} className="mb-1 px-1">
 							<Button size="sm" onClick={onSearchTag}>Search</Button>
 						</Col>
 						<Col name='button' xs={9} sm={2} className="mb-1 px-1">
 							<Button size="sm" variant="secondary" onClick={onClearSearchTag}>Clear</Button>
 						</Col>
+					</Row>
+					<Row>
+						
 					</Row>
 					<Row className="my-1 px-3">
 						<Table striped hover bordered size="sm" className="tag-table">
@@ -106,18 +135,56 @@ class TagConfig extends Component {
 								</tr>
 							</thead>
 							<tbody>
-								<tr id='new'>
-									<td><Form.Control size="sm" name="tag_name"
-										type="text" placeholder="Enter Category Name" /></td>
-									<td><Form.Control size="sm" name="seq"
-										type="text" placeholder="Enter seq" /></td>
+								<tr id='newTag'>
+									<td>
+										<Form.Control size="sm" name="tag_name" 
+										isValid={isCreateTagNameValid} 
+										isInvalid={(isCreateTagNameValid===null)?null:!isCreateTagNameValid}
+										type="text" placeholder="Enter Tag Name (Max. length: 20)"
+										value={createTagName}
+										onChange={onChangeCreateTagName}/>
+										<Form.Control.Feedback type="invalid">
+										 {createTagNameErrMsg}
+										</Form.Control.Feedback>
+										<Form.Control.Feedback type="valid">
+										 looks good
+										</Form.Control.Feedback>
+									</td>
+									<td>
+										<Form.Control size="sm" name="seq"
+										isValid={isCreateTagSeqValid} 
+										isInvalid={(isCreateTagSeqValid===null)?null:!isCreateTagSeqValid}
+										type="text" placeholder="Enter seq" 
+										value={createTagSeq}
+										onChange={onChangeCreateTagSeq}/>
+										<Form.Control.Feedback type="invalid">
+										 {createTagSeqErrMsg}
+										</Form.Control.Feedback>
+										<Form.Control.Feedback type="valid">
+										 looks good
+										</Form.Control.Feedback>
+									</td>
 									<td headers='button'>
-										<Button 
-											className="mx-1" 
-											name="create" onClick={onCreateTag}
-											variant="primary" size="sm">
-											Create
-						</Button>
+										{isPendingPostTag?
+											(<div className="d-flex align-items-center">
+												<Spinner
+													as="span"
+													animation="grow"
+													size="sm"
+													role="status"
+													aria-hidden="true"
+											  	/>
+											  	Loading...
+											</div>)
+											:(<Button 
+												className="mx-1" 
+												name="create" onClick={onCreateTag}
+												variant="primary" size="sm"
+												disabled={!isCreateTagNameValid||!isCreateTagSeqValid}>
+												Create
+											</Button>)
+										}
+										<ValidationAlert/>
 									</td>
 								</tr>
 								{tags.map((tag) => {
@@ -160,5 +227,5 @@ class TagConfig extends Component {
 
 }
 
-// export default CategoryConfig;
+
 export default connect(mapStateToProps, mapDispatchToProps)(TagConfig)

@@ -11,7 +11,7 @@ const initialStateAuth= {
   isPendingPostUser: false,
   isPendingGetUser: false,
   token: null,
-  userID: null,
+  userID: 24,
   isShowAlert:false,
   alertMessage:null,
   captchaToken:null
@@ -115,7 +115,7 @@ export const homeRdc = (state=initialStateHome, action={}) => {
 
 const initialStateTopbar = {
   topbars: [],
-  isPendingTopbar: true
+  isPendingTopbar: false
 }
 
 export const topbarRdc = (state=initialStateTopbar, action={}) => {
@@ -125,7 +125,7 @@ export const topbarRdc = (state=initialStateTopbar, action={}) => {
     case constants.REQUEST_TOPBAR_SUCCESS:
       return Object.assign({}, state, {topbars: action.payload, isPendingTopbar: false})
     case constants.REQUEST_TOPBAR_FAILED:
-      return Object.assign({}, state, {error: action.payload})
+      return Object.assign({}, state, {error: action.payload, isPendingTopbar: false})
     default:
       return state
   }
@@ -403,11 +403,14 @@ export const categoryRdc = (state=initialStateCategory, action={}) => {
 const initialStateTag= {
   tags: [],
   beforeUpdateTag:[],
-  isRefreshTagNeeded:false
-  // isPendingRequestCategory: false,
-  // isPendingRequestCategoryByClick: false,
-  // isPendingDeleteCategory:false,
-  // isPendingPostCategory:false
+  isRefreshTagNeeded:false,
+  createTagName:"",
+  isCreateTagNameValid:null,
+  createTagNameErrMsg:"",
+  createTagSeq:"",
+  isCreateTagSeqValid:null,
+  createTagTagErrMsg:"",
+  isPendingPostTag:false
 }
 
 export const tagRdc = (state=initialStateTag, action={}) => {
@@ -425,11 +428,17 @@ export const tagRdc = (state=initialStateTag, action={}) => {
   case constants.REQUEST_TAG_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case constants.POST_TAG_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isPendingPostTag:true})
   case constants.POST_TAG_SUCCESS:
-    return Object.assign({}, state, {isRefreshTagNeeded:true})
+    return Object.assign({}, state, 
+      {isRefreshTagNeeded:true,isPendingPostTag:false,
+        isCreateTagNameValid:null,createTagName:"",
+        isCreateTagSeqValid:null, createTagSeq:""})
   case constants.POST_TAG_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+    return Object.assign({}, state, 
+      {error: action.payload,isPendingPostTag:false,
+        isCreateTagNameValid:null,createTagName:"",
+        isCreateTagSeqValid:null,createTagSeq:""})
   case constants.DELETE_TAG_PENDING:
     return Object.assign({}, state, {})
   case constants.DELETE_TAG_SUCCESS:
@@ -454,6 +463,28 @@ export const tagRdc = (state=initialStateTag, action={}) => {
     return Object.assign({}, state, {isRefreshTagNeeded:true})
   case constants.CLEAR_SEARCH_TAG:
     return Object.assign({}, state, {isRefreshTagNeeded:true})
+  case constants.ONCHANGE_CREATE_TAG_NAME:
+    switch(action.payload.isValid){
+      case false:
+        return Object.assign({}, state, 
+          {createTagName:action.payload.tagName,createTagNameErrMsg:action.payload.errorMsg,isCreateTagNameValid:false})
+      case true:
+        return Object.assign({}, state, 
+          {createTagName:action.payload.tagName,isCreateTagNameValid:true})
+      default:
+        return state
+    }
+  case constants.ONCHANGE_CREATE_TAG_SEQ:
+    switch(action.payload.isValid){
+      case false:
+        return Object.assign({}, state, 
+          {createTagSeq:action.payload.tagSeq,createTagSeqErrMsg:action.payload.errorMsg,isCreateTagSeqValid:false})
+      case true:
+        return Object.assign({}, state, 
+          {createTagSeq:action.payload.tagSeq,isCreateTagSeqValid:true})
+      default:
+        return state
+    }
   default:
     return state
   }
