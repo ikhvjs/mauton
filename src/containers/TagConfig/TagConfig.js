@@ -15,7 +15,8 @@ import {
 	updateCancelTagAct,
 	clearSearchTagAct,
 	onchangeCreateTagNameAct,
-	onchangeCreateTagSeqAct
+	onchangeCreateTagSeqAct,
+	clearCreateTagAct
 } from './TagConfigAction';
 
 import { Table, Form, Button, Col, Row,Spinner } from "react-bootstrap";
@@ -63,7 +64,9 @@ const mapDispatchToProps = (dispatch) => {
 		onCancelUpdateTag: (event) =>
 			dispatch(updateCancelTagAct(event)),
 		onClearSearchTag: (event) =>
-			dispatch(clearSearchTagAct(event))
+			dispatch(clearSearchTagAct(event)),
+		onClearCreateTag: ()=>
+			dispatch(clearCreateTagAct())
 
 	}
 }
@@ -86,6 +89,7 @@ class TagConfig extends Component {
 
 		const { tags,
 			onCreateTag,
+			onClearCreateTag,
 			onDeleteTag,
 			onSearchTag,
 			onSelectToUpdateTag,
@@ -176,13 +180,22 @@ class TagConfig extends Component {
 											  	/>
 											  	Loading...
 											</div>)
-											:(<Button 
-												className="mx-1" 
-												name="create" onClick={onCreateTag}
-												variant="primary" size="sm"
-												disabled={!isCreateTagNameValid||!isCreateTagSeqValid}>
-												Create
-											</Button>)
+											:(<div>
+												<Button 
+													className="mb-1 mx-1" 
+													name="create" onClick={onCreateTag}
+													variant="primary" size="sm"
+													disabled={!isCreateTagNameValid||!isCreateTagSeqValid}>
+													Create
+												</Button>
+												<Button 
+													className="mb-1 mx-1" 
+													name="clear-create" onClick={onClearCreateTag}
+													variant="secondary"  size="sm">
+														Clear
+												</Button>
+											</div>
+											)
 										}
 										<ValidationAlert/>
 									</td>

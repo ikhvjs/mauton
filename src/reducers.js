@@ -409,7 +409,7 @@ const initialStateTag= {
   createTagNameErrMsg:"",
   createTagSeq:"",
   isCreateTagSeqValid:null,
-  createTagTagErrMsg:"",
+  createTagSeqErrMsg:"",
   isPendingPostTag:false
 }
 
@@ -427,6 +427,10 @@ export const tagRdc = (state=initialStateTag, action={}) => {
     return Object.assign({}, state, {tags: action.payload})
   case constants.REQUEST_TAG_C_FAILED:
     return Object.assign({}, state, {error: action.payload})
+  case constants.CLEAR_CREATE_TAG:
+    return Object.assign({}, state, 
+      {isCreateTagNameValid:null,createTagName:"",createTagNameErrMsg:"",
+      isCreateTagSeqValid:null, createTagSeq:"",createTagSeqErrMsg:""})
   case constants.POST_TAG_PENDING:
     return Object.assign({}, state, {isPendingPostTag:true})
   case constants.POST_TAG_SUCCESS:
@@ -435,10 +439,39 @@ export const tagRdc = (state=initialStateTag, action={}) => {
         isCreateTagNameValid:null,createTagName:"",
         isCreateTagSeqValid:null, createTagSeq:""})
   case constants.POST_TAG_FAILED:
-    return Object.assign({}, state, 
-      {error: action.payload,isPendingPostTag:false,
-        isCreateTagNameValid:null,createTagName:"",
-        isCreateTagSeqValid:null,createTagSeq:""})
+    switch(action.payload.Code){
+      case 'TAG_MANDATORY_FIELD':
+        return Object.assign({}, state, 
+          { isPendingPostTag:false,
+            isCreateTagNameValid:false, createTagNameErrMsg:action.payload.errMessage,
+            isCreateTagSeqValid:false, createTagSeqErrMsg:action.payload.errMessage
+          }) 
+      case 'INTERNAL_SERVER_ERROR_TAG_CHECK_DUP':
+        return Object.assign({}, state, 
+          { isPendingPostTag:false,
+            isCreateTagNameValid:false, createTagNameErrMsg:action.payload.errMessage,
+            isCreateTagSeqValid:false, createTagSeqErrMsg:action.payload.errMessage
+          }) 
+      case 'TAG_DUPLICATE_TAG_NAME':
+        return Object.assign({}, state, 
+          { isPendingPostTag:false,
+            isCreateTagNameValid:false, createTagNameErrMsg:action.payload.errMessage
+          }) 
+      case 'INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          { isPendingPostTag:false,
+            isCreateTagNameValid:false, createTagNameErrMsg:action.payload.errMessage,
+            isCreateTagSeqValid:false, createTagSeqErrMsg:action.payload.errMessage
+          }) 
+      default:
+        return Object.assign({}, state, 
+          {error: action.payload,
+            isPendingPostTag:false,
+            createTagName:"",
+            createTagSeq:"",
+            isCreateTagNameValid:null,createTagNameErrMsg:"",
+            isCreateTagSeqValid:null,createTagSeqErrMsg:""}) 
+    }
   case constants.DELETE_TAG_PENDING:
     return Object.assign({}, state, {})
   case constants.DELETE_TAG_SUCCESS:

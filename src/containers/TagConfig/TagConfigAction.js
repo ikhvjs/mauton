@@ -22,7 +22,8 @@ import {
   CANCEL_UPDATE_TAG,
   CLEAR_SEARCH_TAG, 
   ONCHANGE_CREATE_TAG_NAME,
-  ONCHANGE_CREATE_TAG_SEQ
+  ONCHANGE_CREATE_TAG_SEQ,
+  CLEAR_CREATE_TAG
  } from '../../constants';
 
 export const requestTagAct = () => (dispatch,getState) => {
@@ -70,8 +71,12 @@ export const requestTagByClickAct = () => (dispatch,getState) => {
 //   return tag;
 // }
 
+export const clearCreateTagAct = () => {
+  return ({type: CLEAR_CREATE_TAG});
+}
+
 export const postTagAct = (tag) => (dispatch,getState) =>{
-  let resStatus = "";
+  let resStatus;
   dispatch({ type: POST_TAG_PENDING });
   fetch(`${API_PORT}/tag/create`, {
         method: 'post',
@@ -85,9 +90,7 @@ export const postTagAct = (tag) => (dispatch,getState) =>{
         })
       }
   )
-  .then(response => response.json())
   .then(res => {
-    console.log('tag config res.status',res.status);
     resStatus = res.status
     return res.json()
   })
@@ -96,25 +99,16 @@ export const postTagAct = (tag) => (dispatch,getState) =>{
           case 200:
               return dispatch({ type: POST_TAG_SUCCESS, payload:res})
           case 400:
-              return dispatch({ type: POST_TAG_FAILED, payload: res.errMessage })
+              return dispatch({ type: POST_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           case 500:
-              return dispatch({ type: POST_TAG_FAILED, payload: res.errMessage })
+              return dispatch({ type: POST_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           default:
-              return dispatch({ type: POST_TAG_FAILED, payload: 'Exceptional Error, please try again' })
+              return dispatch({ type: POST_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(TAG1), please try again'} })
       }
   })
   .catch( 
-    (error) =>{
-      if (!error.response) {
-        dispatch({ type: POST_TAG_FAILED, payload: 'Internal Server Error1, please try again' })
-      } else {
-        dispatch({ type: POST_TAG_FAILED, payload: 'Internal Server Error2, please try again' })
-      }
-    }
+    () =>dispatch({ type: POST_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(TAG2), please try again'} })
   )
-  // .then(data => dispatch({ type: POST_TAG_SUCCESS }))
-  // .catch(error => dispatch({ type: POST_TAG_FAILED, payload: error }))
-
 }
 
 export const selectDeleteTagAct = (event) => {
@@ -150,14 +144,17 @@ export const selectSearchTagAct = (event) => {
 
 }
 
-export const searchTagAct = (tag) => (dispatch) =>{
+export const searchTagAct = (tag) => (dispatch,getState) =>{
   dispatch({ type: SEARCH_TAG_PENDING })
   fetch(`${API_PORT}/tag/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-                  'Accept': 'application/json'},
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${getState().authRdc.token}`
+                  },
         body: JSON.stringify({
-          tag_name: tag.tag_name
+          tag_name: tag.tag_name,
+          user_id:getState().authRdc.userID
         })
       }
   )
