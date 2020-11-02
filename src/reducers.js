@@ -410,7 +410,9 @@ const initialStateTag= {
   createTagSeq:"",
   isCreateTagSeqValid:null,
   createTagSeqErrMsg:"",
-  isPendingPostTag:false
+  isPendingPostTag:false,
+  isShowCreateTag:false,
+  isDeleteTagPending:false
 }
 
 export const tagRdc = (state=initialStateTag, action={}) => {
@@ -435,9 +437,9 @@ export const tagRdc = (state=initialStateTag, action={}) => {
     return Object.assign({}, state, {isPendingPostTag:true})
   case constants.POST_TAG_SUCCESS:
     return Object.assign({}, state, 
-      {isRefreshTagNeeded:true,isPendingPostTag:false,
-        isCreateTagNameValid:null,createTagName:"",
-        isCreateTagSeqValid:null, createTagSeq:""})
+      {isRefreshTagNeeded:true,isPendingPostTag:false,isShowCreateTag:false,
+        isCreateTagNameValid:null,createTagName:"",createTagNameErrMsg:"",
+        isCreateTagSeqValid:null, createTagSeq:"",createTagSeqErrMsg:""})
   case constants.POST_TAG_FAILED:
     switch(action.payload.Code){
       case 'TAG_MANDATORY_FIELD':
@@ -473,11 +475,28 @@ export const tagRdc = (state=initialStateTag, action={}) => {
             isCreateTagSeqValid:null,createTagSeqErrMsg:""}) 
     }
   case constants.DELETE_TAG_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isDeleteTagPending:true})
   case constants.DELETE_TAG_SUCCESS:
-    return Object.assign({}, state, {isRefreshTagNeeded:true})
+    return Object.assign({}, state, {isDeleteTagPending:false, isRefreshTagNeeded:true})
   case constants.DELETE_TAG_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_TAG_DELETE':
+        return Object.assign({}, state, 
+          { isDeleteTagPending:false,
+            deleteTagErrMsg:action.payload.errMessage
+          }) 
+      case 'TAG_FOREIGN_KEY_EXIST':
+        return Object.assign({}, state, 
+          { isDeleteTagPending:false,
+            deleteTagErrMsg:action.payload.errMessage
+          }) 
+      default:
+        return Object.assign({}, state, 
+          { error: action.payload,
+            isDeleteTagPending:false,
+            deleteTagErrMsg:"Internal Server Error, please try again"
+          })
+    }
   case constants.SEARCH_TAG_PENDING:
     return Object.assign({}, state, {})
   case constants.SEARCH_TAG_SUCCESS:
@@ -518,6 +537,10 @@ export const tagRdc = (state=initialStateTag, action={}) => {
       default:
         return state
     }
+  case constants.SELECT_CREATE_TAG:
+    return Object.assign({}, state,  {isShowCreateTag:true})
+  case constants.CLOSE_TAG_CREATE:
+    return Object.assign({}, state,  {isShowCreateTag:false})
   default:
     return state
   }
@@ -683,7 +706,6 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
     return state
   }
 }
-
 
 
 

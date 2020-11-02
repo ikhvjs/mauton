@@ -9,7 +9,6 @@ import {
 	selectTagModalAct
 } from './TagModalAction';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {Table, Form, Button, Col, Modal} from "react-bootstrap";
 // import './TagModal.css'
 

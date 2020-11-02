@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import {
 	requestTagAct,
 	requestTagByClickAct,
-	postTagAct,
-	// selectCreateTagAct,
 	deleteTagAct,
-	selectDeleteTagAct,
 	selectSearchTagAct,
 	searchTagAct,
 	beforeUpdateTagAct,
@@ -14,30 +11,20 @@ import {
 	updateTagAct,
 	updateCancelTagAct,
 	clearSearchTagAct,
-	onchangeCreateTagNameAct,
-	onchangeCreateTagSeqAct,
-	clearCreateTagAct
+	selectCreateTagAct
 } from './TagConfigAction';
 
-import { Table, Form, Button, Col, Row,Spinner } from "react-bootstrap";
+import { Table, Form, Button, Col, Row } from "react-bootstrap";
 import './TagConfig.css';
 
-import ValidationAlert from '../../components/ValidationAlert/ValidationAlert';
+import TagConfigCreate from './TagConfigCreate';
 
 
 const mapStateToProps = (state) => {
 	return {
 		tags: state.tagRdc.tags,
 		beforeUpdateTag: state.tagRdc.beforeUpdateTag,
-		isRefreshTagNeeded: state.tagRdc.isRefreshTagNeeded,
-		createTagName: state.tagRdc.createTagName,
-		isCreateTagNameValid: state.tagRdc.isCreateTagNameValid,
-		createTagNameErrMsg: state.tagRdc.createTagNameErrMsg,
-		createTagSeq: state.tagRdc.createTagSeq,
-		isCreateTagSeqValid: state.tagRdc.isCreateTagSeqValid,
-		createTagSeqErrMsg: state.tagRdc.createTagSeqErrMsg,
-		isPendingPostTag:state.tagRdc.isPendingPostTag,
-		error:state.tagRdc.error
+		isRefreshTagNeeded: state.tagRdc.isRefreshTagNeeded
 	}
 }
 
@@ -45,19 +32,13 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestTag: () =>
 			dispatch(requestTagAct()),
-		onChangeCreateTagName: (event)=>
-			dispatch(onchangeCreateTagNameAct(event)),
-		onChangeCreateTagSeq: (event)=>
-			dispatch(onchangeCreateTagSeqAct(event)),
-		onCreateTag: () =>
-			dispatch(postTagAct()),
 		onRequestTagByClick: () =>
 			dispatch(requestTagByClickAct()),
 		onDeleteTag: (event) =>
-			dispatch(deleteTagAct(selectDeleteTagAct(event))),
+			dispatch(deleteTagAct(event)),
 		onSearchTag: (event) =>
 			dispatch(searchTagAct(selectSearchTagAct(event))),
-		onSelectToUpdateTag: (event) =>
+		onSelectUpdateTag: (event) =>
 			dispatch(beforeUpdateTagAct(event)),
 		onUpdateTag: (event) =>
 			dispatch(updateTagAct(afterUpdateTagAct(event))),
@@ -65,8 +46,9 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(updateCancelTagAct(event)),
 		onClearSearchTag: (event) =>
 			dispatch(clearSearchTagAct(event)),
-		onClearCreateTag: ()=>
-			dispatch(clearCreateTagAct())
+		onSelectCreateTag: () => {
+			dispatch(selectCreateTagAct())
+		}
 
 	}
 }
@@ -78,7 +60,7 @@ class TagConfig extends Component {
 		this.props.onRequestTag();
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate() {
 		if (this.props.isRefreshTagNeeded === true) {
 			this.props.onRequestTagByClick();
 		}
@@ -88,48 +70,41 @@ class TagConfig extends Component {
 	render() {
 
 		const { tags,
-			onCreateTag,
-			onClearCreateTag,
 			onDeleteTag,
 			onSearchTag,
-			onSelectToUpdateTag,
+			onSelectUpdateTag,
 			onUpdateTag,
 			onCancelUpdateTag,
 			onClearSearchTag,
-			createTagName,
-			onChangeCreateTagName,
-			createTagNameErrMsg,
-			isCreateTagNameValid,
-			createTagSeq,
-			onChangeCreateTagSeq,
-			createTagSeqErrMsg,
-			isCreateTagSeqValid,
-			isPendingPostTag
-
+			onSelectCreateTag
 		} = this.props;
 
 		return (
 			<Row id="tag-config-container">
+				<TagConfigCreate/>
 				<Col id="tag-config-wrapper">
 					<Row className="mb-1 px-3">
-						<h3>Tag</h3>
+						<Col>
+							<h3>Tag</h3>
+						</Col>
 					</Row>
 					<Row className="mb-1 px-3">
-						<Col sm={4} className="mb-1 px-1">
+						<Col xs={8} sm={4} md={5} className="mb-1">
 							<Form.Control size="sm" name="tag_name"
 								type="text" placeholder="Enter Tag Name" />
 						</Col>
-						<Col name='button' xs={3} sm={1} className="mb-1 px-1">
+						<Col name='button' xs={2} sm={2} md={1}>
 							<Button size="sm" onClick={onSearchTag}>Search</Button>
 						</Col>
-						<Col name='button' xs={9} sm={2} className="mb-1 px-1">
+						<Col name='button' xs={2} sm={2} md={2}>
 							<Button size="sm" variant="secondary" onClick={onClearSearchTag}>Clear</Button>
 						</Col>
-					</Row>
-					<Row>
-						
+						<Col xs={2} sm={2} md={1}>
+							<Button name="create"  variant="success" size="sm" onClick={onSelectCreateTag}> Create </Button>
+						</Col>
 					</Row>
 					<Row className="my-1 px-3">
+						<Col>
 						<Table striped hover bordered size="sm" className="tag-table">
 							<thead>
 								<tr>
@@ -139,76 +114,15 @@ class TagConfig extends Component {
 								</tr>
 							</thead>
 							<tbody>
-								<tr id='newTag'>
-									<td>
-										<Form.Control size="sm" name="tag_name" 
-										isValid={isCreateTagNameValid} 
-										isInvalid={(isCreateTagNameValid===null)?null:!isCreateTagNameValid}
-										type="text" placeholder="Enter Tag Name (Max. length: 20)"
-										value={createTagName}
-										onChange={onChangeCreateTagName}/>
-										<Form.Control.Feedback type="invalid">
-										 {createTagNameErrMsg}
-										</Form.Control.Feedback>
-										<Form.Control.Feedback type="valid">
-										 looks good
-										</Form.Control.Feedback>
-									</td>
-									<td>
-										<Form.Control size="sm" name="seq"
-										isValid={isCreateTagSeqValid} 
-										isInvalid={(isCreateTagSeqValid===null)?null:!isCreateTagSeqValid}
-										type="text" placeholder="Enter seq" 
-										value={createTagSeq}
-										onChange={onChangeCreateTagSeq}/>
-										<Form.Control.Feedback type="invalid">
-										 {createTagSeqErrMsg}
-										</Form.Control.Feedback>
-										<Form.Control.Feedback type="valid">
-										 looks good
-										</Form.Control.Feedback>
-									</td>
-									<td headers='button'>
-										{isPendingPostTag?
-											(<div className="d-flex align-items-center">
-												<Spinner
-													as="span"
-													animation="grow"
-													size="sm"
-													role="status"
-													aria-hidden="true"
-											  	/>
-											  	Loading...
-											</div>)
-											:(<div>
-												<Button 
-													className="mb-1 mx-1" 
-													name="create" onClick={onCreateTag}
-													variant="primary" size="sm"
-													disabled={!isCreateTagNameValid||!isCreateTagSeqValid}>
-													Create
-												</Button>
-												<Button 
-													className="mb-1 mx-1" 
-													name="clear-create" onClick={onClearCreateTag}
-													variant="secondary"  size="sm">
-														Clear
-												</Button>
-											</div>
-											)
-										}
-										<ValidationAlert/>
-									</td>
-								</tr>
 								{tags.map((tag) => {
 									return (
-										<tr id={tag.tag_id} key={tag.tag_id}>
-											<td name='tag_name'>{tag.tag_name}</td>
-											<td name='seq'>{tag.seq}</td>
-											<td headers='button'>
+										<tr tag-id={tag.tag_id} key={tag.tag_id}>
+											<td name='tag-name'>{tag.tag_name}</td>
+											<td name='tag-seq'>{tag.seq}</td>
+											<td name='tag-action-button'>
 												<Button className="mb-1 mx-1" 
 													variant="success" name="update"
-													size="sm" onClick={onSelectToUpdateTag}>
+													size="sm" onClick={onSelectUpdateTag}>
 													Update
 												</Button>
 												<Button className="mb-1 mx-1"
@@ -216,14 +130,14 @@ class TagConfig extends Component {
 													size="sm" onClick={onDeleteTag}>
 													Delete
 												</Button>
-												<Button className="hidden-button mb-1 mx-1" variant="primary" name="save"
+												{/* <Button className="hidden-button mb-1 mx-1" variant="primary" name="save"
 													size="sm" onClick={onUpdateTag}>
 													Save
 												</Button>
 												<Button className="hidden-button mb-1 mx-1" variant="secondary" name="cancel"
 													size="sm" onClick={onCancelUpdateTag}>
 													Cancel
-												</Button>
+												</Button> */}
 											</td>
 										</tr>
 									)
@@ -231,6 +145,7 @@ class TagConfig extends Component {
 								}
 							</tbody>
 						</Table>
+						</Col>
 					</Row>
 				</Col>
 			</Row>

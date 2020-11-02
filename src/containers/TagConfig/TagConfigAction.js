@@ -6,9 +6,6 @@ import {
   REQUEST_TAG_C_PENDING,
   REQUEST_TAG_C_SUCCESS,
   REQUEST_TAG_C_FAILED,
-  POST_TAG_PENDING,
-  POST_TAG_SUCCESS,
-  POST_TAG_FAILED,
   DELETE_TAG_PENDING,
   DELETE_TAG_SUCCESS,
   DELETE_TAG_FAILED,
@@ -23,7 +20,7 @@ import {
   CLEAR_SEARCH_TAG, 
   ONCHANGE_CREATE_TAG_NAME,
   ONCHANGE_CREATE_TAG_SEQ,
-  CLEAR_CREATE_TAG
+  SELECT_CREATE_TAG
  } from '../../constants';
 
 export const requestTagAct = () => (dispatch,getState) => {
@@ -71,22 +68,20 @@ export const requestTagByClickAct = () => (dispatch,getState) => {
 //   return tag;
 // }
 
-export const clearCreateTagAct = () => {
-  return ({type: CLEAR_CREATE_TAG});
-}
 
-export const postTagAct = (tag) => (dispatch,getState) =>{
+export const deleteTagAct = (event) => (dispatch,getState) =>{
+
+  const tagID = event.target.parentNode.parentNode.getAttribute('tag-id');
   let resStatus;
-  dispatch({ type: POST_TAG_PENDING });
-  fetch(`${API_PORT}/tag/create`, {
-        method: 'post',
+  dispatch({ type: DELETE_TAG_PENDING })
+  fetch(`${API_PORT}/tag/delete`, {
+        method: 'delete',
         headers: {'Content-Type': 'application/json',
                   'Accept': 'application/json',
                   'Authorization': `Bearer ${getState().authRdc.token}`},
         body: JSON.stringify({
-          tag_name: getState().tagRdc.createTagName,
-          seq: getState().tagRdc.createTagSeq,
-          user_id:getState().authRdc.userID
+          tag_id: tagID,
+          userID: getState().authRdc.userID 
         })
       }
   )
@@ -97,38 +92,22 @@ export const postTagAct = (tag) => (dispatch,getState) =>{
   .then(res => {
       switch (resStatus) {
           case 200:
-              return dispatch({ type: POST_TAG_SUCCESS, payload:res})
+              return dispatch({ type: DELETE_TAG_SUCCESS})
           case 400:
-              return dispatch({ type: POST_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+              return dispatch({ type: DELETE_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           case 500:
-              return dispatch({ type: POST_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+              return dispatch({ type: DELETE_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           default:
-              return dispatch({ type: POST_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(TAG1), please try again'} })
+              return dispatch({ type: DELETE_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-DELETE-1), please try again'} })
       }
   })
   .catch( 
-    () =>dispatch({ type: POST_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(TAG2), please try again'} })
+    () =>dispatch({ type: DELETE_TAG_FAILED, 
+      payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-DELETE-2), please try again'} })
   )
-}
-
-export const selectDeleteTagAct = (event) => {
-  return event.target.parentNode.parentNode.id;
-}
-
-export const deleteTagAct = (tagID) => (dispatch) =>{
-  dispatch({ type: DELETE_TAG_PENDING })
-  fetch(`${API_PORT}/tag/delete`, {
-        method: 'delete',
-        headers: {'Content-Type': 'application/json',
-                  'Accept': 'application/json'},
-        body: JSON.stringify({
-          tag_id: tagID
-        })
-      }
-  )
-  .then(response => response.json())
-  .then(data => dispatch({ type: DELETE_TAG_SUCCESS}))
-  .catch(error => dispatch({ type: DELETE_TAG_FAILED, payload: error }))
+  // .then(response => response.json())
+  // .then(data => dispatch({ type: DELETE_TAG_SUCCESS}))
+  // .catch(error => dispatch({ type: DELETE_TAG_FAILED, payload: error }))
 }
 
 
@@ -382,4 +361,8 @@ export const onchangeCreateTagSeqAct = (event) => {
     return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:false, errorMsg:result.errorMsg}};
   }
   return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:true}};
+}
+
+export const selectCreateTagAct = () => {
+  return {type:SELECT_CREATE_TAG}
 }
