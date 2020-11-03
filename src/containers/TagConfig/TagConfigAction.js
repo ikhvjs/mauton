@@ -6,24 +6,21 @@ import {
   REQUEST_TAG_C_PENDING,
   REQUEST_TAG_C_SUCCESS,
   REQUEST_TAG_C_FAILED,
-  DELETE_TAG_PENDING,
-  DELETE_TAG_SUCCESS,
-  DELETE_TAG_FAILED,
   SEARCH_TAG_PENDING,
   SEARCH_TAG_SUCCESS,
   SEARCH_TAG_FAILED,
+  CLEAR_SEARCH_TAG, 
+  SELECT_CREATE_TAG,
+  SELECT_DELETE_TAG,
   SELECT_UPDATE_TAG,
   UPDATE_TAG_PENDING,
   UPDATE_TAG_SUCCESS,
   UPDATE_TAG_FAILED ,
-  CANCEL_UPDATE_TAG,
-  CLEAR_SEARCH_TAG, 
-  ONCHANGE_CREATE_TAG_NAME,
-  ONCHANGE_CREATE_TAG_SEQ,
-  SELECT_CREATE_TAG
+  CANCEL_UPDATE_TAG
  } from '../../constants';
 
 export const requestTagAct = () => (dispatch,getState) => {
+  let resStatus;
   dispatch({ type: REQUEST_TAG_PENDING })
   fetch(`${API_PORT}/tag/request`, {
           method: 'post',
@@ -35,12 +32,33 @@ export const requestTagAct = () => (dispatch,getState) => {
             userID: getState().authRdc.userID
           })
   })
-  .then(response => response.json())
-  .then(data => dispatch({ type: REQUEST_TAG_SUCCESS, payload: data }))
-  .catch(error => dispatch({ type: REQUEST_TAG_FAILED, payload: error }))
+  .then(res => {
+    resStatus = res.status
+    return res.json()
+  })
+  .then(res => {
+      switch (resStatus) {
+          case 200:
+              return dispatch({ type: REQUEST_TAG_SUCCESS, payload: res})
+          // case 400:
+          //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+          case 500:
+              return dispatch({ type: REQUEST_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+          default:
+              return dispatch({ type: REQUEST_TAG_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-REQUEST-1), please try again'} })
+      }
+  })
+  .catch( 
+    () =>dispatch({ type: REQUEST_TAG_FAILED, 
+      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-REQUEST-2), please try again'} })
+  )
+  // .then(response => response.json())
+  // .then(data => dispatch({ type: REQUEST_TAG_SUCCESS, payload: data }))
+  // .catch(error => dispatch({ type: REQUEST_TAG_FAILED, payload: error }))
 }
 
 export const requestTagByClickAct = () => (dispatch,getState) => {
+  let resStatus;
   dispatch({ type: REQUEST_TAG_C_PENDING })
   fetch(`${API_PORT}/tag/request`, {
           method: 'post',
@@ -52,39 +70,6 @@ export const requestTagByClickAct = () => (dispatch,getState) => {
             userID: getState().authRdc.userID
           })
   })
-  .then(response => response.json())
-  .then(data => dispatch({ type: REQUEST_TAG_C_SUCCESS, payload: data }))
-  .catch(error => dispatch({ type: REQUEST_TAG_C_FAILED, payload: error }))
-}
-
-// export const selectCreateTagAct = (event) => {
-//   const tag ={};
-//   const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
-//   childrenNode.forEach((node)=>{
-//     Object.assign(tag,  {[node.name]: node.value})
-//     node.value = "";
-//   })
-  
-//   return tag;
-// }
-
-
-export const deleteTagAct = (event) => (dispatch,getState) =>{
-
-  const tagID = event.target.parentNode.parentNode.getAttribute('tag-id');
-  let resStatus;
-  dispatch({ type: DELETE_TAG_PENDING })
-  fetch(`${API_PORT}/tag/delete`, {
-        method: 'delete',
-        headers: {'Content-Type': 'application/json',
-                  'Accept': 'application/json',
-                  'Authorization': `Bearer ${getState().authRdc.token}`},
-        body: JSON.stringify({
-          tag_id: tagID,
-          userID: getState().authRdc.userID 
-        })
-      }
-  )
   .then(res => {
     resStatus = res.status
     return res.json()
@@ -92,22 +77,22 @@ export const deleteTagAct = (event) => (dispatch,getState) =>{
   .then(res => {
       switch (resStatus) {
           case 200:
-              return dispatch({ type: DELETE_TAG_SUCCESS})
-          case 400:
-              return dispatch({ type: DELETE_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+              return dispatch({ type: REQUEST_TAG_C_SUCCESS, payload: res})
+          // case 400:
+          //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           case 500:
-              return dispatch({ type: DELETE_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+              return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           default:
-              return dispatch({ type: DELETE_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-DELETE-1), please try again'} })
+              return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-REQUEST-C-1), please try again'} })
       }
   })
   .catch( 
-    () =>dispatch({ type: DELETE_TAG_FAILED, 
-      payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-DELETE-2), please try again'} })
+    () =>dispatch({ type: REQUEST_TAG_C_FAILED, 
+      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-REQUEST-C-2), please try again'} })
   )
   // .then(response => response.json())
-  // .then(data => dispatch({ type: DELETE_TAG_SUCCESS}))
-  // .catch(error => dispatch({ type: DELETE_TAG_FAILED, payload: error }))
+  // .then(data => dispatch({ type: REQUEST_TAG_C_SUCCESS, payload: data }))
+  // .catch(error => dispatch({ type: REQUEST_TAG_C_FAILED, payload: error }))
 }
 
 
@@ -124,6 +109,7 @@ export const selectSearchTagAct = (event) => {
 }
 
 export const searchTagAct = (tag) => (dispatch,getState) =>{
+  let resStatus;
   dispatch({ type: SEARCH_TAG_PENDING })
   fetch(`${API_PORT}/tag/search`, {
         method: 'POST',
@@ -137,9 +123,29 @@ export const searchTagAct = (tag) => (dispatch,getState) =>{
         })
       }
   )
-  .then(response => response.json())
-  .then(data => dispatch({ type: SEARCH_TAG_SUCCESS, payload: data}))
-  .catch(error => dispatch({ type: SEARCH_TAG_FAILED, payload: error }))
+  .then(res => {
+    resStatus = res.status
+    return res.json()
+  })
+  .then(res => {
+      switch (resStatus) {
+          case 200:
+              return dispatch({ type: SEARCH_TAG_SUCCESS, payload: res})
+          // case 400:
+          //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+          case 500:
+              return dispatch({ type: SEARCH_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+          default:
+              return dispatch({ type: SEARCH_TAG_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-SEARCH-1), please try again'} })
+      }
+  })
+  .catch( 
+    () =>dispatch({ type: SEARCH_TAG_FAILED, 
+      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-SEARCH-2), please try again'} })
+  )
+  // .then(response => response.json())
+  // .then(data => dispatch({ type: SEARCH_TAG_SUCCESS, payload: data}))
+  // .catch(error => dispatch({ type: SEARCH_TAG_FAILED, payload: error }))
 }
 
 
@@ -324,45 +330,14 @@ export const clearSearchTagAct = (event) => {
 
 }
 
-const checkTagName = (tagName) => {
-  if (!tagName){
-    return {isValid:false, errorMsg: `Please enter tag name`}
-  }else if (tagName.length > 20){
-    return {isValid:false, errorMsg: `Tag name cannot be more than 20 characters`}
-  }
-
-  return {isValid:true};
-}
-
-export const onchangeCreateTagNameAct = (event) => {
-  const tagName = event.target.value;
-  const result = checkTagName(tagName);
-  if (!result.isValid){
-    return { type: ONCHANGE_CREATE_TAG_NAME, payload: {tagName:tagName,isValid:false, errorMsg:result.errorMsg}};
-  }
-  return { type: ONCHANGE_CREATE_TAG_NAME, payload: {tagName:tagName,isValid:true}};
-}
-
-
-const checkTagSeq = (tagSeq) => {
-  if (!tagSeq){
-    return {isValid:false, errorMsg: `Please enter seq`}
-  }else if (isNaN(Number(tagSeq))){
-    return {isValid:false, errorMsg: `Seq must be a number`}
-  }
-
-  return {isValid:true};
-}
-
-export const onchangeCreateTagSeqAct = (event) => {
-  const tagSeq = event.target.value;
-  const result = checkTagSeq(tagSeq);
-  if (!result.isValid){
-    return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:false, errorMsg:result.errorMsg}};
-  }
-  return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:true}};
-}
 
 export const selectCreateTagAct = () => {
   return {type:SELECT_CREATE_TAG}
 }
+
+export const selectDeleteTagAct = (event) => {
+  const tagID = Number(event.target.getAttribute('tag-id'));
+  const tagName = event.target.getAttribute('tag-name');
+  return {type:SELECT_DELETE_TAG, payload:{deleteTagName:tagName,deleteTagID:tagID}}
+}
+

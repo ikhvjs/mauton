@@ -412,23 +412,56 @@ const initialStateTag= {
   createTagSeqErrMsg:"",
   isPendingPostTag:false,
   isShowCreateTag:false,
-  isDeleteTagPending:false
+  isShowDeleteTag:false,
+  isPendingDeleteTag:false,
+  isDeleteTagFailed:false,
+  isPendingRequestTag:false,
+  requestTagErrMsg:"",
+  isRequestTagFailed:false,
+  deleteTagName:null,
+  deleteTagID:null,
+  deleteTagErrMsg:"",
+  isShowRequestTagErrAlert:false
 }
 
 export const tagRdc = (state=initialStateTag, action={}) => {
   switch (action.type) {
   case constants.REQUEST_TAG_PENDING:
-    return Object.assign({}, state, {isRefreshTagNeeded:false})
+    return Object.assign({}, state, {isPendingRequestTag:true,isRequestTagFailed:false, isRefreshTagNeeded:false})
   case constants.REQUEST_TAG_SUCCESS:
-    return Object.assign({}, state, {tags: action.payload})
+    return Object.assign({}, state, {isPendingRequestTag:false,isRequestTagFailed:false, tags: action.payload})
   case constants.REQUEST_TAG_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_TAG_REQUEST':
+        return Object.assign({}, state, 
+          {isPendingRequestTag:false, isRequestTagFailed:true,
+            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          {isPendingRequestTag:false, isRequestTagFailed:true,
+            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage }) 
+      default://unhandled error
+        return Object.assign({}, state,  
+          {error: action.payload, isPendingRequestTag:false, isRequestTagFailed:true}) 
+    }
   case constants.REQUEST_TAG_C_PENDING:
-    return Object.assign({}, state, {isRefreshTagNeeded:false})
+    return Object.assign({}, state, {isPendingRequestTag:true,isRequestTagFailed:false, isRefreshTagNeeded:false})
   case constants.REQUEST_TAG_C_SUCCESS:
-    return Object.assign({}, state, {tags: action.payload})
+    return Object.assign({}, state, {isPendingRequestTag:false,isRequestTagFailed:false, tags: action.payload})
   case constants.REQUEST_TAG_C_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_TAG_REQUEST':
+        return Object.assign({}, state, 
+          {isPendingRequestTag:false, isRequestTagFailed:true,
+            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          {isPendingRequestTag:false, isRequestTagFailed:true,
+            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage }) 
+      default://unhandled error
+        return Object.assign({}, state,  
+          {error: action.payload, isPendingRequestTag:false,  isRequestTagFailed:true}) 
+    }
   case constants.CLEAR_CREATE_TAG:
     return Object.assign({}, state, 
       {isCreateTagNameValid:null,createTagName:"",createTagNameErrMsg:"",
@@ -459,13 +492,13 @@ export const tagRdc = (state=initialStateTag, action={}) => {
           { isPendingPostTag:false,
             isCreateTagNameValid:false, createTagNameErrMsg:action.payload.errMessage
           }) 
-      case 'INTERNAL_SERVER_ERROR':
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
         return Object.assign({}, state, 
           { isPendingPostTag:false,
             isCreateTagNameValid:false, createTagNameErrMsg:action.payload.errMessage,
             isCreateTagSeqValid:false, createTagSeqErrMsg:action.payload.errMessage
           }) 
-      default:
+      default://unhandled error
         return Object.assign({}, state, 
           {error: action.payload,
             isPendingPostTag:false,
@@ -475,34 +508,58 @@ export const tagRdc = (state=initialStateTag, action={}) => {
             isCreateTagSeqValid:null,createTagSeqErrMsg:""}) 
     }
   case constants.DELETE_TAG_PENDING:
-    return Object.assign({}, state, {isDeleteTagPending:true})
+    return Object.assign({}, state, {isPendingDeleteTag:true})
   case constants.DELETE_TAG_SUCCESS:
-    return Object.assign({}, state, {isDeleteTagPending:false, isRefreshTagNeeded:true})
+    return Object.assign({}, state, 
+      {isPendingDeleteTag:false, isRefreshTagNeeded:true,isDeleteTagFailed:false,
+        isShowDeleteTag:false, deleteTagName:null, deleteTagID:null})
   case constants.DELETE_TAG_FAILED:
     switch(action.payload.Code){
       case 'INTERNAL_SERVER_ERROR_TAG_DELETE':
         return Object.assign({}, state, 
-          { isDeleteTagPending:false,
+          { isPendingDeleteTag:false,
+            isDeleteTagFailed:true,
+            deleteTagErrMsg:action.payload.errMessage
+          }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          { isPendingDeleteTag:false,
+            isDeleteTagFailed:true,
             deleteTagErrMsg:action.payload.errMessage
           }) 
       case 'TAG_FOREIGN_KEY_EXIST':
         return Object.assign({}, state, 
-          { isDeleteTagPending:false,
+          { isPendingDeleteTag:false,
+            isDeleteTagFailed:true,
             deleteTagErrMsg:action.payload.errMessage
           }) 
-      default:
+      default://unhandled error
         return Object.assign({}, state, 
           { error: action.payload,
-            isDeleteTagPending:false,
-            deleteTagErrMsg:"Internal Server Error, please try again"
+            isPendingDeleteTag:false,
+            isDeleteTagFailed:true
           })
     }
   case constants.SEARCH_TAG_PENDING:
-    return Object.assign({}, state, {})
+    return Object.assign({}, state, {isPendingRequestTag:true,isRequestTagFailed:false})
   case constants.SEARCH_TAG_SUCCESS:
-    return Object.assign({}, state, {tags: action.payload, isRefreshTagNeeded:false})
+    return Object.assign({}, state, 
+      {isPendingRequestTag:false,isRequestTagFailed:false,tags: action.payload, isRefreshTagNeeded:false})
   case constants.SEARCH_TAG_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_TAG_SEARCH':
+        return Object.assign({}, state, 
+          {isPendingRequestTag:false, isRequestTagFailed:true,
+            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          {isPendingRequestTag:false, isRequestTagFailed:true,
+            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage })
+      default://unhandled error
+        return Object.assign({}, state,  
+          {error: action.payload, isPendingRequestTag:false, isRequestTagFailed:true,
+            isShowRequestTagErrAlert:true}) 
+    }
   case constants.SELECT_UPDATE_TAG:
     return Object.assign({}, state, {beforeUpdateCategory: action.payload, isRefreshTagNeeded:false})
   case constants.UPDATE_TAG_PENDING:
@@ -539,8 +596,17 @@ export const tagRdc = (state=initialStateTag, action={}) => {
     }
   case constants.SELECT_CREATE_TAG:
     return Object.assign({}, state,  {isShowCreateTag:true})
-  case constants.CLOSE_TAG_CREATE:
+  case constants.CLOSE_CREATE_TAG:
     return Object.assign({}, state,  {isShowCreateTag:false})
+  case constants.CLOSE_TAG_ERROR_ALERT:
+    return Object.assign({}, state,  {isShowRequestTagErrAlert:false})
+  case constants.SELECT_DELETE_TAG:
+    return Object.assign({}, state,  
+      {isShowDeleteTag:true, deleteTagName:action.payload.deleteTagName, deleteTagID:action.payload.deleteTagID})
+  case constants.CLOSE_DELETE_TAG:
+    return Object.assign({}, state,  
+      {isShowDeleteTag:false, isDeleteTagFailed:false, deleteTagName:null, 
+        deleteTagID:null, deleteTagErrMsg:null})
   default:
     return state
   }

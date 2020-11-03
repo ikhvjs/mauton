@@ -1,6 +1,6 @@
 import {
     API_PORT,
-    CLOSE_TAG_CREATE,
+    CLOSE_CREATE_TAG,
     ONCHANGE_CREATE_TAG_NAME,
     ONCHANGE_CREATE_TAG_SEQ,
     POST_TAG_PENDING,
@@ -10,7 +10,7 @@ import {
    } from '../../constants';
 
 export const closeTagCreateAct = () => {
-    return ({type:CLOSE_TAG_CREATE})
+    return ({type:CLOSE_CREATE_TAG})
 }
 
 const checkCreateTagName = (tagName) => {
@@ -81,11 +81,11 @@ export const postTagAct = () => (dispatch,getState) =>{
           case 500:
               return dispatch({ type: POST_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           default:
-              return dispatch({ type: POST_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-Create-1), please try again'} })
+              return dispatch({ type: POST_TAG_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-Create-1), please try again'} })
       }
   })
   .catch( 
-    () =>dispatch({ type: POST_TAG_FAILED, payload: {Code:'INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-Create-2), please try again'} })
+    () =>dispatch({ type: POST_TAG_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-Create-2), please try again'} })
   )
 }
 
