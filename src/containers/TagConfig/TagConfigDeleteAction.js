@@ -6,7 +6,7 @@ import {
     DELETE_TAG_FAILED
    } from '../../constants';
 
-export const closeTagDeleteAct = () => {
+export const closeDeleteTagAct = () => {
     return ({type:CLOSE_DELETE_TAG})
 }
 

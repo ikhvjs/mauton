@@ -6,6 +6,7 @@ import { Modal } from "react-bootstrap";
 const mapStateToProps = (state) => {
     return {
         isShowRequestTagErrAlert: state.tagRdc.isShowRequestTagErrAlert,
+        requestTagErrMsg: state.tagRdc.requestTagErrMsg,
     }
 }
 
@@ -20,7 +21,7 @@ class TagErrorAlert extends Component {
     render() {
         const { isShowRequestTagErrAlert,
                 onCloseErrorAlert,
-                errorAlertMsg
+                requestTagErrMsg
         } = this.props;
 
         return (
@@ -29,7 +30,7 @@ class TagErrorAlert extends Component {
                     <Modal.Title>You got an Error!</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="modal-error-alert">
-                    {errorAlertMsg}
+                    {requestTagErrMsg}
                 </Modal.Body>
             </Modal>
         )

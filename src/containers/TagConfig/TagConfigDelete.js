@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { closeTagDeleteAct, deleteTagAct } from './TagConfigDeleteAction';
+import { closeDeleteTagAct, deleteTagAct } from './TagConfigDeleteAction';
 
 import { Button, Row, Col, Modal, Spinner } from "react-bootstrap";
 
@@ -16,8 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onCloseTagDelete: () =>
-            dispatch(closeTagDeleteAct()),
+        onCloseDeleteTag: () =>
+            dispatch(closeDeleteTagAct()),
         onDeleteTag: () =>
             dispatch(deleteTagAct())
     }
@@ -29,7 +29,7 @@ class TagConfigDelete extends Component {
         const {
             isShowDeleteTag,
             isPendingDeleteTag,
-            onCloseTagDelete,
+            onCloseDeleteTag,
             onDeleteTag,
             deleteTagErrMsg,
             isDeleteTagFailed,
@@ -37,7 +37,7 @@ class TagConfigDelete extends Component {
         } = this.props;
 
         return (
-            <Modal size="md" show={isShowDeleteTag} onHide={onCloseTagDelete}>
+            <Modal size="md" show={isShowDeleteTag} onHide={onCloseDeleteTag}>
                 <Modal.Header closeButton>
                     <Modal.Title>Delete Tag Section</Modal.Title>
                 </Modal.Header>
@@ -79,7 +79,7 @@ class TagConfigDelete extends Component {
                                     }
                                     <Button
                                         className="mb-1 mx-1"
-                                        name="cancel" onClick={onCloseTagDelete}
+                                        name="cancel" onClick={onCloseDeleteTag}
                                         variant="secondary" size="sm">
                                         Cancel
                                 </Button>
