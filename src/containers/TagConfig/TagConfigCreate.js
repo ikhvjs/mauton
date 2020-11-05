@@ -70,7 +70,7 @@ class TagConfigCreate extends Component {
                                 Tag Name
                                 </Form.Label>
                             <Col sm={10}>
-                                <Form.Control size="sm" name="tag_name"
+                                <Form.Control size="sm" name="tag-name"
                                     isValid={isCreateTagNameValid}
                                     isInvalid={(isCreateTagNameValid === null) ? null : !isCreateTagNameValid}
                                     type="text" placeholder="Enter Tag Name (Max. length: 20)"

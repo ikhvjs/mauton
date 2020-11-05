@@ -1,54 +1,76 @@
-import React , { Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { 
+import {
 	requestCategoryAct,
 	requestCategoryByClickAct,
-	postCategoryAct,
-	selectCreateCategoryAct,
-	deleteCategoryAct,
-	selectDeleteCategoryAct,
-	selectSearchCategoryAct,
 	searchCategoryAct,
-	beforeUpdateCategoryAct,
-	afterUpdateCategoryAct,
-	updateCategoryAct,
-	updateCancelCategoryAct,
-	clearSearchCategoryAct
+	onchangeSearchCategoryNameAct,
+	onchangeSearchCategoryDescAct,
+	clearSearchCategoryAct,
+	selectCreateCategoryAct
+	// selectDeleteCategoryAct,
+	// selectUpdateCategoryAct
+
+	// postCategoryAct,
+	// deleteCategoryAct,
+	// selectSearchCategoryAct,
+	// beforeUpdateCategoryAct,
+	// afterUpdateCategoryAct,
+	// updateCategoryAct,
+	// updateCancelCategoryAct,
+	
 } from './CategoryConfigAction';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {Table, Form, Button, Col} from "react-bootstrap";
+import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
 import './CategoryConfig.css'
 
+import CategoryConfigCreate from './CategoryConfigCreate';
+// import CategoryConfigDelete from './CategoryConfigDelete';
+// import CategoryConfigUpdate from './CategoryConfigUpdate';
+import CategoryConfigErrorAlert   from './CategoryConfigErrorAlert';
 
 const mapStateToProps = (state) => {
-  return {
-    categories: state.categoryRdc.categories,
-    beforeUpdateCategory: state.categoryRdc.beforeUpdateCategory,
-  	isRefreshCategoryNeeded:state.categoryRdc.isRefreshCategoryNeeded
-  }
+	return {
+		categories: state.categoryRdc.categories,
+		isRefreshCategoryNeeded: state.categoryRdc.isRefreshCategoryNeeded,
+		isPendingRequestCategory: state.categoryRdc.isPendingRequestCategory,
+		isRequestCategoryFailed: state.categoryRdc.isRequestCategoryFailed,
+		searchCategoryName: state.categoryRdc.searchCategoryName,
+		searchCategoryDesc: state.categoryRdc.searchCategoryDesc
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-	    onRequestCategory: () => 
-	    	dispatch(requestCategoryAct()),
-		onCreateCategory:(event) =>
-			dispatch(postCategoryAct(selectCreateCategoryAct(event))),
-		onRequestCategoryByClick:() =>
+		onRequestCategory: () =>
+			dispatch(requestCategoryAct()),
+		onRequestCategoryByClick: () =>
 			dispatch(requestCategoryByClickAct()),
-		onDeleteCategory:(event) =>
-			dispatch(deleteCategoryAct(selectDeleteCategoryAct(event))),
-		onSearchCategory:(event) =>
-			dispatch(searchCategoryAct(selectSearchCategoryAct(event))),
-		onSelectToUpdateCategory:(event) => 
-			dispatch(beforeUpdateCategoryAct(event)),
-		onUpdateCategory:(event) => 
-			dispatch(updateCategoryAct(afterUpdateCategoryAct(event))),
-		onCancelUpdateCategory:(event) =>
-			dispatch(updateCancelCategoryAct(event)),
-		onClearSearchCategory:(event) =>
-			dispatch(clearSearchCategoryAct(event))
+		onSearchCategory: () =>
+			dispatch(searchCategoryAct()),
+		onChangeSearchCategoryName: (event) =>
+			dispatch(onchangeSearchCategoryNameAct(event)),
+		onChangeSearchCategoryDesc: (event) =>
+			dispatch(onchangeSearchCategoryDescAct(event)),
+		onClearSearchCategory: () =>
+			dispatch(clearSearchCategoryAct()),
+		onSelectCreateCategory: () =>
+			dispatch(selectCreateCategoryAct()),
+		// onSelectDeleteCategory: (event) =>
+		// 	dispatch(selectDeleteCategoryAct(event)),
+		// onSelectUpdateCategory: (event) =>
+		// 	dispatch(selectUpdateCategoryAct(event))
+
+		// onCreateCategory:(event) =>
+		// 	dispatch(postCategoryAct(selectCreateCategoryAct(event))),	
+		// onDeleteCategory:(event) =>
+		// 	dispatch(deleteCategoryAct(selectDeleteCategoryAct(event))),
+		// onSelectToUpdateCategory:(event) => 
+		// 	dispatch(beforeUpdateCategoryAct(event)),
+		// onUpdateCategory:(event) => 
+		// 	dispatch(updateCategoryAct(afterUpdateCategoryAct(event))),
+		// onCancelUpdateCategory:(event) =>
+		// 	dispatch(updateCancelCategoryAct(event)),
 
 	}
 }
@@ -61,15 +83,15 @@ const mapDispatchToProps = (dispatch) => {
 //     };
 // };
 
-class CategoryConfig extends Component  {
+class CategoryConfig extends Component {
 
 	componentDidMount() {
 		this.props.onRequestCategory();
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate() {
 		if (this.props.isRefreshCategoryNeeded === true) {
-					this.props.onRequestCategoryByClick();
+			this.props.onRequestCategoryByClick();
 		}
 	}
 
@@ -77,93 +99,130 @@ class CategoryConfig extends Component  {
 	render() {
 
 		const { categories,
-				onCreateCategory,
-				onDeleteCategory,
-				onSearchCategory,
-				onSelectToUpdateCategory,
-				onUpdateCategory,
-				onCancelUpdateCategory,
-				onClearSearchCategory
-			} = this.props;
+			searchCategoryName,
+			searchCategoryDesc,
+			onSearchCategory,
+			onChangeSearchCategoryName,
+			onChangeSearchCategoryDesc,
+			onClearSearchCategory,
+			onSelectCreateCategory,
+			onSelectUpdateCategory,
+			onSelectDeleteCategory,
+			isPendingRequestCategory,
+			isRequestCategoryFailed
+		} = this.props;
 
 
 
 
 		return (
-			<React.Fragment>
-			<h3>Blog Category</h3>
-			<br/>
-			<Form.Row>
-				<Col xs={3}>
-					<Form.Control size="sm" name="blog_category_name"
-						type="text" placeholder="Enter Category Name" />
+			<Row id="category-config-container">
+				<Col id="category-config-wrapper">
+					<Row className="mb-1 px-3">
+						<Col>
+							<h3>Category</h3>
+						</Col>
+					</Row>
+					<Row className="mb-1 px-3">
+						<Col xs={4} sm={4} md={3} className="mb-1">
+							<Form.Control
+								size="sm"
+								name="category-name"
+								type="text"
+								placeholder="Category Name"
+								value={searchCategoryName}
+								onChange={onChangeSearchCategoryName}
+							/>
+						</Col>
+						<Col xs={4} sm={4} md={3} className="mb-1">
+							<Form.Control
+								size="sm"
+								name="category-desc"
+								type="text"
+								placeholder="Category Desc"
+								value={searchCategoryDesc}
+								onChange={onChangeSearchCategoryDesc}
+							/>
+						</Col>
+						<Col name='button' xs={2} sm={2} md={1}>
+							<Button name="search" size="sm" onClick={onSearchCategory}>Search</Button>
+						</Col>
+						<Col name='button' xs={2} sm={2} md={2}>
+							<Button name="clear" size="sm" variant="secondary" onClick={onClearSearchCategory}>Clear</Button>
+						</Col>
+						<Col xs={6} sm={2} md={3}>
+							<Button name="create" variant="success" size="sm" onClick={onSelectCreateCategory}> Create </Button>
+						</Col>
+					</Row>
+
+					<Row className="my-1 px-3">
+						<Col>
+							{(isPendingRequestCategory)
+								? (<div className="d-flex align-items-center justify-content-center">
+									<Spinner
+										as="span"
+										animation="grow"
+										size="sm"
+										role="status"
+										aria-hidden="true"
+									/>
+									Loading...
+								</div>)
+								: (isRequestCategoryFailed
+									? (<CategoryConfigErrorAlert />)
+									: (<Table striped hover bordered size="sm">
+											<thead>
+												<tr>
+													<th width="30%">Category Name</th>
+													<th width="40%">Category Desc</th>
+													<th width="10%">Seq</th>
+													<th width="20%">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												{categories.map((category) => {
+													return (
+														<tr id={category.blog_category_id} key={category.blog_category_id}>
+															<td name='category-name'>{category.blog_category_name}</td>
+															<td name='category-desc'>{category.blog_category_desc}</td>
+															<td name='category-seq'>{category.seq}</td>
+															<td name='category-action-button'>
+															<Button 
+																category-id={category.blog_category_id} 
+																category-name={category.blog_category_name} 
+																category-desc={category.blog_category_desc} 
+																category-seq={category.seq}
+																className="mb-1 mx-1"
+																variant="success" 
+																name="update"
+																size="sm" onClick={onSelectUpdateCategory}>
+																Update
+															</Button>
+															<Button 
+																category-id={category.blog_category_id} 
+																category-name={category.blog_category_name} 
+																className="mb-1 mx-1"
+																variant="danger" 
+																name="delete"
+																size="sm" onClick={onSelectDeleteCategory}>
+																Delete
+															</Button>
+															</td>
+														</tr>
+													)
+												})
+												}
+											</tbody>
+										</Table>
+									)
+								)
+							}
+						</Col>
+					</Row>
 				</Col>
-				<Col xs={7}>
-					<Form.Control size="sm" name="blog_category_desc"
-						type="text" placeholder="Enter Category Description" />
-				</Col>
-				<Col name='button' xs={0.3}>
-					<Button size="sm" onClick={onSearchCategory}>Search</Button>
-				</Col>
-				<Col name='button' xs={0.3}>
-					<Button size="sm" variant="secondary" onClick={onClearSearchCategory}>Clear</Button>
-				</Col>
-			</Form.Row>
-			<br/>
-			<Table striped  hover size="sm" className="category-table">
-			  <thead>
-			    <tr>
-			      <th width="20%">Category Name</th>
-			      <th width="50%">Category Description</th>
-			      <th width="10%">Seq</th>
-			      <th width="20%">Action</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			  <tr id='new'>
-			      <td><Form.Control  size="sm" name="blog_category_name" 
-			      	type="text" placeholder="Enter Category Name" /></td>
-			      <td><Form.Control  size="sm" name="blog_category_desc" 
-			      	type="text" placeholder="Enter Category Description" /></td>
-			      <td><Form.Control  size="sm" name="seq" 
-			      	type="text" placeholder="Enter seq" /></td>
-			      <td headers='button'>
-			      	<Button name="create" onClick={onCreateCategory} 
-			      		variant="primary" size="sm">
-			      		Create
-			      	</Button>
-			      </td>
-			    </tr>
-			  	{categories.map((category)=>{
-			  		return(
-			  			<tr id={category.blog_category_id} key={category.blog_category_id}>
-					      <td name='blog_category_name'>{category.blog_category_name}</td>
-					      <td name='blog_category_desc'>{category.blog_category_desc}</td>
-					      <td name='seq'>{category.seq}</td>
-					      <td headers='button'>
-					      	<Button variant="success" name="update"
-					      	size="sm" onClick={onSelectToUpdateCategory}>
-					      		Update
-					      	</Button>{" "}
-							<Button variant="danger" name="delete"
-							size="sm" onClick={onDeleteCategory}>
-								Delete
-							</Button>{" "}
-							<Button className="hidden-button" variant="primary" name="save"
-							size="sm" onClick={onUpdateCategory}>
-								Save
-							</Button>{" "}
-							<Button className="hidden-button" variant="secondary" name="cancel"
-							size="sm" onClick={onCancelUpdateCategory}>
-								Cancel
-							</Button>
-						  </td>
-					    </tr>
-			  		)})
-			  	}
-			  </tbody>
-			</Table>
-			</React.Fragment>
+				<CategoryConfigCreate/>
+			</Row>
+
 		);
 	}
 

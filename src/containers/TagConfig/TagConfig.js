@@ -17,7 +17,7 @@ import './TagConfig.css';
 import TagConfigCreate from './TagConfigCreate';
 import TagConfigDelete from './TagConfigDelete';
 import TagConfigUpdate from './TagConfigUpdate';
-import TagErrorAlert from './TagErrorAlert';
+import TagConfigErrorAlert from './TagConfigErrorAlert';
 
 
 const mapStateToProps = (state) => {
@@ -93,17 +93,17 @@ class TagConfig extends Component {
 						<Col xs={6} sm={4} md={5} className="mb-1">
 							<Form.Control 
 								size="sm" 
-								name="tag_name"
+								name="tag-name"
 								type="text" 
 								placeholder="Enter Tag Name" 
 								value={searchTagName}
 								onChange={onChangeSearchTagName}
 							/>
 						</Col>
-						<Col name='button' xs={3} sm={2} md={1}>
+						<Col xs={3} sm={2} md={1}>
 							<Button name="search" size="sm" onClick={onSearchTag}>Search</Button>
 						</Col>
-						<Col name='button' xs={3} sm={2} md={2}>
+						<Col xs={3} sm={2} md={2}>
 							<Button name="clear" size="sm" variant="secondary" onClick={onClearSearchTag}>Clear</Button>
 						</Col>
 						<Col xs={2} sm={2} md={1}>
@@ -124,8 +124,8 @@ class TagConfig extends Component {
 									Loading...
 								</div>)
 								: (isRequestTagFailed
-									? (<TagErrorAlert />)
-									: (<Table striped hover bordered size="sm" className="tag-table">
+									? (<TagConfigErrorAlert />)
+									: (<Table striped hover bordered size="sm">
 										<thead>
 											<tr>
 												<th width="60%">Tag Name</th>

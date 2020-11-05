@@ -1,59 +1,117 @@
 import {
   API_PORT,
+  //request category
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
   REQUEST_CATEGORY_FAILED,
   REQUEST_CATEGORY_C_PENDING,
   REQUEST_CATEGORY_C_SUCCESS,
   REQUEST_CATEGORY_C_FAILED,
-  POST_CATEGORY_PENDING,
-  POST_CATEGORY_SUCCESS,
-  POST_CATEGORY_FAILED,
-  DELETE_CATEGORY_PENDING,
-  DELETE_CATEGORY_SUCCESS,
-  DELETE_CATEGORY_FAILED,
+  //search category
   SEARCH_CATEGORY_PENDING,
   SEARCH_CATEGORY_SUCCESS,
   SEARCH_CATEGORY_FAILED,
+  CLEAR_SEARCH_CATEGORY,
+  ONCHANGE_SEARCH_CATEGORY_NAME,
+  ONCHANGE_SEARCH_CATEGORY_DESC,
+  //create category
+  POST_CATEGORY_PENDING,
+  POST_CATEGORY_SUCCESS,
+  POST_CATEGORY_FAILED,
+  SELECT_CREATE_CATEGORY,
+
+
+  DELETE_CATEGORY_PENDING,
+  DELETE_CATEGORY_SUCCESS,
+  DELETE_CATEGORY_FAILED,
+
   SELECT_UPDATE_CATEGORY,
   UPDATE_CATEGORY_PENDING,
   UPDATE_CATEGORY_SUCCESS,
   UPDATE_CATEGORY_FAILED ,
-  CANCEL_UPDATE_CATEGORY,
-  CLEAR_SEARCH_CATEGORY 
+  CANCEL_UPDATE_CATEGORY
+   
  } from '../../constants';
 
-export const requestCategoryAct = () => (dispatch) => {
+export const requestCategoryAct = () => (dispatch,getState) => {
+  let resStatus;
   dispatch({ type: REQUEST_CATEGORY_PENDING })
-  fetch(`${API_PORT}/category/get`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
+  fetch(`${API_PORT}/category/request`, {
+          method: 'post',
+          headers: {'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${getState().authRdc.token}`
+                  },
+          body: JSON.stringify({
+            userID: getState().authRdc.userID
+          })
         })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_CATEGORY_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_CATEGORY_FAILED, payload: error }))
-}
-
-export const requestCategoryByClickAct = () => (dispatch) => {
-  dispatch({ type: REQUEST_CATEGORY_C_PENDING })
-  fetch(`${API_PORT}/category/get`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_CATEGORY_C_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_CATEGORY_C_FAILED, payload: error }))
-}
-
-export const selectCreateCategoryAct = (event) => {
-  const category ={};
-  const childrenNode = event.target.parentNode.parentNode.querySelectorAll("td > input.form-control");
-  childrenNode.forEach((node)=>{
-    Object.assign(category,  {[node.name]: node.value})
-    node.value = "";
+  .then(res => {
+    resStatus = res.status
+    return res.json()
   })
-  
-  return category;
+  .then(res => {
+      switch (resStatus) {
+          case 200:
+              return dispatch({ type: REQUEST_CATEGORY_SUCCESS, payload: res})
+          // case 400:
+          //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+          case 500:
+              return dispatch({ type: REQUEST_CATEGORY_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+          default:
+              return dispatch({ type: REQUEST_CATEGORY_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:CATEGORY-REQUEST-1), please try again'} })
+      }
+  })
+  .catch( 
+    () =>dispatch({ type: REQUEST_CATEGORY_FAILED, 
+      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:CATEGORY-REQUEST-2), please try again'} })
+  )
+}
+//     .then(response => response.json())
+//     .then(data => dispatch({ type: REQUEST_CATEGORY_SUCCESS, payload: data }))
+//     .catch(error => dispatch({ type: REQUEST_CATEGORY_FAILED, payload: error }))
+// }
+
+export const requestCategoryByClickAct = () => (dispatch,getState) => {
+  let resStatus;
+  dispatch({ type: REQUEST_CATEGORY_C_PENDING })
+  fetch(`${API_PORT}/category/request`, {
+          method: 'post',
+          headers: {'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${getState().authRdc.token}`
+                  },
+          body: JSON.stringify({
+            userID: getState().authRdc.userID
+          })
+    })
+    .then(res => {
+      resStatus = res.status
+      return res.json()
+    })
+    .then(res => {
+        switch (resStatus) {
+            case 200:
+                return dispatch({ type: REQUEST_CATEGORY_C_SUCCESS, payload: res})
+            // case 400:
+            //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+            case 500:
+                return dispatch({ type: REQUEST_CATEGORY_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+            default:
+                return dispatch({ type: REQUEST_CATEGORY_C_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:CATEGORY-REQUEST-1), please try again'} })
+        }
+    })
+    .catch( 
+      () =>dispatch({ type: REQUEST_CATEGORY_C_FAILED, 
+        payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:CATEGORY-REQUEST-2), please try again'} })
+    )
+    // .then(response => response.json())
+    // .then(data => dispatch({ type: REQUEST_CATEGORY_C_SUCCESS, payload: data }))
+    // .catch(error => dispatch({ type: REQUEST_CATEGORY_C_FAILED, payload: error }))
+}
+
+export const selectCreateCategoryAct = () => {
+  return {type:SELECT_CREATE_CATEGORY}
 }
 
 export const postCategoryAct = (category) => (dispatch) =>{
@@ -108,21 +166,56 @@ export const selectSearchCategoryAct = (event) => {
 
 }
 
-export const searchCategoryAct = (category) => (dispatch) =>{
+export const clearSearchCategoryAct = () => {
+  return ({ type: CLEAR_SEARCH_CATEGORY });
+}
+
+export const onchangeSearchCategoryNameAct = (event) => {
+  return ({type:ONCHANGE_SEARCH_CATEGORY_NAME, payload:event.target.value});
+}
+
+export const onchangeSearchCategoryDescAct = (event) => {
+  return ({type:ONCHANGE_SEARCH_CATEGORY_DESC, payload:event.target.value});
+}
+
+export const searchCategoryAct = () => (dispatch,getState) =>{
+  let resStatus;
   dispatch({ type: SEARCH_CATEGORY_PENDING })
   fetch(`${API_PORT}/category/search`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
-                  'Accept': 'application/json'},
+                  'Accept': 'application/json',
+                  'Authorization': `Bearer ${getState().authRdc.token}`},
         body: JSON.stringify({
-          blog_category_name: category.blog_category_name,
-          blog_category_desc: category.blog_category_desc
+          categoryName: getState().categoryRdc.searchCategoryName,
+          categoryDesc: getState().categoryRdc.searchCategoryDesc,
+          userID:getState().authRdc.userID
         })
       }
   )
-  .then(response => response.json())
-  .then(data => dispatch({ type: SEARCH_CATEGORY_SUCCESS, payload: data}))
-  .catch(error => dispatch({ type: SEARCH_CATEGORY_FAILED, payload: error }))
+  .then(res => {
+    resStatus = res.status
+    return res.json()
+  })
+  .then(res => {
+    switch (resStatus) {
+        case 200:
+            return dispatch({ type: SEARCH_CATEGORY_SUCCESS, payload: res})
+        // case 400:
+        //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+        case 500:
+            return dispatch({ type: SEARCH_CATEGORY_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+        default:
+            return dispatch({ type: SEARCH_CATEGORY_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:CATEGORY-SEARCH-1), please try again'} })
+    }
+  })
+  .catch( 
+    () =>dispatch({ type: SEARCH_CATEGORY_FAILED, 
+      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:CATEGORY-SEARCH-2), please try again'} })
+  )
+  // .then(response => response.json())
+  // .then(data => dispatch({ type: SEARCH_CATEGORY_SUCCESS, payload: data}))
+  // .catch(error => dispatch({ type: SEARCH_CATEGORY_FAILED, payload: error }))
 }
 
 
@@ -294,18 +387,6 @@ export const updateCategoryAct = (afterUpdateCategory)  => (dispatch, getState) 
     .then(data => dispatch({ type: UPDATE_CATEGORY_SUCCESS, payload: data}))
     .catch(error => dispatch({ type: UPDATE_CATEGORY_FAILED, payload: error }))
   }
-
-}
-
-export const clearSearchCategoryAct = (event) => {
-  const selectedNode = event.target.parentNode.parentNode;
-  const inputNode = selectedNode.querySelectorAll('div > input[name]');
-
-  inputNode.forEach((node)=>{
-    node.value="";
-  })
-
-  return { type: CLEAR_SEARCH_CATEGORY };
 
 }
 

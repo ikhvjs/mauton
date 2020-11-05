@@ -96,8 +96,8 @@ export const searchTagAct = () => (dispatch,getState) =>{
                     'Authorization': `Bearer ${getState().authRdc.token}`
                   },
         body: JSON.stringify({
-          tag_name: getState().tagRdc.searchTagName,
-          user_id:getState().authRdc.userID
+          tagName: getState().tagRdc.searchTagName,
+          userID:getState().authRdc.userID
         })
       }
   )

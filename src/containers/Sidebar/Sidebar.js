@@ -45,7 +45,7 @@ class Sidebar extends Component {
 								<Nav.Link>Menu</Nav.Link>
 							</LinkContainer>
 							<LinkContainer to={`${url}/category`}>
-								<Nav.Link>Blog Category</Nav.Link>
+								<Nav.Link>Category</Nav.Link>
 							</LinkContainer>
 							<LinkContainer to={`${url}/tag`}>
 								<Nav.Link>Tag</Nav.Link>

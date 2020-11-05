@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { closeErrorAlertAct } from './TagErrorAlertAction';
+import { closeTagErrorAlertAct } from './TagConfigErrorAlertAction';
 import { Modal } from "react-bootstrap";
 
 const mapStateToProps = (state) => {
@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onCloseErrorAlert: () =>
-            dispatch(closeErrorAlertAct())
+            dispatch(closeTagErrorAlertAct())
     }
 }
 
@@ -27,7 +27,7 @@ class TagErrorAlert extends Component {
         return (
             <Modal size="md" show={isShowRequestTagErrAlert} onHide={onCloseErrorAlert}>
                 <Modal.Header className="modal-error-alert" closeButton>
-                    <Modal.Title>You got an Error!</Modal.Title>
+                    <Modal.Title>Error, Cannot fetch Tag!</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="modal-error-alert">
                     {requestTagErrMsg}

@@ -340,46 +340,209 @@ export const blogRdc = (state=initialStateBlog, action={}) => {
 
 const initialStateCategory= {
   categories: [],
-  beforeUpdateCategory:[],
   isRefreshCategoryNeeded:false,
-  // isPendingRequestCategory: false,
-  // isPendingRequestCategoryByClick: false,
-  // isPendingDeleteCategory:false,
-  // isPendingPostCategory:false
+  //request ctgs
+  isPendingRequestCategory: false,
+  isRequestCategoryFailed: false,
+  isShowRequestCategoryErrAlert:false,
+  requestCategoryErrMsg:"",
+  //search ctgs
+  searchCategoryName:"",
+  searchCategoryDesc:"",
+  //create ctgs
+  isShowCreateCategory:false,
+  createCategoryName:"",
+  createCategoryDesc:"",
+  createCategorySeq:"",
+  isCreateCategoryNameValid:null,
+  isCreateCategoryDescValid:true,
+  isCreateCategorySeqValid:null,
+  createCategoryNameErrMsg:"",
+  createCategoryDescErrMsg:"",
+  createCategorySeqErrMsg:"",
+  isPendingPostCategory:false
 }
 
 export const categoryRdc = (state=initialStateCategory, action={}) => {
   switch (action.type) {
+  /*------------------------------------------request ctgs---------------------------------------*/
   case constants.REQUEST_CATEGORY_PENDING:
-    return Object.assign({}, state, {isRefreshCategoryNeeded:false})
+    return Object.assign({}, state, 
+      {isPendingRequestCategory:true,isRequestCategoryFailed:false, isRefreshCategoryNeeded:false})
   case constants.REQUEST_CATEGORY_SUCCESS:
-    return Object.assign({}, state, {categories: action.payload})
+    return Object.assign({}, state, 
+      {isPendingRequestCategory:false,isRequestCategoryFailed:false, categories: action.payload})
   case constants.REQUEST_CATEGORY_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.REQUEST_CATEGORY_C_PENDING:
-    return Object.assign({}, state, {isRefreshCategoryNeeded:false})
-  case constants.REQUEST_CATEGORY_C_SUCCESS:
-    return Object.assign({}, state, {categories: action.payload})
-  case constants.REQUEST_CATEGORY_C_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.POST_CATEGORY_PENDING:
-    return Object.assign({}, state, {})
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_CATEGORY_REQUEST':
+        return Object.assign({}, state, 
+          {isPendingRequestCategory:false, isRequestCategoryFailed:true,
+            isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          {isPendingRequestCategory:false, isRequestCategoryFailed:true,
+            isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage }) 
+      default://unhandled error
+        return Object.assign({}, state,  
+          {error: action.payload, isPendingRequestCategory:false, isRequestCategoryFailed:true}) 
+    }
+    case constants.REQUEST_CATEGORY_C_PENDING:
+      return Object.assign({}, state, 
+        {isPendingRequestCategory:true,isRequestCategoryFailed:false, isRefreshCategoryNeeded:false})
+    case constants.REQUEST_CATEGORY_C_SUCCESS:
+      return Object.assign({}, state, 
+        {isPendingRequestCategory:false,isRequestCategoryFailed:false, categories: action.payload})
+    case constants.REQUEST_CATEGORY_C_FAILED:
+      switch(action.payload.Code){
+        case 'INTERNAL_SERVER_ERROR_CATEGORY_REQUEST':
+          return Object.assign({}, state, 
+            {isPendingRequestCategory:false, isRequestCategoryFailed:true,
+              isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage }) 
+        case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+          return Object.assign({}, state, 
+            {isPendingRequestCategory:false, isRequestCategoryFailed:true,
+              isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage }) 
+        default://unhandled error
+          return Object.assign({}, state,  
+            {error: action.payload, isPendingRequestCategory:false, isRequestCategoryFailed:true}) 
+      }
+  case constants.CLOSE_CATEGORY_ERROR_ALERT:
+    return Object.assign({}, state, {isShowRequestCategoryErrAlert:false, requestCategoryErrMsg:""})
+  /*------------------------------------------search ctgs---------------------------------------*/
+  case constants.ONCHANGE_SEARCH_CATEGORY_NAME:
+    return Object.assign({}, state, {searchCategoryName:action.payload})
+  case constants.ONCHANGE_SEARCH_CATEGORY_DESC:
+    return Object.assign({}, state, {searchCategoryDesc:action.payload})
+  case constants.SEARCH_CATEGORY_PENDING:
+    return Object.assign({}, state, {isPendingRequestCategory:true,isRequestCategoryFailed:false})
+  case constants.SEARCH_CATEGORY_SUCCESS:
+    return Object.assign({}, state, 
+      {isPendingRequestCategory:false,isRequestCategoryFailed:false,
+        categories: action.payload, isRefreshCategoryNeeded:false})
+  case constants.SEARCH_CATEGORY_FAILED:
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_CATEGORY_SEARCH':
+        return Object.assign({}, state, 
+          {isPendingRequestCategory:false, isRequestCategoryFailed:true,
+            isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          {isPendingRequestCategory:false, isRequestCategoryFailed:true,
+            isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage })
+      default://unhandled error
+        return Object.assign({}, state,  
+          {error: action.payload, isPendingRequestCategory:false, isRequestCategoryFailed:true,
+            isShowRequestCategoryErrAlert:true}) 
+    }
+  case constants.CLEAR_SEARCH_CATEGORY:
+    return Object.assign({}, state, 
+      {isRefreshCategoryNeeded:true,
+      searchCategoryName:"",
+      searchCategoryDesc:""})
+/*------------------------------------------create ctgs---------------------------------------*/
   case constants.POST_CATEGORY_SUCCESS:
-    return Object.assign({}, state, {isRefreshCategoryNeeded:true})
+    return Object.assign({}, state, 
+      {isRefreshCategoryNeeded:true,isPendingPostCategory:false,isShowCreateCategory:false,
+        isCreateCategoryNameValid:null,createCategoryName:"",createCategoryNameErrMsg:"",
+        isCreateCategoryDescValid:null,createCategoryDesc:"",createCategoryDescErrMsg:"",
+        isCreateCategorySeqValid:null, createCategorySeq:"",createCategorySeqErrMsg:""})
   case constants.POST_CATEGORY_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+    switch(action.payload.Code){
+      case 'CATEGORY_MANDATORY_FIELD':
+        return Object.assign({}, state, 
+          { isPendingPostCategory:false,
+            isCreateCategoryNameValid:false, createCategoryNameErrMsg:action.payload.errMessage,
+            isCreateCategorySeqValid:false, createCategorySeqErrMsg:action.payload.errMessage
+          }) 
+      case 'INTERNAL_SERVER_ERROR_CATEGORY_CHECK_DUP':
+        return Object.assign({}, state, 
+          { isPendingPostCategory:false,
+            isCreateCategoryNameValid:false, createCategoryNameErrMsg:action.payload.errMessage,
+            isCreateCategoryDescValid:false, createCategoryDescErrMsg:action.payload.errMessage,
+            isCreateCategorySeqValid:false, createCategorySeqErrMsg:action.payload.errMessage
+          }) 
+      case 'CATEGORY_DUPLICATE_CATEGORY_NAME':
+        return Object.assign({}, state, 
+          { isPendingPostCategory:false,
+            isCreateCategoryNameValid:false, createCategoryNameErrMsg:action.payload.errMessage
+          }) 
+      case 'INTERNAL_SERVER_ERROR_CATEGORY_INSERT':
+        return Object.assign({}, state, 
+          { isPendingPostCategory:false,
+            isCreateCategoryNameValid:false, createCategoryNameErrMsg:action.payload.errMessage
+          }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          { isPendingPostCategory:false,
+            isCreateCategoryNameValid:false, createCategoryNameErrMsg:action.payload.errMessage,
+            isCreateCategoryDescValid:false, createCategoryDescErrMsg:action.payload.errMessage,
+            isCreateCategorySeqValid:false, createCategorySeqErrMsg:action.payload.errMessage
+          }) 
+      default://unhandled error
+        return Object.assign({}, state, 
+          {error: action.payload,
+            isPendingPostCategory:false,
+            createCategoryName:"",
+            createCategoryDesc:"",
+            createCategorySeq:"",
+            isCreateCategoryNameValid:null,createCategoryNameErrMsg:"",
+            isCreateCategoryDescValid:true, createCategoryDescErrMsg:"",
+            isCreateCategorySeqValid:null,createCategorySeqErrMsg:""}) 
+    }
+  case constants.ONCHANGE_CREATE_CATEGORY_NAME:
+    switch(action.payload.isValid){
+      case false:
+        return Object.assign({}, state, 
+          {createCategoryName:action.payload.categoryName,createCategoryNameErrMsg:action.payload.errorMsg,isCreateCategoryNameValid:false})
+      case true:
+        return Object.assign({}, state, 
+          {createCategoryName:action.payload.categoryName,isCreateCategoryNameValid:true})
+      default:
+        return state
+    }
+  case constants.ONCHANGE_CREATE_CATEGORY_DESC:
+    switch(action.payload.isValid){
+      case false:
+        return Object.assign({}, state, 
+          {createCategoryDesc:action.payload.categoryDesc,createCategoryDescErrMsg:action.payload.errorMsg,isCreateCategoryDescValid:false})
+      case true:
+        return Object.assign({}, state, 
+          {createCategoryDesc:action.payload.categoryDesc,isCreateCategoryDescValid:true})
+      default:
+        return state
+    }
+  case constants.ONCHANGE_CREATE_CATEGORY_SEQ:
+    switch(action.payload.isValid){
+      case false:
+        return Object.assign({}, state, 
+          {createCategorySeq:action.payload.categorySeq,createCategorySeqErrMsg:action.payload.errorMsg,isCreateCategorySeqValid:false})
+      case true:
+        return Object.assign({}, state, 
+          {createCategorySeq:action.payload.categorySeq,isCreateCategorySeqValid:true})
+      default:
+        return state
+    }
+  case constants.SELECT_CREATE_CATEGORY:
+    return Object.assign({}, state,  {isShowCreateCategory:true})
+  case constants.CLOSE_CREATE_CATEGORY:
+    return Object.assign({}, state,  
+      {isShowCreateCategory:false,
+        isCreateCategoryNameValid:null,createCategoryName:"",createCategoryNameErrMsg:"",
+        isCreateCategoryDescValid:true,createCategoryDesc:"",createCategoryDescErrMsg:"",
+        isCreateCategorySeqValid:null, createCategorySeq:"",createCategorySeqErrMsg:""})
+  case constants.CLEAR_CREATE_CATEGORY:
+    return Object.assign({}, state, 
+      {isCreateCategoryNameValid:null,createCategoryName:"",createCategoryNameErrMsg:"",
+      isCreateCategoryDescValid:true,createCategoryDesc:"",createCategoryDescErrMsg:"",
+      isCreateCategorySeqValid:null, createCategorySeq:"",createCategorySeqErrMsg:""})
+/*------------------------------------------delete ctgs---------------------------------------*/
   case constants.DELETE_CATEGORY_PENDING:
     return Object.assign({}, state, {})
   case constants.DELETE_CATEGORY_SUCCESS:
     return Object.assign({}, state, {isRefreshCategoryNeeded:true})
   case constants.DELETE_CATEGORY_FAILED:
     return Object.assign({}, state, {error: action.payload})
-  case constants.SEARCH_CATEGORY_PENDING:
-    return Object.assign({}, state, {})
-  case constants.SEARCH_CATEGORY_SUCCESS:
-    return Object.assign({}, state, {categories: action.payload, isRefreshCategoryNeeded:false})
-  case constants.SEARCH_CATEGORY_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+  
   case constants.SELECT_UPDATE_CATEGORY:
     return Object.assign({}, state, {beforeUpdateCategory: action.payload, isRefreshCategoryNeeded:false})
   case constants.UPDATE_CATEGORY_PENDING:
@@ -390,8 +553,7 @@ export const categoryRdc = (state=initialStateCategory, action={}) => {
     return Object.assign({}, state, {error: action.payload})
   case constants.CANCEL_UPDATE_CATEGORY:
     return Object.assign({}, state, {isRefreshCategoryNeeded:true})
-  case constants.CLEAR_SEARCH_CATEGORY:
-    return Object.assign({}, state, {isRefreshCategoryNeeded:true})
+  
   default:
     return state
   }
@@ -580,7 +742,12 @@ export const tagRdc = (state=initialStateTag, action={}) => {
   case constants.SELECT_CREATE_TAG:
     return Object.assign({}, state,  {isShowCreateTag:true})
   case constants.CLOSE_CREATE_TAG:
-    return Object.assign({}, state,  {isShowCreateTag:false})
+    return Object.assign({}, state,  
+      {isShowCreateTag:false,
+      createTagName:"",
+      createTagSeq:"",
+      isCreateTagNameValid:null,
+      isCreateTagSeqValid:null})
   /*------------------------------------------delete tag---------------------------------------*/
   case constants.DELETE_TAG_PENDING:
     return Object.assign({}, state, {isPendingDeleteTag:true})
