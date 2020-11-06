@@ -54,8 +54,10 @@ export const onchangeCreateCategoryDescAct = (event) => {
 const checkCreateCategorySeq = (categorySeq) => {
     if (!categorySeq) {
         return { isValid: false, errorMsg: `Please enter seq` }
-    } else if (isNaN(Number(categorySeq))) {
+    }else if(isNaN(Number(categorySeq))) {
         return { isValid: false, errorMsg: `Seq must be a number` }
+    }else if (Number(categorySeq)<0||Number(categorySeq)>1000){
+        return {isValid:false, errorMsg: `Seq must be between 0 to 1000`}
     }
 
     return { isValid: true };
@@ -67,7 +69,7 @@ export const onchangeCreateCategorySeqAct = (event) => {
     if (!result.isValid) {
         return { type: ONCHANGE_CREATE_CATEGORY_SEQ, payload: { categorySeq: categorySeq, isValid: false, errorMsg: result.errorMsg } };
     }
-    return { type: ONCHANGE_CREATE_CATEGORY_SEQ, payload: { categorySeq: categorySeq, isValid: true } };
+    return { type: ONCHANGE_CREATE_CATEGORY_SEQ, payload: { categorySeq: Number(categorySeq), isValid: true } };
 }
 
 

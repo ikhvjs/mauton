@@ -124,7 +124,7 @@ class TagConfig extends Component {
 									Loading...
 								</div>)
 								: (isRequestTagFailed
-									? (<TagConfigErrorAlert />)
+									? (<TagConfigErrorAlert/>)
 									: (<Table striped hover bordered size="sm">
 										<thead>
 											<tr>

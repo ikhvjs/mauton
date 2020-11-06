@@ -38,6 +38,8 @@ const checkCreateTagName = (tagName) => {
       return {isValid:false, errorMsg: `Please enter seq`}
     }else if (isNaN(Number(tagSeq))){
       return {isValid:false, errorMsg: `Seq must be a number`}
+    }else if (Number(tagSeq)<0||Number(tagSeq)>1000){
+      return {isValid:false, errorMsg: `Seq must be between 0 to 1000`}
     }
   
     return {isValid:true};
@@ -49,7 +51,7 @@ const checkCreateTagName = (tagName) => {
     if (!result.isValid){
       return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:false, errorMsg:result.errorMsg}};
     }
-    return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:tagSeq,isValid:true}};
+    return { type: ONCHANGE_CREATE_TAG_SEQ, payload: {tagSeq:Number(tagSeq),isValid:true}};
   }
   
 

@@ -83,7 +83,7 @@ class CategoryConfigCreate extends Component {
                                 <Form.Control size="sm" name="category-name"
                                     isValid={isCreateCategoryNameValid}
                                     isInvalid={(isCreateCategoryNameValid === null) ? null : !isCreateCategoryNameValid}
-                                    type="text" placeholder="Enter Category Name (Max. length: 20)"
+                                    type="text" placeholder="Enter Category Name"
                                     value={createCategoryName}
                                     onChange={onChangeCreateCategoryName} />
                                 <Form.Control.Feedback type="invalid">
@@ -103,7 +103,7 @@ class CategoryConfigCreate extends Component {
                                 <Form.Control size="sm" name="category-desc"
                                     isValid={isCreateCategoryDescValid}
                                     isInvalid={(isCreateCategoryDescValid === null) ? null : !isCreateCategoryDescValid}
-                                    type="text" placeholder="Enter Category Desc (Max. length: 20)"
+                                    type="text" placeholder="Enter Category Desc"
                                     value={createCategoryDesc}
                                     onChange={onChangeCreateCategoryDesc} />
                                 <Form.Control.Feedback type="invalid">

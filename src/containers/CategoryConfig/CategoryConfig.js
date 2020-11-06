@@ -7,26 +7,17 @@ import {
 	onchangeSearchCategoryNameAct,
 	onchangeSearchCategoryDescAct,
 	clearSearchCategoryAct,
-	selectCreateCategoryAct
-	// selectDeleteCategoryAct,
-	// selectUpdateCategoryAct
-
-	// postCategoryAct,
-	// deleteCategoryAct,
-	// selectSearchCategoryAct,
-	// beforeUpdateCategoryAct,
-	// afterUpdateCategoryAct,
-	// updateCategoryAct,
-	// updateCancelCategoryAct,
-	
+	selectCreateCategoryAct,
+	selectDeleteCategoryAct,
+	selectUpdateCategoryAct
 } from './CategoryConfigAction';
 
 import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
 import './CategoryConfig.css'
 
 import CategoryConfigCreate from './CategoryConfigCreate';
-// import CategoryConfigDelete from './CategoryConfigDelete';
-// import CategoryConfigUpdate from './CategoryConfigUpdate';
+import CategoryConfigDelete from './CategoryConfigDelete';
+import CategoryConfigUpdate from './CategoryConfigUpdate';
 import CategoryConfigErrorAlert   from './CategoryConfigErrorAlert';
 
 const mapStateToProps = (state) => {
@@ -56,32 +47,12 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(clearSearchCategoryAct()),
 		onSelectCreateCategory: () =>
 			dispatch(selectCreateCategoryAct()),
-		// onSelectDeleteCategory: (event) =>
-		// 	dispatch(selectDeleteCategoryAct(event)),
-		// onSelectUpdateCategory: (event) =>
-		// 	dispatch(selectUpdateCategoryAct(event))
-
-		// onCreateCategory:(event) =>
-		// 	dispatch(postCategoryAct(selectCreateCategoryAct(event))),	
-		// onDeleteCategory:(event) =>
-		// 	dispatch(deleteCategoryAct(selectDeleteCategoryAct(event))),
-		// onSelectToUpdateCategory:(event) => 
-		// 	dispatch(beforeUpdateCategoryAct(event)),
-		// onUpdateCategory:(event) => 
-		// 	dispatch(updateCategoryAct(afterUpdateCategoryAct(event))),
-		// onCancelUpdateCategory:(event) =>
-		// 	dispatch(updateCancelCategoryAct(event)),
-
+		onSelectDeleteCategory: (event) =>
+			dispatch(selectDeleteCategoryAct(event)),
+		onSelectUpdateCategory: (event) =>
+			dispatch(selectUpdateCategoryAct(event))
 	}
 }
-
-
-// const mergeProps = (propsFromState, propsFromDispatch, ownProps) => {
-//     return {
-//         onUpdateCategory2:(event) => 
-//         	propsFromDispatch.onUpdateCategory1(propsFromState.updatedCategory)(event)
-//     };
-// };
 
 class CategoryConfig extends Component {
 
@@ -221,6 +192,8 @@ class CategoryConfig extends Component {
 					</Row>
 				</Col>
 				<CategoryConfigCreate/>
+				<CategoryConfigDelete/>
+				<CategoryConfigUpdate/>
 			</Row>
 
 		);
