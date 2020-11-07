@@ -1026,8 +1026,7 @@ const initialStateMenu1= {
   isShowRequestMenu1ErrAlert:false,
   requestMenu1ErrMsg:"",
   //search Menu1
-  searchMenu1Name:"",
-  searchMenu1Seq:""
+  searchMenu1Name:""
 
 
   // menus2: [],
@@ -1091,12 +1090,9 @@ export const menu1Rdc = (state=initialStateMenu1, action={}) => {
     }
   case constants.ONCHANGE_SEARCH_MENU1_NAME:
     return Object.assign({}, state, {searchMenu1Name:action.payload})
-  case constants.ONCHANGE_SEARCH_MENU1_SEQ:
-    return Object.assign({}, state, {searchMenu1Seq:action.payload})
   case constants.CLEAR_SEARCH_MENU1:
     return Object.assign({}, state, 
       {searchMenu1Name:"", 
-      searchMenu1Seq:"", 
       isRefreshMenu1Needed:true
     })
   /*--------------------------create menu1------------------------------- */

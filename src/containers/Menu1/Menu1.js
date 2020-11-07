@@ -4,7 +4,6 @@ import {
 	requestMenu1Act,
 	searchMenu1Act,
 	onchangeSearchMenu1NameAct,
-	onchangeSearchMenu1SeqAct,
 	clearSearchMenu1Act
 } from './Menu1Action';
 import {  requestTopbarAct } from '../Topbar/TopbarAction';
@@ -22,8 +21,7 @@ const mapStateToProps = (state) => {
 	isRefreshMenu1Needed: state.menu1Rdc.isRefreshMenu1Needed,
 	isPendingRequestMenu1: state.menu1Rdc.isPendingRequestMenu1,
 	isRequestMenu1Failed: state.menu1Rdc.isRequestMenu1Failed,
-	searchMenu1Name: state.menu1Rdc.searchMenu1Name,
-	searchMenu1Seq: state.menu1Rdc.searchMenu1Seq
+	searchMenu1Name: state.menu1Rdc.searchMenu1Name
   }
 }
 
@@ -35,8 +33,6 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(searchMenu1Act()),
 		onChangeSearchMenu1Name: (event) =>
 			dispatch(onchangeSearchMenu1NameAct(event)),
-		onChangeSearchMenu1Seq: (event) =>
-			dispatch(onchangeSearchMenu1SeqAct(event)),
 		onClearSearchMenu1:() =>
 			dispatch(clearSearchMenu1Act()),
 		onRequestTopbar:()=>
@@ -66,9 +62,7 @@ class Menu1 extends Component  {
 		const { menu1,
 			onSearchMenu1,
 			searchMenu1Name,
-			searchMenu1Seq,
 			onChangeSearchMenu1Name,
-			onChangeSearchMenu1Seq,
 			onClearSearchMenu1,
 			onSelectCreateMenu1,
 			onSelectUpdateMenu1,
@@ -97,16 +91,6 @@ class Menu1 extends Component  {
 								placeholder="Menu Name"
 								value={searchMenu1Name}
 								onChange={onChangeSearchMenu1Name}
-							/>
-						</Col>
-						<Col xs={4} sm={4} md={3} className="mb-1">
-							<Form.Control
-								size="sm"
-								name="menu1-seq"
-								type="text"
-								placeholder="Seq"
-								value={searchMenu1Seq}
-								onChange={onChangeSearchMenu1Seq}
 							/>
 						</Col>
 						<Col name='button' xs={2} sm={2} md={1}>

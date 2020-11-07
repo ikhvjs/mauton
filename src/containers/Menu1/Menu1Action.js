@@ -3,12 +3,11 @@ import {
   REQUEST_MENU1_PENDING,
   REQUEST_MENU1_SUCCESS,
   REQUEST_MENU1_FAILED,
-  
+
   SEARCH_MENU1_PENDING,
   SEARCH_MENU1_SUCCESS,
   SEARCH_MENU1_FAILED,
   ONCHANGE_SEARCH_MENU1_NAME,
-  ONCHANGE_SEARCH_MENU1_SEQ,
 
   POST_MENU1_PENDING,
   POST_MENU1_SUCCESS,
@@ -16,7 +15,7 @@ import {
   DELETE_MENU1_PENDING,
   DELETE_MENU1_SUCCESS,
   DELETE_MENU1_FAILED,
-  
+
   SELECT_UPDATE_MENU1,
   UPDATE_MENU1_PENDING,
   UPDATE_MENU1_SUCCESS,
@@ -26,37 +25,40 @@ import {
 } from '../../constants';
 
 
-export const requestMenu1Act = () => (dispatch,getState) => {
+export const requestMenu1Act = () => (dispatch, getState) => {
   let resStatus;
   dispatch({ type: REQUEST_MENU1_PENDING })
   fetch(`${API_PORT}/menu1/request`, {
     method: 'post',
-    headers: {'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              'Authorization': `Bearer ${getState().authRdc.token}`
-            },
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${getState().authRdc.token}`
+    },
     body: JSON.stringify({
       userID: getState().authRdc.userID
     })
   })
-  .then(res => {
-    resStatus = res.status
-    return res.json()
-  })
-  .then(res => {
+    .then(res => {
+      resStatus = res.status
+      return res.json()
+    })
+    .then(res => {
       switch (resStatus) {
-          case 200:
-              return dispatch({ type: REQUEST_MENU1_SUCCESS, payload: res})
-          case 500:
-              return dispatch({ type: REQUEST_MENU1_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
-          default:
-              return dispatch({ type: REQUEST_MENU1_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:MENU1-REQUEST-1), please try again'} })
+        case 200:
+          return dispatch({ type: REQUEST_MENU1_SUCCESS, payload: res })
+        case 500:
+          return dispatch({ type: REQUEST_MENU1_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
+        default:
+          return dispatch({ type: REQUEST_MENU1_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:MENU1-REQUEST-1), please try again' } })
       }
-  })
-  .catch( 
-    () =>dispatch({ type: REQUEST_MENU1_FAILED, 
-      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:MENU1-REQUEST-2), please try again'} })
-  )
+    })
+    .catch(
+      () => dispatch({
+        type: REQUEST_MENU1_FAILED,
+        payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:MENU1-REQUEST-2), please try again' }
+      })
+    )
 }
 
 
@@ -79,8 +81,45 @@ export const onchangeSearchMenu1NameAct = (event) => {
   return ({ type: ONCHANGE_SEARCH_MENU1_NAME, payload: event.target.value });
 }
 
-export const onchangeSearchMenu1SeqAct = (event) => {
-  return ({ type: ONCHANGE_SEARCH_MENU1_SEQ, payload: event.target.value });
+
+export const searchMenu1Act = () => (dispatch, getState) => {
+  let resStatus;
+  dispatch({ type: SEARCH_MENU1_PENDING });
+  fetch(`${API_PORT}/menu1/search`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${getState().authRdc.token}`
+    },
+    body: JSON.stringify({
+      menuName: getState().menu1Rdc.searchMenu1Name,
+      seq: getState().menu1Rdc.searchMenu1Seq,
+      userID: getState().authRdc.userID
+    })
+  })
+    .then(res => {
+      resStatus = res.status
+      return res.json()
+    })
+    .then(res => {
+      switch (resStatus) {
+        case 200:
+          return dispatch({ type: SEARCH_MENU1_SUCCESS, payload: res })
+        case 400:
+          return dispatch({ type: SEARCH_MENU1_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
+        case 500:
+          return dispatch({ type: SEARCH_MENU1_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
+        default:
+          return dispatch({ type: SEARCH_MENU1_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:MENU1-SEARCH-1), please try again' } })
+      }
+    })
+    .catch(
+      () => dispatch({
+        type: SEARCH_MENU1_FAILED,
+        payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:MENU1-SEARCH-2), please try again' }
+      })
+    )
 }
 
 
@@ -140,24 +179,7 @@ export const selectSearchMenu1Act = (event) => {
 
 }
 
-export const searchMenu1Act = (menu) => (dispatch) => {
-  dispatch({ type: SEARCH_MENU1_PENDING })
-  fetch(`${API_PORT}/menu1/search`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify({
-      menu_name: menu.menu_name,
-      menu_path: menu.menu_path
-    })
-  }
-  )
-    .then(response => response.json())
-    .then(data => dispatch({ type: SEARCH_MENU1_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: SEARCH_MENU1_FAILED, payload: error }))
-}
+
 
 
 const toggleDisplayMenu1Button = (selectedNode) => {
