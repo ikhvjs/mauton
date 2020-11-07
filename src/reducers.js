@@ -406,26 +406,6 @@ export const categoryRdc = (state=initialStateCategory, action={}) => {
         return Object.assign({}, state,  
           {error: action.payload, isPendingRequestCategory:false, isRequestCategoryFailed:true}) 
     }
-    case constants.REQUEST_CATEGORY_C_PENDING:
-      return Object.assign({}, state, 
-        {isPendingRequestCategory:true,isRequestCategoryFailed:false, isRefreshCategoryNeeded:false})
-    case constants.REQUEST_CATEGORY_C_SUCCESS:
-      return Object.assign({}, state, 
-        {isPendingRequestCategory:false,isRequestCategoryFailed:false, categories: action.payload})
-    case constants.REQUEST_CATEGORY_C_FAILED:
-      switch(action.payload.Code){
-        case 'INTERNAL_SERVER_ERROR_CATEGORY_REQUEST':
-          return Object.assign({}, state, 
-            {isPendingRequestCategory:false, isRequestCategoryFailed:true,
-              isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage }) 
-        case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
-          return Object.assign({}, state, 
-            {isPendingRequestCategory:false, isRequestCategoryFailed:true,
-              isShowRequestCategoryErrAlert:true, requestCategoryErrMsg:action.payload.errMessage }) 
-        default://unhandled error
-          return Object.assign({}, state,  
-            {error: action.payload, isPendingRequestCategory:false, isRequestCategoryFailed:true}) 
-      }
   case constants.CLOSE_CATEGORY_ERROR_ALERT:
     return Object.assign({}, state, {isShowRequestCategoryErrAlert:false, requestCategoryErrMsg:""})
   /*------------------------------------------search ctgs---------------------------------------*/
@@ -794,24 +774,6 @@ export const tagRdc = (state=initialStateTag, action={}) => {
         return Object.assign({}, state,  
           {error: action.payload, isPendingRequestTag:false, isRequestTagFailed:true}) 
     }
-  case constants.REQUEST_TAG_C_PENDING:
-    return Object.assign({}, state, {isPendingRequestTag:true,isRequestTagFailed:false, isRefreshTagNeeded:false})
-  case constants.REQUEST_TAG_C_SUCCESS:
-    return Object.assign({}, state, {isPendingRequestTag:false,isRequestTagFailed:false, tags: action.payload})
-  case constants.REQUEST_TAG_C_FAILED:
-    switch(action.payload.Code){
-      case 'INTERNAL_SERVER_ERROR_TAG_REQUEST':
-        return Object.assign({}, state, 
-          {isPendingRequestTag:false, isRequestTagFailed:true,
-            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage }) 
-      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
-        return Object.assign({}, state, 
-          {isPendingRequestTag:false, isRequestTagFailed:true,
-            isShowRequestTagErrAlert:true, requestTagErrMsg:action.payload.errMessage }) 
-      default://unhandled error
-        return Object.assign({}, state,  
-          {error: action.payload, isPendingRequestTag:false,  isRequestTagFailed:true}) 
-    }
   case constants.CLOSE_TAG_ERROR_ALERT:
     return Object.assign({}, state,  {isShowRequestTagErrAlert:false,requestTagErrMsg:""})
   /*------------------------------------------search tag---------------------------------------*/
@@ -1054,43 +1016,92 @@ export const tagRdc = (state=initialStateTag, action={}) => {
   }
 }
 
-const initialStateMenu= {
-  menus1: [],
-  beforeUpdateMenu1:[],
+const initialStateMenu1= {
+  menu1: [],
   isRefreshMenu1Needed:false,
   isRefreshTopbarNeeded:false,
-  menus2: [],
-  beforeUpdateMenu2:[],
-  isRefreshMenu2Needed:false,
-  menuLevel:1,
-  isShowParentMenuModal:false,
-  parentMenus:[],
-  isRefreshParentMenuNeeded: false,
-  createParentMenu:[],
-  updateParentMenu:[],
-  isAllowUpdateParentMenuName:false,
-  isCreateActionMenu2:false,
-  isDisableMenuTab:false
+  //request Menu1
+  isPendingRequestMenu1: false,
+  isRequestMenu1Failed: false,
+  isShowRequestMenu1ErrAlert:false,
+  requestMenu1ErrMsg:"",
+  //search Menu1
+  searchMenu1Name:"",
+  searchMenu1Seq:""
+
+
+  // menus2: [],
+  // beforeUpdateMenu2:[],
+  // isRefreshMenu2Needed:false,
+  // isShowParentMenuModal:false,
+  // parentMenus:[],
+  // isRefreshParentMenuNeeded: false,
+  // createParentMenu:[],
+  // updateParentMenu:[],
+  // isAllowUpdateParentMenuName:false,
+  // isCreateActionMenu2:false,
+  // isDisableMenuTab:false
 }
 
-export const menuRdc = (state=initialStateMenu, action={}) => {
+export const menu1Rdc = (state=initialStateMenu1, action={}) => {
   switch (action.type) {
-  //MenuConfig
-  case constants.SET_MENU_TAB_NOT_DISABLE:
-    return Object.assign({}, state, {isDisableMenuTab:false})
-  //Menu1
+  /*------------------request Menu1----------------------- */
   case constants.REQUEST_MENU1_PENDING:
-    return Object.assign({}, state, {isRefreshMenu1Needed:false})
+    return Object.assign({}, state, 
+      {isPendingRequestMenu1:true,isRequestMenu1Failed:false, isRefreshMenu1Needed:false})
   case constants.REQUEST_MENU1_SUCCESS:
-    return Object.assign({}, state, {menus1: action.payload})
+    return Object.assign({}, state, 
+      {isPendingRequestMenu1:false,isRequestMenu1Failed:false, menu1: action.payload})
   case constants.REQUEST_MENU1_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.REQUEST_MENU1_C_PENDING:
-    return Object.assign({}, state, {isRefreshMenu1Needed:false})
-  case constants.REQUEST_MENU1_C_SUCCESS:
-    return Object.assign({}, state, {menus1: action.payload})
-  case constants.REQUEST_MENU1_C_FAILED:
-    return Object.assign({}, state, {error: action.payload})
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_MENU1_REQUEST':
+        return Object.assign({}, state, 
+          {isPendingRequestMenu1:false, isRequestMenu1Failed:true,
+            isShowRequestMenu1ErrAlert:true, requestMenu1ErrMsg:action.payload.errMessage }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          {isPendingRequestMenu1:false, isRequestMenu1Failed:true,
+            isShowRequestMenu1ErrAlert:true, requestMenu1ErrMsg:action.payload.errMessage }) 
+      default://unhandled error
+        return Object.assign({}, state,  
+          {error: action.payload, isPendingRequestMenu1:false, isRequestMenu1Failed:true}) 
+    }
+  case constants.CLOSE_MENU1_ERROR_ALERT:
+    return Object.assign({}, state, {isShowRequestMenu1ErrAlert:false, requestMenu1ErrMsg:""})
+  /*------------------search Menu1----------------------- */
+  case constants.SEARCH_MENU1_PENDING:
+    return Object.assign({}, state, {isPendingRequestMenu1:true,isRequestMenu1Failed:false})
+  case constants.SEARCH_MENU1_SUCCESS:
+    return Object.assign({}, state, 
+      {isPendingRequestMenu1:false,isRequestMenu1Failed:false,menu1: action.payload, isRefreshMenu1Needed:false})
+  case constants.SEARCH_MENU1_FAILED:
+    switch(action.payload.Code){
+      case 'INTERNAL_SERVER_ERROR_MENU1_SEARCH':
+        return Object.assign({}, state, 
+          {isPendingRequestMenu1:false, isRequestMenu1Failed:true,
+            isShowRequestMenu1ErrAlert:true, requestMenu1ErrMsg:action.payload.errMessage }) 
+      case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+        return Object.assign({}, state, 
+          {isPendingRequestMenu1:false, isRequestMenu1Failed:true,
+            isShowRequestMenu1ErrAlert:true, requestMenu1ErrMsg:action.payload.errMessage })
+      default://unhandled error
+        return Object.assign({}, state,  
+          {error: action.payload, isPendingRequestMenu1:false, isRequestMenu1Failed:true,
+            isShowRequestMenu1ErrAlert:true}) 
+    }
+  case constants.ONCHANGE_SEARCH_MENU1_NAME:
+    return Object.assign({}, state, {searchMenu1Name:action.payload})
+  case constants.ONCHANGE_SEARCH_MENU1_SEQ:
+    return Object.assign({}, state, {searchMenu1Seq:action.payload})
+  case constants.CLEAR_SEARCH_MENU1:
+    return Object.assign({}, state, 
+      {searchMenu1Name:"", 
+      searchMenu1Seq:"", 
+      isRefreshMenu1Needed:true
+    })
+  /*--------------------------create menu1------------------------------- */
+
+
   case constants.POST_MENU1_PENDING:
     return Object.assign({}, state, {})
   case constants.POST_MENU1_SUCCESS:
@@ -1104,12 +1115,6 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
     return Object.assign({}, state, 
       {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:true, isRefreshParentMenuNeeded:true})
   case constants.DELETE_MENU1_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.SEARCH_MENU1_PENDING:
-    return Object.assign({}, state, {})
-  case constants.SEARCH_MENU1_SUCCESS:
-    return Object.assign({}, state, {menus1: action.payload, isRefreshMenu1Needed:false})
-  case constants.SEARCH_MENU1_FAILED:
     return Object.assign({}, state, {error: action.payload})
   case constants.SELECT_UPDATE_MENU1:
     return Object.assign({}, state, 
@@ -1125,8 +1130,6 @@ export const menuRdc = (state=initialStateMenu, action={}) => {
   case constants.CANCEL_UPDATE_MENU1:
     return Object.assign({}, state, 
       {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:false, isDisableMenuTab:false})
-  case constants.CLEAR_SEARCH_MENU1:
-    return Object.assign({}, state, {isRefreshMenu1Needed:true, isRefreshTopbarNeeded:false})
   //Menu2
   case constants.REQUEST_MENU2_PENDING:
     return Object.assign({}, state, {isRefreshMenu2Needed:false})
@@ -1225,7 +1228,7 @@ const rootReducer = combineReducers({
 	blogRdc,
   categoryRdc,
   tagRdc,
-  menuRdc
+  menu1Rdc
 }); 
 
 export default rootReducer;

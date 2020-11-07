@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
 	requestTagAct,
-	requestTagByClickAct,
 	onchangeSearchTagNameAct,
 	searchTagAct,
 	clearSearchTagAct,
@@ -34,8 +33,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestTag: () =>
 			dispatch(requestTagAct()),
-		onRequestTagByClick: () =>
-			dispatch(requestTagByClickAct()),
 		onSearchTag: () =>
 			dispatch(searchTagAct()),
 		onChangeSearchTagName: (event) =>
@@ -62,7 +59,7 @@ class TagConfig extends Component {
 
 	componentDidUpdate() {
 		if (this.props.isRefreshTagNeeded === true) {
-			this.props.onRequestTagByClick();
+			this.props.onRequestTag();
 		}
 	}
 

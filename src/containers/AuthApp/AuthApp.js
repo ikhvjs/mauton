@@ -30,9 +30,7 @@ class AuthApp extends Component {
 	}
 
 	render() {
-		const { topbars,
-				onRequestTopbar
-			} = this.props;
+		const { topbars } = this.props;
 						    
 		return (
 			<Container fluid >
@@ -54,7 +52,7 @@ class AuthApp extends Component {
 							})
 			          	}
 			          	<Route path="/dashboard">
-			           		<Dashboard onRequestTopbar={onRequestTopbar} />
+			           		<Dashboard />
 			          	</Route>
 					</Switch>
 				</Row>	

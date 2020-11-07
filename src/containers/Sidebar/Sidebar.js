@@ -41,14 +41,20 @@ class Sidebar extends Component {
 					<Navbar.Toggle aria-controls="sidebar-dashboard-toggle" />
 					<Navbar.Collapse id="sidebar-dashboard-collapse">
 						<Nav className="flex-column">
-							<LinkContainer to={`${url}/menu`}>
-								<Nav.Link>Menu</Nav.Link>
-							</LinkContainer>
 							<LinkContainer to={`${url}/category`}>
 								<Nav.Link>Category</Nav.Link>
 							</LinkContainer>
 							<LinkContainer to={`${url}/tag`}>
 								<Nav.Link>Tag</Nav.Link>
+							</LinkContainer>
+							{/* <LinkContainer to={`${url}/menu`}>
+								<Nav.Link>Menu</Nav.Link>
+							</LinkContainer> */}
+							<LinkContainer to={`${url}/menu1`}>
+								<Nav.Link>Topbar Menu</Nav.Link>
+							</LinkContainer>
+							<LinkContainer to={`${url}/menu2`}>
+								<Nav.Link>Sidebar Menu</Nav.Link>
 							</LinkContainer>
 						</Nav>
 					</Navbar.Collapse>

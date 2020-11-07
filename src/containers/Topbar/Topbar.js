@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestSidebarByClick: (event) =>
-			dispatch(requestSidebarByClickAct(event.target.getAttribute('value')))
+			dispatch(requestSidebarByClickAct(event.target.getAttribute('menu-id')))
 	}
 }
 
@@ -53,9 +53,9 @@ class Topbar extends Component {
 							</div>)
 						:(topbars.map((topbar) => {
 							return (
-								<LinkContainer key={topbar.menu_id} to={`/${topbar.menu_path}`}>
+								<LinkContainer key={topbar.menu_id} to={`/${topbar.menu_id}`}>
 									<Nav.Link key={topbar.menu_id}
-										value={topbar.menu_id}
+										menu-id={topbar.menu_id}
 										onClick={onRequestSidebarByClick}>
 										{topbar.menu_name}
 									</Nav.Link>

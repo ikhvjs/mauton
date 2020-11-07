@@ -91,7 +91,4 @@ export const updateTagAct = () => (dispatch, getState) => {
         .catch(
             () => dispatch({ type: UPDATE_TAG_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:TAG-Update-2), please try again' } })
         )
-    // .then(response => response.json())
-    // .then(data => dispatch({ type: UPDATE_TAG_SUCCESS, payload: data}))
-    // .catch(error => dispatch({ type: UPDATE_TAG_FAILED, payload: error }))
 }

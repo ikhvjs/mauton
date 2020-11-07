@@ -2,30 +2,28 @@ import React , { Component } from 'react';
 import { connect } from 'react-redux';
 import { 
 	requestMenu1Act,
-	requestMenu1ByClickAct,
-	postMenu1Act,
-	selectCreateMenu1Act,
-	deleteMenu1Act,
-	selectDeleteMenu1Act,
-	selectSearchMenu1Act,
 	searchMenu1Act,
-	beforeUpdateMenu1Act,
-	afterUpdateMenu1Act,
-	updateMenu1Act,
-	cancelUpdateMenu1Act,
+	onchangeSearchMenu1NameAct,
+	onchangeSearchMenu1SeqAct,
 	clearSearchMenu1Act
 } from './Menu1Action';
+import {  requestTopbarAct } from '../Topbar/TopbarAction';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {Table, Form, Button, Col} from "react-bootstrap";
-// import './Menu1.css'
+import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
+import './Menu1.css';
+// import Menu1Create from './Menu1Create';
+// import Menu1Delete from './Menu1Delete';
+// import Menu1Update from './Menu1Update';
+import Menu1ErrorAlert   from './Menu1ErrorAlert';
 
 const mapStateToProps = (state) => {
   return {
-  	menus1: state.menuRdc.menus1,
-    beforeUpdateMenu1: state.menuRdc.beforeUpdateMenu1,
-  	isRefreshMenu1Needed:state.menuRdc.isRefreshMenu1Needed,
-  	isRefreshTopbarNeeded:state.menuRdc.isRefreshTopbarNeeded
+	menu1: state.menu1Rdc.menu1,
+	isRefreshMenu1Needed: state.menu1Rdc.isRefreshMenu1Needed,
+	isPendingRequestMenu1: state.menu1Rdc.isPendingRequestMenu1,
+	isRequestMenu1Failed: state.menu1Rdc.isRequestMenu1Failed,
+	searchMenu1Name: state.menu1Rdc.searchMenu1Name,
+	searchMenu1Seq: state.menu1Rdc.searchMenu1Seq
   }
 }
 
@@ -33,22 +31,16 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 	    onRequestMenu1: () => 
 	    	dispatch(requestMenu1Act()),
-		onCreateMenu1:(event) =>
-			dispatch(postMenu1Act(selectCreateMenu1Act(event))),
-		onRequestMenu1ByClick:() =>
-			dispatch(requestMenu1ByClickAct()),
-		onDeleteMenu1:(event) =>
-			dispatch(deleteMenu1Act(selectDeleteMenu1Act(event))),
-		onSearchMenu1:(event) =>
-			dispatch(searchMenu1Act(selectSearchMenu1Act(event))),
-		onSelectToUpdateMenu1:(event) => 
-			dispatch(beforeUpdateMenu1Act(event)),
-		onUpdateMenu1:(event) => 
-			dispatch(updateMenu1Act(afterUpdateMenu1Act(event))),
-		onCancelUpdateMenu1:(event) =>
-			dispatch(cancelUpdateMenu1Act(event)),
-		onClearSearchMenu1:(event) =>
-			dispatch(clearSearchMenu1Act(event))
+		onSearchMenu1:() =>
+			dispatch(searchMenu1Act()),
+		onChangeSearchMenu1Name: (event) =>
+			dispatch(onchangeSearchMenu1NameAct(event)),
+		onChangeSearchMenu1Seq: (event) =>
+			dispatch(onchangeSearchMenu1SeqAct(event)),
+		onClearSearchMenu1:() =>
+			dispatch(clearSearchMenu1Act()),
+		onRequestTopbar:()=>
+			dispatch(requestTopbarAct())
 	}
 }
 
@@ -58,9 +50,9 @@ class Menu1 extends Component  {
 		this.props.onRequestMenu1();
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate() {
 		if (this.props.isRefreshMenu1Needed === true) {
-			this.props.onRequestMenu1ByClick();
+			this.props.onRequestMenu1();
 
 			if(this.props.isRefreshTopbarNeeded === true) {
 				this.props.onRequestTopbar();
@@ -71,91 +63,131 @@ class Menu1 extends Component  {
 
 	render() {
 
-		const { menus1,
-				onCreateMenu1,
-				onDeleteMenu1,
-				onSearchMenu1,
-				onSelectToUpdateMenu1,
-				onUpdateMenu1,
-				onCancelUpdateMenu1,
-				onClearSearchMenu1
-			} = this.props;
+		const { menu1,
+			onSearchMenu1,
+			searchMenu1Name,
+			searchMenu1Seq,
+			onChangeSearchMenu1Name,
+			onChangeSearchMenu1Seq,
+			onClearSearchMenu1,
+			onSelectCreateMenu1,
+			onSelectUpdateMenu1,
+			onSelectDeleteMenu1,
+			isPendingRequestMenu1,
+			isRequestMenu1Failed
+		} = this.props;
+
+
+
 
 		return (
-			<React.Fragment>
-				<br/>
-				<Form.Row>
-					<Col xs={3}>
-						<Form.Control size="sm" name="menu_name"
-							type="text" placeholder="Enter Menu Name" />
-					</Col>
-					<Col xs={7}>
-						<Form.Control size="sm" name="menu_path"
-							type="text" placeholder="Enter Menu Path" />
-					</Col>
-					<Col name='button' xs={0.3}>   
-						<Button size="sm" onClick={onSearchMenu1}>Search</Button>
-					</Col>
-					<Col name='button' xs={0.3}>
-						<Button size="sm" variant="secondary" onClick={onClearSearchMenu1}>Clear</Button>
-					</Col>
-				</Form.Row>
-				<br/>
-				<Table striped  hover size="sm" className="menu1-table">
-				  <thead>
-				    <tr>
-				      <th width="20%">Menu Name</th>
-				      <th width="50%">Menu Path</th>
-				      <th width="10%">Seq</th>
-				      <th width="20%">Action</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				  <tr id='new'>
-				      <td><Form.Control  size="sm" name="menu_name" 
-				      	type="text" placeholder="Enter Menu Name" /></td>
-				      <td><Form.Control  size="sm" name="menu_path" 
-				      	type="text" placeholder="Enter Menu Path" /></td>
-				      <td><Form.Control  size="sm" name="seq" 
-				      	type="text" placeholder="Enter seq" /></td>
-				      <td headers='button'>
-				      	<Button name="create" onClick={onCreateMenu1} 
-				      		variant="primary" size="sm">
-				      		Create
-				      	</Button>
-				      </td>
-				    </tr>
-				  	{menus1.map((menu)=>{
-				  		return(
-				  			<tr id={menu.menu_id} key={menu.menu_id}>
-						      <td name='menu_name'>{menu.menu_name}</td>
-						      <td name='menu_path'>{menu.menu_path}</td>
-						      <td name='seq'>{menu.seq}</td>
-						      <td headers='button'>
-						      	<Button variant="success" name="update"
-						      	size="sm" onClick={onSelectToUpdateMenu1}>
-						      		Update
-						      	</Button>{" "}
-								<Button variant="danger" name="delete"
-								size="sm" onClick={onDeleteMenu1}>
-									Delete
-								</Button>{" "}
-								<Button className="hidden-button" variant="primary" name="save"
-								size="sm" onClick={onUpdateMenu1}>
-									Save
-								</Button>{" "}
-								<Button className="hidden-button" variant="secondary" name="cancel"
-								size="sm" onClick={onCancelUpdateMenu1}>
-									Cancel
-								</Button>
-							  </td>
-						    </tr>
-				  		)})
-				  	}
-				  </tbody>
-				</Table>
-			</React.Fragment>
-		)
+			<Row id="menu1-config-container">
+				<Col id="menu1-config-wrapper">
+					<Row className="mb-1 px-3">
+						<Col>
+							<h3>Topbar Menu</h3>
+						</Col>
+					</Row>
+					<Row className="mb-1 px-3">
+						<Col xs={4} sm={4} md={3} className="mb-1">
+							<Form.Control
+								size="sm"
+								name="menu1-name"
+								type="text"
+								placeholder="Menu Name"
+								value={searchMenu1Name}
+								onChange={onChangeSearchMenu1Name}
+							/>
+						</Col>
+						<Col xs={4} sm={4} md={3} className="mb-1">
+							<Form.Control
+								size="sm"
+								name="menu1-seq"
+								type="text"
+								placeholder="Seq"
+								value={searchMenu1Seq}
+								onChange={onChangeSearchMenu1Seq}
+							/>
+						</Col>
+						<Col name='button' xs={2} sm={2} md={1}>
+							<Button name="search" size="sm" onClick={onSearchMenu1}>Search</Button>
+						</Col>
+						<Col name='button' xs={2} sm={2} md={2}>
+							<Button name="clear" size="sm" variant="secondary" onClick={onClearSearchMenu1}>Clear</Button>
+						</Col>
+						<Col xs={6} sm={2} md={3}>
+							<Button name="create" variant="success" size="sm" onClick={onSelectCreateMenu1}> Create </Button>
+						</Col>
+					</Row>
+
+					<Row className="my-1 px-3">
+						<Col>
+							{(isPendingRequestMenu1)
+								? (<div className="d-flex align-items-center justify-content-center">
+									<Spinner
+										as="span"
+										animation="grow"
+										size="sm"
+										role="status"
+										aria-hidden="true"
+									/>
+									Loading...
+								</div>)
+								: (isRequestMenu1Failed
+									? (<Menu1ErrorAlert />)
+									: (<Table striped hover bordered size="sm">
+											<thead>
+												<tr>
+													<th width="50%">Menu Name</th>
+													<th width="20%">Seq</th>
+													<th width="30%">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												{menu1.map((menu1) => {
+													return (
+														<tr id={menu1.menu_id} key={menu1.menu_id}>
+															<td name='menu1-name'>{menu1.menu_name}</td>
+															<td name='menu1-seq'>{menu1.seq}</td>
+															<td name='menu1-action-button'>
+															<Button 
+																menu1-id={menu1.menu_id} 
+																menu1-name={menu1.menu_name} 
+																menu1-seq={menu1.seq}
+																className="mb-1 mx-1"
+																variant="success" 
+																name="update"
+																size="sm" onClick={onSelectUpdateMenu1}>
+																Update
+															</Button>
+															<Button 
+																menu1-id={menu1.menu_id} 
+																menu1-name={menu1.menu_name} 
+																className="mb-1 mx-1"
+																variant="danger" 
+																name="delete"
+																size="sm" onClick={onSelectDeleteMenu1}>
+																Delete
+															</Button>
+															</td>
+														</tr>
+													)
+												})
+												}
+											</tbody>
+										</Table>
+									)
+								)
+							}
+						</Col>
+					</Row>
+				</Col>
+				{/* <Menu1Create/>
+				<Menu1Delete/>
+				<Menu1Update/> */}
+			</Row>
+
+		);
 	}
 
 

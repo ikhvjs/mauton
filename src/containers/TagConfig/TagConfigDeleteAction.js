@@ -44,8 +44,5 @@ export const deleteTagAct = () => (dispatch,getState) =>{
       () =>dispatch({ type: DELETE_TAG_FAILED, 
         payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-DELETE-2), please try again'} })
     )
-    // .then(response => response.json())
-    // .then(data => dispatch({ type: DELETE_TAG_SUCCESS}))
-    // .catch(error => dispatch({ type: DELETE_TAG_FAILED, payload: error }))
   }
 

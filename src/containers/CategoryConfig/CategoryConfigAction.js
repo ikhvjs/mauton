@@ -4,9 +4,6 @@ import {
   REQUEST_CATEGORY_PENDING,
   REQUEST_CATEGORY_SUCCESS,
   REQUEST_CATEGORY_FAILED,
-  REQUEST_CATEGORY_C_PENDING,
-  REQUEST_CATEGORY_C_SUCCESS,
-  REQUEST_CATEGORY_C_FAILED,
   //search category
   SEARCH_CATEGORY_PENDING,
   SEARCH_CATEGORY_SUCCESS,
@@ -77,41 +74,6 @@ export const requestCategoryAct = () => (dispatch, getState) => {
     )
 }
 
-export const requestCategoryByClickAct = () => (dispatch, getState) => {
-  let resStatus;
-  dispatch({ type: REQUEST_CATEGORY_C_PENDING })
-  fetch(`${API_PORT}/category/request`, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${getState().authRdc.token}`
-    },
-    body: JSON.stringify({
-      userID: getState().authRdc.userID
-    })
-  })
-    .then(res => {
-      resStatus = res.status
-      return res.json()
-    })
-    .then(res => {
-      switch (resStatus) {
-        case 200:
-          return dispatch({ type: REQUEST_CATEGORY_C_SUCCESS, payload: res })
-        case 500:
-          return dispatch({ type: REQUEST_CATEGORY_C_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
-        default:
-          return dispatch({ type: REQUEST_CATEGORY_C_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:CATEGORY-REQUEST-1), please try again' } })
-      }
-    })
-    .catch(
-      () => dispatch({
-        type: REQUEST_CATEGORY_C_FAILED,
-        payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:CATEGORY-REQUEST-2), please try again' }
-      })
-    )
-}
 
 export const clearSearchCategoryAct = () => {
   return ({ type: CLEAR_SEARCH_CATEGORY });

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import Sidebar from '../Sidebar/Sidebar';
-import MenuConfig from '../MenuConfig/MenuConfig';
+// import MenuConfig from '../MenuConfig/MenuConfig';
+import Menu1 from '../Menu1/Menu1';
+import Menu2 from '../Menu2/Menu2';
 import CategoryConfig from '../CategoryConfig/CategoryConfig';
 import TagConfig from '../TagConfig/TagConfig';
 import Page404 from '../../components/Page404/Page404';
 import { Col} from "react-bootstrap";
 
 
-const Dashboard = ({ onRequestTopbar }) => {
+const Dashboard = () => {
 	const match = useRouteMatch();
 	return (
 		<React.Fragment>
@@ -20,8 +22,14 @@ const Dashboard = ({ onRequestTopbar }) => {
 					<Route exact path={match.path}>
 						<h3>Please select a topic in the blue menu</h3>
 					</Route>
-					<Route exact path={`${match.path}/menu`}>
+					{/* <Route exact path={`${match.path}/menu`}>
 						<MenuConfig onRequestTopbar={onRequestTopbar} />
+					</Route> */}
+					<Route exact path={`${match.path}/menu1`}>
+						<Menu1/>
+					</Route>
+					<Route exact path={`${match.path}/menu2`}>
+						<Menu2/>
 					</Route>
 					<Route exact path={`${match.path}/category`}>
 						<CategoryConfig />

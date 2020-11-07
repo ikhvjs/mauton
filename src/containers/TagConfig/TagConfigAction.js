@@ -3,9 +3,6 @@ import {
   REQUEST_TAG_PENDING,
   REQUEST_TAG_SUCCESS,
   REQUEST_TAG_FAILED,
-  REQUEST_TAG_C_PENDING,
-  REQUEST_TAG_C_SUCCESS,
-  REQUEST_TAG_C_FAILED,
   SEARCH_TAG_PENDING,
   SEARCH_TAG_SUCCESS,
   SEARCH_TAG_FAILED,
@@ -37,8 +34,6 @@ export const requestTagAct = () => (dispatch,getState) => {
       switch (resStatus) {
           case 200:
               return dispatch({ type: REQUEST_TAG_SUCCESS, payload: res})
-          // case 400:
-          //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           case 500:
               return dispatch({ type: REQUEST_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           default:
@@ -51,40 +46,6 @@ export const requestTagAct = () => (dispatch,getState) => {
   )
 }
 
-export const requestTagByClickAct = () => (dispatch,getState) => {
-  let resStatus;
-  dispatch({ type: REQUEST_TAG_C_PENDING })
-  fetch(`${API_PORT}/tag/request`, {
-          method: 'post',
-          headers: {'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${getState().authRdc.token}`
-                  },
-          body: JSON.stringify({
-            userID: getState().authRdc.userID
-          })
-  })
-  .then(res => {
-    resStatus = res.status
-    return res.json()
-  })
-  .then(res => {
-      switch (resStatus) {
-          case 200:
-              return dispatch({ type: REQUEST_TAG_C_SUCCESS, payload: res})
-          // case 400:
-          //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
-          case 500:
-              return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
-          default:
-              return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-REQUEST-C-1), please try again'} })
-      }
-  })
-  .catch( 
-    () =>dispatch({ type: REQUEST_TAG_C_FAILED, 
-      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TAG-REQUEST-C-2), please try again'} })
-  )
-}
 
 export const searchTagAct = () => (dispatch,getState) =>{
   let resStatus;
@@ -109,8 +70,6 @@ export const searchTagAct = () => (dispatch,getState) =>{
       switch (resStatus) {
           case 200:
               return dispatch({ type: SEARCH_TAG_SUCCESS, payload: res})
-          // case 400:
-          //     return dispatch({ type: REQUEST_TAG_C_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           case 500:
               return dispatch({ type: SEARCH_TAG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
           default:

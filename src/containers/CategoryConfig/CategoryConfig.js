@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
 	requestCategoryAct,
-	requestCategoryByClickAct,
 	searchCategoryAct,
 	onchangeSearchCategoryNameAct,
 	onchangeSearchCategoryDescAct,
@@ -35,8 +34,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestCategory: () =>
 			dispatch(requestCategoryAct()),
-		onRequestCategoryByClick: () =>
-			dispatch(requestCategoryByClickAct()),
 		onSearchCategory: () =>
 			dispatch(searchCategoryAct()),
 		onChangeSearchCategoryName: (event) =>
@@ -62,7 +59,7 @@ class CategoryConfig extends Component {
 
 	componentDidUpdate() {
 		if (this.props.isRefreshCategoryNeeded === true) {
-			this.props.onRequestCategoryByClick();
+			this.props.onRequestCategory();
 		}
 	}
 
@@ -202,5 +199,4 @@ class CategoryConfig extends Component {
 
 }
 
-// export default CategoryConfig;
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryConfig)
