@@ -4,21 +4,25 @@ import {
 	requestMenu1Act,
 	searchMenu1Act,
 	onchangeSearchMenu1NameAct,
-	clearSearchMenu1Act
+	clearSearchMenu1Act,
+	selectCreateMenu1Act,
+	selectDeleteMenu1Act,
+	selectUpdateMenu1Act
 } from './Menu1Action';
 import {  requestTopbarAct } from '../Topbar/TopbarAction';
 
 import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
 import './Menu1.css';
-// import Menu1Create from './Menu1Create';
-// import Menu1Delete from './Menu1Delete';
-// import Menu1Update from './Menu1Update';
+import Menu1Create from './Menu1Create';
+import Menu1Delete from './Menu1Delete';
+import Menu1Update from './Menu1Update';
 import Menu1ErrorAlert   from './Menu1ErrorAlert';
 
 const mapStateToProps = (state) => {
   return {
 	menu1: state.menu1Rdc.menu1,
 	isRefreshMenu1Needed: state.menu1Rdc.isRefreshMenu1Needed,
+	isRefreshTopbarNeeded: state.menu1Rdc.isRefreshTopbarNeeded,
 	isPendingRequestMenu1: state.menu1Rdc.isPendingRequestMenu1,
 	isRequestMenu1Failed: state.menu1Rdc.isRequestMenu1Failed,
 	searchMenu1Name: state.menu1Rdc.searchMenu1Name
@@ -36,7 +40,13 @@ const mapDispatchToProps = (dispatch) => {
 		onClearSearchMenu1:() =>
 			dispatch(clearSearchMenu1Act()),
 		onRequestTopbar:()=>
-			dispatch(requestTopbarAct())
+			dispatch(requestTopbarAct()),
+		onSelectCreateMenu1: () =>
+			dispatch(selectCreateMenu1Act()),
+		onSelectDeleteMenu1: (event) =>
+			dispatch(selectDeleteMenu1Act(event)),
+		onSelectUpdateMenu1: (event) =>
+			dispatch(selectUpdateMenu1Act(event))
 	}
 }
 
@@ -49,7 +59,6 @@ class Menu1 extends Component  {
 	componentDidUpdate() {
 		if (this.props.isRefreshMenu1Needed === true) {
 			this.props.onRequestMenu1();
-
 			if(this.props.isRefreshTopbarNeeded === true) {
 				this.props.onRequestTopbar();
 			}
@@ -166,9 +175,9 @@ class Menu1 extends Component  {
 						</Col>
 					</Row>
 				</Col>
-				{/* <Menu1Create/>
+				<Menu1Create/>
 				<Menu1Delete/>
-				<Menu1Update/> */}
+				<Menu1Update/>
 			</Row>
 
 		);

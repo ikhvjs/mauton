@@ -56,8 +56,8 @@ const checkCreateCategorySeq = (categorySeq) => {
         return { isValid: false, errorMsg: `Please enter seq` }
     }else if(isNaN(Number(categorySeq))) {
         return { isValid: false, errorMsg: `Seq must be a number` }
-    }else if (Number(categorySeq)<0||Number(categorySeq)>1000){
-        return {isValid:false, errorMsg: `Seq must be between 0 to 1000`}
+    }else if (Number(categorySeq)<1||Number(categorySeq)>1000){
+        return {isValid:false, errorMsg: `Seq must be between 1 to 1000`}
     }
 
     return { isValid: true };

@@ -64,10 +64,10 @@ class TagConfigUpdate extends Component {
                                 Tag Name
                                 </Form.Label>
                             <Col sm={10}>
-                                <Form.Control size="sm" name="tag_name"
+                                <Form.Control size="sm" name="tag-name"
                                     isValid={isUpdateTagNameValid}
                                     isInvalid={(isUpdateTagNameValid === null) ? null : !isUpdateTagNameValid}
-                                    type="text" placeholder="Enter Tag Name (Max. length: 20)"
+                                    type="text" placeholder="Enter Tag Name"
                                     value={updateTagName}
                                     onChange={onChangeUpdateTagName} />
                                 <Form.Control.Feedback type="invalid">

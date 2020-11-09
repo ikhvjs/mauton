@@ -38,8 +38,8 @@ const checkCreateTagName = (tagName) => {
       return {isValid:false, errorMsg: `Please enter seq`}
     }else if (isNaN(Number(tagSeq))){
       return {isValid:false, errorMsg: `Seq must be a number`}
-    }else if (Number(tagSeq)<0||Number(tagSeq)>1000){
-      return {isValid:false, errorMsg: `Seq must be between 0 to 1000`}
+    }else if (Number(tagSeq)<1||Number(tagSeq)>1000){
+      return {isValid:false, errorMsg: `Seq must be between 1 to 1000`}
     }
   
     return {isValid:true};
