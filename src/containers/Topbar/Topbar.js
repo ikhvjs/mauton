@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
-import { requestTopbarAct } from './TopbarAction';
-import { requestSidebarByClickAct } from '../Sidebar/SidebarAction';
+import { requestTopbarAct, selectTopbarAct } from './TopbarAction';
+import { requestSidebarAct } from '../Sidebar/SidebarAction';
 import logo from './logo.png';
 
 const mapStateToProps = (state) => {
@@ -18,18 +18,21 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestTopbar: () =>
 			dispatch(requestTopbarAct()),
-		onRequestSidebarByClick: (event) =>
-			dispatch(requestSidebarByClickAct(event.target.getAttribute('menu-id')))
+		onSelectTopbar: (event)=>{
+			dispatch(selectTopbarAct(event.target.getAttribute('menu-id')));
+			dispatch(requestSidebarAct());
+			}
 	}
 }
+
 
 class Topbar extends Component {
 	render() {
 		const { topbar,
 			isPendingRequestTopbar,
-			onRequestSidebarByClick,
+			onRequestTopbar,
 			isRequestTopbarFailed,
-			onRequestTopbar
+			onSelectTopbar
 		} = this.props;
 		return (
 			<Navbar collapseOnSelect id="topbar" bg="light" variant="light" expand="lg"
@@ -74,7 +77,7 @@ class Topbar extends Component {
 									<LinkContainer key={topbar.menu_id} to={`/${topbar.menu_id}`}>
 										<Nav.Link key={topbar.menu_id}
 											menu-id={topbar.menu_id}
-											onClick={onRequestSidebarByClick}>
+											onClick={onSelectTopbar}>
 											{topbar.menu_name}
 										</Nav.Link>
 									</LinkContainer>

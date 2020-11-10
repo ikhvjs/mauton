@@ -2,7 +2,8 @@ import {
     API_PORT,
     REQUEST_TOPBAR_PENDING,
     REQUEST_TOPBAR_SUCCESS,
-    REQUEST_TOPBAR_FAILED
+    REQUEST_TOPBAR_FAILED,
+    SELECT_TOPBAR_MENU_ID
    } from '../../constants';
 
 export const requestTopbarAct = () => (dispatch,getState) => {
@@ -36,9 +37,9 @@ export const requestTopbarAct = () => (dispatch,getState) => {
     () =>dispatch({ type: REQUEST_TOPBAR_FAILED, 
       payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TOPBAR-REQUEST-2), please try again'} })
   )
-  // .then(response => response.json())
-  // .then(data => dispatch({ type: REQUEST_TOPBAR_SUCCESS, payload: data }))
-  // .catch(error => dispatch({ type: REQUEST_TOPBAR_FAILED, payload: error }))
 };
   
 
+export const selectTopbarAct = (topbarMenuID) => {
+  return({type:SELECT_TOPBAR_MENU_ID, payload:Number(topbarMenuID)})
+};

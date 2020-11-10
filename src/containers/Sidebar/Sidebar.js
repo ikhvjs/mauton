@@ -1,39 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
 import { requestBloglistByClickAct } from '../Bloglist/BloglistAction';
-import { requestSidebarAct } from '../Sidebar/SidebarAction';
+import { requestSidebarAct } from './SidebarAction';
 
 
 const mapStateToProps = (state) => {
 	return {
-		sidebars: state.sidebarRdc.sidebars,
-		isPendingSidebarByClick: state.sidebarRdc.isPendingSidebarByClick
+		sidebar: state.sidebarRdc.sidebar,
+		isPendingRequestSidebar: state.sidebarRdc.isPendingRequestSidebar,
+		isRequestSidebarFailed: state.sidebarRdc.isRequestSidebarFailed
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		onRequestSidebar: () =>
+			dispatch(requestSidebarAct()),
 		onRequestBloglistByClick: (event) =>
-			dispatch(requestBloglistByClickAct(event.target.getAttribute('menu-id'))),
-		onRequestSidebar: (id) =>
-			dispatch(requestSidebarAct(id))
+			dispatch(requestBloglistByClickAct(event.target.getAttribute('menu-id')))
 	}
 }
 
 class Sidebar extends Component {
 
-	componentDidMount() {
-		const { isPendingSidebarByClick, url, onRequestSidebar, topbarMenuID } = this.props;
-		if (isPendingSidebarByClick === false && url !== "/dashboard") {
-			onRequestSidebar(topbarMenuID);
-		}
-	}
-
 
 	render() {
-		const { url, sidebars, onRequestBloglistByClick } = this.props;
+		const { url,
+			sidebar,
+			onRequestSidebar,
+			isPendingRequestSidebar,
+			isRequestSidebarFailed,
+			onRequestBloglistByClick
+		} = this.props;
 		return (
 			(url === "/dashboard") ?
 				(<Navbar id="dashboard-siderbar" bg="primary" variant="dark" expand="sm"
@@ -63,17 +63,40 @@ class Sidebar extends Component {
 				(<Navbar id="dynamic-siderbar" bg="primary" variant="dark" expand="sm"
 					className="h-100 align-items-start justify-content-center shadow rounded">
 					<Navbar.Toggle aria-controls="sidebar-dynamic-toggle" />
+					{(isPendingRequestSidebar)
+						? (<div className="d-flex align-items-center"><Spinner
+							as="span"
+							animation="grow"
+							size="sm"
+							role="status"
+							aria-hidden="true"
+						/>
+					  		Loading...
+						</div>)
+						: ((isRequestSidebarFailed)
+							? (<Button variant="secondary"
+								size='sm' onClick={onRequestSidebar}>
+								something wrong, Refresh Sidebar
+							</Button>)
+							: null)
+					}
 					<Navbar.Collapse id="sidebar-dynamic-collapse">
 						<Nav className="flex-column">
-							{sidebars.map((sidebar) => {
-								return (
-									<LinkContainer key={sidebar.menu_id} to={`${url}/${sidebar.menu_id}`}>
-										<Nav.Link menu-id={sidebar.menu_id} onClick={onRequestBloglistByClick}>
-											{sidebar.menu_name}
-										</Nav.Link>
-									</LinkContainer>
-								)
-							})}
+
+							{(isPendingRequestSidebar) ?
+								(null)
+								: (sidebar.map((sidebar) => {
+									return (
+										<LinkContainer key={sidebar.menu_id}
+											to={`${url}/${sidebar.menu_id}`}>
+											<Nav.Link menu-id={sidebar.menu_id}
+												onClick={onRequestBloglistByClick}>
+												{sidebar.menu_name}
+											</Nav.Link>
+										</LinkContainer>
+									)
+								}))
+							}
 						</Nav>
 					</Navbar.Collapse>
 				</Navbar>

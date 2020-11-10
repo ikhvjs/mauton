@@ -9,14 +9,11 @@ class Content extends Component {
 	render() {
 		
 		const match = this.props.match;
-		const { topbarMenuID } = this.props;
 
 		return (
 			<React.Fragment>
 				<Col sm={2} id="sidebar-container" className="align-items-start mx-2 p-0" >
-					<Sidebar url={match.url}
-						topbarMenuID={topbarMenuID}
-					/>
+					<Sidebar url={match.url} />
 				</Col>
 				<Col id="blog-container" className="min-vh-100" >
 					<Switch>

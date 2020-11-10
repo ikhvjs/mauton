@@ -115,12 +115,15 @@ export const homeRdc = (state=initialStateHome, action={}) => {
 
 const initialStateTopbar = {
   topbar: [],
+  selectTopbarID:"",
   isPendingRequestTopbar: false,
   isRequestTopbarFailed:false,
 }
 
 export const topbarRdc = (state=initialStateTopbar, action={}) => {
   switch (action.type) {
+  	case constants.SELECT_TOPBAR_MENU_ID:
+    return Object.assign({}, state, {selectTopbarID:action.payload})
   	case constants.REQUEST_TOPBAR_PENDING:
     return Object.assign({}, state, {isPendingRequestTopbar:true,isRequestTopbarFailed:false})
     case constants.REQUEST_TOPBAR_SUCCESS:
@@ -148,27 +151,38 @@ export const topbarRdc = (state=initialStateTopbar, action={}) => {
 
 
 const initialStateSidebar = {
-  sidebars: [],
-  isPendingSidebar: false,
-  isPendingSidebarByClick: false
+  sidebar: [],
+  isPendingRequestSidebar: false,
+  isRequestSidebarFailed:false,
 }
 
 export const sidebarRdc = (state=initialStateSidebar, action={}) => {
   switch (action.type) {
-	case constants.REQUEST_SIDEBAR_PENDING:
-	  return Object.assign({}, state, {isPendingSidebar: true})
-	case constants.REQUEST_SIDEBAR_SUCCESS:
-	  return Object.assign({}, state, {sidebars: action.payload, isPendingSidebar: false})
-	case constants.REQUEST_SIDEBAR_FAILED:
-	  return Object.assign({}, state, {error: action.payload})
-	case constants.REQUEST_SIDEBAR_C_PENDING:
-	  return Object.assign({}, state, {isPendingSidebarByClick: true})
-	case constants.REQUEST_SIDEBAR_C_SUCCESS:
-	  return Object.assign({}, state, {sidebars: action.payload, isPendingSidebarByClick: false})
-	case constants.REQUEST_SIDEBAR_C_FAILED:
-	  return Object.assign({}, state, {error: action.payload})  
-	default:
-	  return state
+    case constants.REQUEST_SIDEBAR_PENDING:
+      return Object.assign({}, state, {isPendingRequestSidebar:true,isRequestSidebarFailed:false})
+      case constants.REQUEST_SIDEBAR_SUCCESS:
+        return Object.assign({}, state, 
+          {isPendingRequestSidebar:false,
+            isRequestSidebarFailed:false, 
+            sidebar: action.payload})
+      case constants.REQUEST_SIDEBAR_FAILED:
+        switch(action.payload.Code){
+          case 'INTERNAL_SERVER_ERROR_SIDEBAR_REQUEST':
+            return Object.assign({}, state, 
+              {isPendingRequestSidebar:false,
+                isRequestSidebarFailed:true }) 
+          case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+            return Object.assign({}, state, 
+              {isPendingRequestSidebar:false,
+                isRequestSidebarFailed:true}) 
+          default://unhandled error
+            return Object.assign({}, state,  
+              {error: action.payload, 
+                isPendingRequestSidebar:false, 
+                isRequestSidebarFailed:true}) 
+        }
+    default:
+      return state
   }
 }
 

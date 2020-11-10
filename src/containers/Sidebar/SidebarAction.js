@@ -1,34 +1,45 @@
 import {
-    API_PORT,
-    REQUEST_SIDEBAR_PENDING,
-    REQUEST_SIDEBAR_SUCCESS,
-    REQUEST_SIDEBAR_FAILED,
-    REQUEST_SIDEBAR_C_PENDING,
-    REQUEST_SIDEBAR_C_SUCCESS,
-    REQUEST_SIDEBAR_C_FAILED
-   } from '../../constants';
+  API_PORT,
+  REQUEST_SIDEBAR_PENDING,
+  REQUEST_SIDEBAR_SUCCESS,
+  REQUEST_SIDEBAR_FAILED
+} from '../../constants';
 
-export const requestSidebarAct = (topbarMenuID) => (dispatch) =>{
-    dispatch({ type: REQUEST_SIDEBAR_PENDING })
-      fetch(`${API_PORT}/sidebar/id/${topbarMenuID}`, {  
-            method: 'get',
-            headers: {'Content-Type': 'text/plain'}
-          })
-      .then(response => response.json())
-      .then(data => dispatch({ type: REQUEST_SIDEBAR_SUCCESS, payload: data }))
-      .catch(error => dispatch({ type: REQUEST_SIDEBAR_FAILED, payload: error }))
+
+export const requestSidebarAct = () => (dispatch,getState) => {
+  let resStatus;
+  dispatch({ type: REQUEST_SIDEBAR_PENDING });
+  fetch(`${API_PORT}/sidebar/request`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${getState().authRdc.token}`
+    },
+    body: JSON.stringify({
+      userID: getState().authRdc.userID,
+      topbarMenuID: getState().topbarRdc.selectTopbarID
+    })
+  })
+    .then(res => {
+      resStatus = res.status
+      return res.json()
+    })
+    .then(res => {
+      switch (resStatus) {
+        case 200:
+          return dispatch({ type: REQUEST_SIDEBAR_SUCCESS, payload: res })
+        case 500:
+          return dispatch({ type: REQUEST_SIDEBAR_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
+        default:
+          return dispatch({ type: REQUEST_SIDEBAR_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:SIDEBAR-REQUEST-1), please try again' } })
+      }
+    })
+    .catch(
+      () => dispatch({
+        type: REQUEST_SIDEBAR_FAILED,
+        payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:SIDEBAR-REQUEST-2), please try again' }
+      })
+    )
 };
 
-export const requestSidebarByClickAct = (topbarMenuID) => (dispatch) =>{
-  dispatch({ type: REQUEST_SIDEBAR_C_PENDING })
-    // fetch(`${API_PORT}/sidebar/path${topbarMenuPath}`, {
-    fetch(`${API_PORT}/sidebar/id/${topbarMenuID}`, {  
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_SIDEBAR_C_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_SIDEBAR_C_FAILED, payload: error }))
-};
-
-  

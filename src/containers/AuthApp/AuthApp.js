@@ -44,9 +44,8 @@ class AuthApp extends Component {
 			          	</Route>
 			          	{topbar.map((topbar)=>{
 								return(
-									<Route key={topbar.menu_id} path={`/${topbar.menu_path}`}>
-										<Content topbarMenuID={topbar.menu_id}
-										/>
+									<Route key={topbar.menu_id} path={`/${topbar.menu_id}`}>
+										<Content/>
 					    			</Route>
 								)
 							})
