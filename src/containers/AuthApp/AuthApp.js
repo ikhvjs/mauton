@@ -11,7 +11,7 @@ import {Container, Row} from "react-bootstrap";
 
 const mapStateToProps = (state) => {
   return {
-    topbars: state.topbarRdc.topbars
+    topbar: state.topbarRdc.topbar
   }
 }
 
@@ -30,7 +30,7 @@ class AuthApp extends Component {
 	}
 
 	render() {
-		const { topbars } = this.props;
+		const { topbar } = this.props;
 						    
 		return (
 			<Container fluid >
@@ -42,7 +42,7 @@ class AuthApp extends Component {
 			          	<Route exact path="/">
 			           		<Home />
 			          	</Route>
-			          	{topbars.map((topbar)=>{
+			          	{topbar.map((topbar)=>{
 								return(
 									<Route key={topbar.menu_id} path={`/${topbar.menu_path}`}>
 										<Content topbarMenuID={topbar.menu_id}

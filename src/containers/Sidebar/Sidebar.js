@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestBloglistByClick: (event) =>
-			dispatch(requestBloglistByClickAct(event.target.getAttribute('id'))),
+			dispatch(requestBloglistByClickAct(event.target.getAttribute('menu-id'))),
 		onRequestSidebar: (id) =>
 			dispatch(requestSidebarAct(id))
 	}
@@ -67,8 +67,8 @@ class Sidebar extends Component {
 						<Nav className="flex-column">
 							{sidebars.map((sidebar) => {
 								return (
-									<LinkContainer key={sidebar.menu_id} to={`${url}/${sidebar.menu_path}`}>
-										<Nav.Link id={sidebar.menu_id} onClick={onRequestBloglistByClick}>
+									<LinkContainer key={sidebar.menu_id} to={`${url}/${sidebar.menu_id}`}>
+										<Nav.Link menu-id={sidebar.menu_id} onClick={onRequestBloglistByClick}>
 											{sidebar.menu_name}
 										</Nav.Link>
 									</LinkContainer>
