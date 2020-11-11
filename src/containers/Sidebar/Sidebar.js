@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
 import { requestBloglistByClickAct } from '../Bloglist/BloglistAction';
 import { requestSidebarAct } from './SidebarAction';
+import './Sidebar.css';
 
 
 const mapStateToProps = (state) => {
@@ -47,9 +48,6 @@ class Sidebar extends Component {
 							<LinkContainer to={`${url}/tag`}>
 								<Nav.Link>Tag</Nav.Link>
 							</LinkContainer>
-							{/* <LinkContainer to={`${url}/menu`}>
-								<Nav.Link>Menu</Nav.Link>
-							</LinkContainer> */}
 							<LinkContainer to={`${url}/menu1`}>
 								<Nav.Link>Topbar Menu</Nav.Link>
 							</LinkContainer>
@@ -62,7 +60,6 @@ class Sidebar extends Component {
 				) :
 				(<Navbar id="dynamic-siderbar" bg="primary" variant="dark" expand="sm"
 					className="h-100 align-items-start justify-content-center shadow rounded">
-					<Navbar.Toggle aria-controls="sidebar-dynamic-toggle" />
 					{(isPendingRequestSidebar)
 						? (<div className="d-flex align-items-center"><Spinner
 							as="span"
@@ -74,15 +71,15 @@ class Sidebar extends Component {
 					  		Loading...
 						</div>)
 						: ((isRequestSidebarFailed)
-							? (<Button variant="secondary"
+							? (<Button variant="light" className="mr-1"
 								size='sm' onClick={onRequestSidebar}>
 								something wrong, Refresh Sidebar
 							</Button>)
 							: null)
 					}
+					<Navbar.Toggle aria-controls="sidebar-dynamic-toggle" />
 					<Navbar.Collapse id="sidebar-dynamic-collapse">
 						<Nav className="flex-column">
-
 							{(isPendingRequestSidebar) ?
 								(null)
 								: (sidebar.map((sidebar) => {

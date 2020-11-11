@@ -1,0 +1,6 @@
+@media only screen and (max-width: 576px) {
+    #dynamic-siderbar{
+        justify-content: flex-end !important;
+        align-items:center !important;
+    }
+}

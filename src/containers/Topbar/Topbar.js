@@ -38,7 +38,7 @@ class Topbar extends Component {
 			<Navbar collapseOnSelect id="topbar" bg="light" variant="light" expand="lg"
 				className="w-100 shadow my-1 mx-2 rounded">
 				<LinkContainer to="/">
-					<Navbar.Brand id="home">
+					<Navbar.Brand id="home" >
 						<img
 							src={logo}
 							width="30"

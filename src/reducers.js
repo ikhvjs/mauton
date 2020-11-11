@@ -125,9 +125,15 @@ export const topbarRdc = (state=initialStateTopbar, action={}) => {
   	case constants.SELECT_TOPBAR_MENU_ID:
     return Object.assign({}, state, {selectTopbarID:action.payload})
   	case constants.REQUEST_TOPBAR_PENDING:
-    return Object.assign({}, state, {isPendingRequestTopbar:true,isRequestTopbarFailed:false})
+    return Object.assign({}, state, 
+      {topbar:[],
+        isPendingRequestTopbar:true,
+        isRequestTopbarFailed:false})
     case constants.REQUEST_TOPBAR_SUCCESS:
-      return Object.assign({}, state, {isPendingRequestTopbar:false,isRequestTopbarFailed:false, topbar: action.payload})
+      return Object.assign({}, state, 
+        {isPendingRequestTopbar:false,
+          isRequestTopbarFailed:false, 
+          topbar: action.payload})
     case constants.REQUEST_TOPBAR_FAILED:
       switch(action.payload.Code){
         case 'INTERNAL_SERVER_ERROR_TOPBAR_REQUEST':
@@ -159,7 +165,10 @@ const initialStateSidebar = {
 export const sidebarRdc = (state=initialStateSidebar, action={}) => {
   switch (action.type) {
     case constants.REQUEST_SIDEBAR_PENDING:
-      return Object.assign({}, state, {isPendingRequestSidebar:true,isRequestSidebarFailed:false})
+      return Object.assign({}, state, 
+        {sidebar:[],
+          isPendingRequestSidebar:true,
+          isRequestSidebarFailed:false})
       case constants.REQUEST_SIDEBAR_SUCCESS:
         return Object.assign({}, state, 
           {isPendingRequestSidebar:false,
@@ -1390,90 +1399,8 @@ case constants.UPDATE_MENU1_FAILED:
           isUpdateMenu1NameValid:null,updateMenu1NameErrMsg:"",
           isUpdateMenu1SeqValid:null,updateMenu1SeqErrMsg:""}) 
   }
-  //Menu2
-  case constants.REQUEST_MENU2_PENDING:
-    return Object.assign({}, state, {isRefreshMenu2Needed:false})
-  case constants.REQUEST_MENU2_SUCCESS:
-    return Object.assign({}, state, {menus2: action.payload})
-  case constants.REQUEST_MENU2_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.REQUEST_MENU2_C_PENDING:
-    return Object.assign({}, state, {isRefreshMenu2Needed:false})
-  case constants.REQUEST_MENU2_C_SUCCESS:
-    return Object.assign({}, state, {menus2: action.payload})
-  case constants.REQUEST_MENU2_C_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.POST_MENU2_PENDING:
-    return Object.assign({}, state, {})
-  case constants.POST_MENU2_SUCCESS:
-    return Object.assign({}, state, {createParentMenu:{}, isRefreshMenu2Needed:true})
-  case constants.POST_MENU2_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.DELETE_MENU2_PENDING:
-    return Object.assign({}, state, {})
-  case constants.DELETE_MENU2_SUCCESS:
-    return Object.assign({}, state, {isRefreshMenu2Needed:true})
-  case constants.DELETE_MENU2_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.SEARCH_MENU2_PENDING:
-    return Object.assign({}, state, {})
-  case constants.SEARCH_MENU2_SUCCESS:
-    return Object.assign({}, state, {menus2: action.payload, isRefreshMenu2Needed:false})
-  case constants.SEARCH_MENU2_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.SELECT_UPDATE_MENU2:
-    return Object.assign({}, state, 
-      {beforeUpdateMenu2: action.payload, isRefreshMenu2Needed:false,
-         isAllowUpdateParentMenuName:true, isDisableMenuTab:true })
-  case constants.UPDATE_MENU2_PENDING:
-    return Object.assign({}, state, {})
-  case constants.UPDATE_MENU2_SUCCESS:
-    return Object.assign({}, state, {isRefreshMenu2Needed:true})
-  case constants.UPDATE_MENU2_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.CANCEL_UPDATE_MENU2:
-    return Object.assign({}, state, 
-      {isRefreshMenu2Needed:true, isAllowUpdateParentMenuName:false,
-        beforeUpdateMenu2:{} , updateParentMenu:{},  isDisableMenuTab:false })
-  case constants.CLEAR_SEARCH_MENU2:
-    return Object.assign({}, state, {isRefreshMenu2Needed:true})
-  case constants.SELECT_CREATE_PARENT_MENU_NAME:
-    return Object.assign({}, state, {isShowParentMenuModal:true, isCreateActionMenu2:true})
-  case constants.SELECT_UPDATE_PARENT_MENU_NAME:
-    return Object.assign({}, state, 
-      {isShowParentMenuModal:true, isCreateActionMenu2:false})
-  case constants.CLOSE_PARENT_MENU_MODAL:
-    return Object.assign({}, state, {isShowParentMenuModal:false})
-  // case constants.CHANGE_PARENT_MENU_NAME:
-  //   return Object.assign({}, state, {updateParentMenu:action.payload})
-//PARENT MENU MODAL
-  case constants.REQUEST_PARENT_MENU_PENDING:
-    return Object.assign({}, state, {isRefreshParentMenuNeeded:false})
-  case constants.REQUEST_PARENT_MENU_SUCCESS:
-    return Object.assign({}, state, {parentMenus: action.payload})
-  case constants.REQUEST_PARENT_MENU_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.SEARCH_PARENT_MENU_PENDING:
-    return Object.assign({}, state, {})
-  case constants.SEARCH_PARENT_MENU_SUCCESS:
-    return Object.assign({}, state, {parentMenus: action.payload})
-  case constants.SEARCH_PARENT_MENU_FAILED:
-    return Object.assign({}, state, {error: action.payload})
-  case constants.CLEAR_SEARCH_PARENT_MENU:
-    return Object.assign({}, state, {isRefreshParentMenuNeeded:true})
-  case constants.SELECT_CREATE_PARENT_MENU:
-    return Object.assign({}, state, 
-      {createParentMenu:action.payload, isShowParentMenuModal:false})
-  case constants.SELECT_UPDATE_PARENT_MENU:
-    return Object.assign({}, state, 
-      {updateParentMenu:action.payload, isShowParentMenuModal:false})
-  case constants.CLEAR_CREATE_MENU2:
-    return Object.assign({}, state, {})
-  case constants.SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME:
-    return Object.assign({}, state, {isAllowUpdateParentMenuName:false})
-  case constants.CLEAR_SELECT_PARENT_MENU:
-    return Object.assign({}, state, {createParentMenu:{},updateParentMenu:{}})
-  default:
+
+default:
     return state
   }
 }
@@ -1490,13 +1417,17 @@ const initialStateMenu2= {
   requestMenu2ErrMsg:"",
   //search Menu2
   searchMenu2Name:"",
+  searchMenu2ParentName:"",
   //create Menu2
   isShowCreateMenu2:false,
   createMenu2Name:"",
+  createMenu2ParentMenuID:"",
   createMenu2Seq:"",
   isCreateMenu2NameValid:null,
+  isCreateMenu2ParentMenuIDValid:null,
   isCreateMenu2SeqValid:null,
   createMenu2NameErrMsg:"",
+  createMenu2ParentMenuIDErrMsg:"",
   createMenu2SeqErrMsg:"",
   isPendingPostMenu2:false,
   //delete Menu2
@@ -1570,21 +1501,24 @@ export const menu2Rdc = (state=initialStateMenu2, action={}) => {
     }
   case constants.ONCHANGE_SEARCH_MENU2_NAME:
     return Object.assign({}, state, {searchMenu2Name:action.payload})
+  case constants.ONCHANGE_SEARCH_MENU2_PARENT_NAME:
+    return Object.assign({}, state, {searchMenu2ParentName:action.payload})
   case constants.CLEAR_SEARCH_MENU2:
     return Object.assign({}, state, 
       {searchMenu2Name:"", 
+      searchMenu2ParentName:"",
       isRefreshMenu2Needed:true
     })
   /*--------------------------create Menu2------------------------------- */
   case constants.POST_MENU2_PENDING:
-    return Object.assign({}, state, {isPendingPostMenu2:true,isRefreshTopbarNeeded:false})
+    return Object.assign({}, state, {isPendingPostMenu2:true})
   case constants.POST_MENU2_SUCCESS:
     return Object.assign({}, state, 
       {isRefreshMenu2Needed:true,
-        isRefreshTopbarNeeded:true,
         isPendingPostMenu2:false,
         isShowCreateMenu2:false,
         isCreateMenu2NameValid:null,createMenu2Name:"",createMenu2NameErrMsg:"",
+        isCreateMenu2ParentMenuIDValid:null,createMenu2ParentMenuID:"",createMenu2ParentMenuIDErrMsg:"",
         isCreateMenu2SeqValid:null, createMenu2Seq:"",createMenu2SeqErrMsg:""})
   case constants.POST_MENU2_FAILED:
     switch(action.payload.Code){
@@ -1592,19 +1526,21 @@ export const menu2Rdc = (state=initialStateMenu2, action={}) => {
         return Object.assign({}, state, 
           { isPendingPostMenu2:false,
             isCreateMenu2NameValid:false, createMenu2NameErrMsg:action.payload.errMessage,
+            isCreateMenu2ParentMenuIDValid:false, createMenu2ParentMenuIDErrMsg:action.payload.errMessage,
             isCreateMenu2SeqValid:false, createMenu2SeqErrMsg:action.payload.errMessage
           }) 
       case 'INTERNAL_SERVER_ERROR_MENU2_CHECK_DUP':
         return Object.assign({}, state, 
           { isPendingPostMenu2:false,
             isCreateMenu2NameValid:false, createMenu2NameErrMsg:action.payload.errMessage,
+            isCreateMenu2ParentMenuIDValid:false, createMenu2ParentMenuIDErrMsg:action.payload.errMessage,
             isCreateMenu2SeqValid:false, createMenu2SeqErrMsg:action.payload.errMessage
           }) 
       case 'MENU2_DUPLICATE_MENU2_NAME':
         return Object.assign({}, state, 
           { isPendingPostMenu2:false,
             isCreateMenu2NameValid:false, createMenu2NameErrMsg:action.payload.errMessage
-          }) 
+          })
       case 'INTERNAL_SERVER_ERROR_MENU2_INSERT':
         return Object.assign({}, state, 
           { isPendingPostMenu2:false,
@@ -1614,6 +1550,7 @@ export const menu2Rdc = (state=initialStateMenu2, action={}) => {
         return Object.assign({}, state, 
           { isPendingPostMenu2:false,
             isCreateMenu2NameValid:false, createMenu2NameErrMsg:action.payload.errMessage,
+            isCreateMenu2ParentMenuIDValid:false, createMenu2ParentMenuIDErrMsg:action.payload.errMessage,
             isCreateMenu2SeqValid:false, createMenu2SeqErrMsg:action.payload.errMessage
           }) 
       default://unhandled error
@@ -1623,11 +1560,13 @@ export const menu2Rdc = (state=initialStateMenu2, action={}) => {
             createMenu2Name:"",
             createMenu2Seq:"",
             isCreateMenu2NameValid:null,createMenu2NameErrMsg:"",
+            isCreateMenu2ParentMenuIDValid:null,createMenu2ParentMenuIDErrMsg:"",
             isCreateMenu2SeqValid:null,createMenu2SeqErrMsg:""}) 
     }
   case constants.CLEAR_CREATE_MENU2:
     return Object.assign({}, state, 
       {isCreateMenu2NameValid:null,createMenu2Name:"",createMenu2NameErrMsg:"",
+      isCreateMenu2ParentMenuIDValid:null,createMenu2ParentMenuID:"",createMenu2ParentMenuIDErrMsg:"",
       isCreateMenu2SeqValid:null, createMenu2Seq:"",createMenu2SeqErrMsg:""})
   case constants.ONCHANGE_CREATE_MENU2_NAME:
     switch(action.payload.isValid){
@@ -1641,6 +1580,21 @@ export const menu2Rdc = (state=initialStateMenu2, action={}) => {
           {createMenu2Name:action.payload.menu2Name,
             createMenu2NameErrMsg:"",
             isCreateMenu2NameValid:true})
+      default:
+        return state
+    }
+  case constants.ONCHANGE_CREATE_MENU2_PARENT_NAME:
+    switch(action.payload.isValid){
+      case false:
+        return Object.assign({}, state, 
+          {createMenu2ParentMenuID:action.payload.menu2ParentMenuID,
+            createMenu2ParentMenuIDErrMsg:action.payload.errorMsg,
+            isCreateMenu2ParentMenuIDValid:false})
+      case true:
+        return Object.assign({}, state, 
+          {createMenu2ParentMenuID:action.payload.menu2ParentMenuID,
+            createMenu2ParentMenuIDErrMsg:"",
+            isCreateMenu2ParentMenuIDValid:true})
       default:
         return state
     }
@@ -1665,8 +1619,10 @@ export const menu2Rdc = (state=initialStateMenu2, action={}) => {
     return Object.assign({}, state,  
       {isShowCreateMenu2:false,
       createMenu2Name:"",
+      createMenu2ParentMenuID:"",
       createMenu2Seq:"",
       isCreateMenu2NameValid:null,
+      isCreateMenu2ParentMenuIDValid:null,
       isCreateMenu2SeqValid:null})
 /*--------------------------delete Menu2------------------------------- */
 case constants.DELETE_MENU2_PENDING:
@@ -1811,7 +1767,7 @@ case constants.UPDATE_MENU2_FAILED:
           updateMenu2Seq:"",
           isUpdateMenu2NameValid:null,updateMenu2NameErrMsg:"",
           isUpdateMenu2SeqValid:null,updateMenu2SeqErrMsg:""}) 
-  }
+    }
   //Parent Menu Modal
   case constants.CLOSE_PARENT_MENU_MODAL:
     return Object.assign({}, state, {isShowParentMenuModal:false})

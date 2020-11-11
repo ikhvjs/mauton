@@ -2,18 +2,20 @@ import React , { Component } from 'react';
 import { connect } from 'react-redux';
 import { 
 	requestMenu2Act,
-	// searchMenu2Act,
-	// onchangeSearchMenu2NameAct,
-	// onchangeSearchParentMenu2NameAct,
-	// clearSearchMenu2Act,
-	// selectCreateMenu2Act,
+	searchMenu2Act,
+	onchangeSearchMenu2NameAct,
+	onchangeSearchMenu2ParentNameAct,
+	clearSearchMenu2Act,
+	selectCreateMenu2Act,
 	// selectDeleteMenu2Act,
 	// selectUpdateMenu2Act
 } from './Menu2Action';
 
+import { requestMenu1Act } from '../Menu1/Menu1Action';
+
 import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
 import './Menu2.css';
-// import Menu2Create from './Menu2Create';
+import Menu2Create from './Menu2Create';
 // import Menu2Delete from './Menu2Delete';
 // import Menu2Update from './Menu2Update';
 import Menu2ErrorAlert   from './Menu2ErrorAlert';
@@ -24,7 +26,8 @@ const mapStateToProps = (state) => {
 	isRefreshMenu2Needed: state.menu2Rdc.isRefreshMenu2Needed,
 	isPendingRequestMenu2: state.menu2Rdc.isPendingRequestMenu2,
 	isRequestMenu2Failed: state.menu2Rdc.isRequestMenu2Failed,
-	searchMenu2Name: state.menu2Rdc.searchMenu2Name
+	searchMenu2Name: state.menu2Rdc.searchMenu2Name,
+	searchMenu2ParentName: state.menu2Rdc.searchMenu2ParentName
   }
 }
 
@@ -32,16 +35,18 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 	    onRequestMenu2: () => 
 	    	dispatch(requestMenu2Act()),
-		// onSearchMenu2:() =>
-		// 	dispatch(searchMenu2Act()),
-		// onChangeSearchMenu2Name: (event) =>
-		// 	dispatch(onchangeSearchMenu2NameAct(event)),
-		// onChangeSearchParentMenu2Name: (event) =>
-		// 	dispatch(onchangeSearchParentMenu2NameAct(event)),
-		// onClearSearchMenu2:() =>
-		// 	dispatch(clearSearchMenu2Act()),
-		// onSelectCreateMenu2: () =>
-		// 	dispatch(selectCreateMenu2Act()),
+		onSearchMenu2:() =>
+			dispatch(searchMenu2Act()),
+		onChangeSearchMenu2Name: (event) =>
+			dispatch(onchangeSearchMenu2NameAct(event)),
+		onChangeSearchMenu2ParentName: (event) =>
+			dispatch(onchangeSearchMenu2ParentNameAct(event)),
+		onClearSearchMenu2:() =>
+			dispatch(clearSearchMenu2Act()),
+		onSelectCreateMenu2: () =>{
+			dispatch(requestMenu1Act());
+			dispatch(selectCreateMenu2Act());
+		}
 		// onSelectDeleteMenu2: (event) =>
 		// 	dispatch(selectDeleteMenu2Act(event)),
 		// onSelectUpdateMenu2: (event) =>
@@ -66,7 +71,9 @@ class Menu2 extends Component  {
 		const { menu2,
 				onSearchMenu2,
 				searchMenu2Name,
+				searchMenu2ParentName,
 				onChangeSearchMenu2Name,
+				onChangeSearchMenu2ParentName,
 				onClearSearchMenu2,
 				onSelectCreateMenu2,
 				onSelectUpdateMenu2,
@@ -97,11 +104,11 @@ class Menu2 extends Component  {
 						<Col xs={4} sm={4} md={3} className="mb-1">
 							<Form.Control
 								size="sm"
-								name="menu2-name"
+								name="menu2-parent-name"
 								type="text"
 								placeholder="Parent Menu Name"
-								value={searchMenu2Name}
-								onChange={onChangeSearchMenu2Name}
+								value={searchMenu2ParentName}
+								onChange={onChangeSearchMenu2ParentName}
 							/>
 						</Col>
 						<Col name='button' xs={2} sm={2} md={1}>
@@ -149,7 +156,9 @@ class Menu2 extends Component  {
 															<td name='menu2-action-button'>
 															<Button 
 																menu2-id={menu2.menu_id} 
-																menu2-name={menu2.menu_name} 
+																menu2-name={menu2.menu_name}
+																menu2-parent-id={menu2.parent_menu_id}
+																menu2-parent-name={menu2.parent_menu_name}
 																menu2-seq={menu2.seq}
 																className="mb-1 mx-1"
 																variant="success" 
@@ -179,9 +188,9 @@ class Menu2 extends Component  {
 						</Col>
 					</Row>
 				</Col>
-				{/* <Menu2Create/>
-				<Menu2Delete/>
-				<Menu2Update/> */}
+				<Menu2Create/>
+				{/* <Menu2Delete/> */}
+				{/* <Menu2Update/> */}
 			</Row>
 		)
 	}

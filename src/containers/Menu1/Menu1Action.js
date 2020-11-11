@@ -90,7 +90,6 @@ export const searchMenu1Act = () => (dispatch, getState) => {
     },
     body: JSON.stringify({
       menuName: getState().menu1Rdc.searchMenu1Name,
-      seq: getState().menu1Rdc.searchMenu1Seq,
       userID: getState().authRdc.userID
     })
   })
