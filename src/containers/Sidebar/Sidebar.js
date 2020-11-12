@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
-import { requestBloglistByClickAct } from '../Bloglist/BloglistAction';
-import { requestSidebarAct } from './SidebarAction';
+import { requestBlogListAct } from '../BlogList/BlogListAction';
+import { requestSidebarAct, selectSidebarAct } from './SidebarAction';
 import './Sidebar.css';
 
 
@@ -19,8 +19,11 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestSidebar: () =>
 			dispatch(requestSidebarAct()),
-		onRequestBloglistByClick: (event) =>
-			dispatch(requestBloglistByClickAct(event.target.getAttribute('menu-id')))
+		onSelectSidebar: (event) =>{
+			dispatch(selectSidebarAct(event.target.getAttribute('menu-id')));
+			dispatch(requestBlogListAct());
+		}
+			
 	}
 }
 
@@ -33,7 +36,7 @@ class Sidebar extends Component {
 			onRequestSidebar,
 			isPendingRequestSidebar,
 			isRequestSidebarFailed,
-			onRequestBloglistByClick
+			onSelectSidebar
 		} = this.props;
 		return (
 			(url === "/dashboard") ?
@@ -87,7 +90,7 @@ class Sidebar extends Component {
 										<LinkContainer key={sidebar.menu_id}
 											to={`${url}/${sidebar.menu_id}`}>
 											<Nav.Link menu-id={sidebar.menu_id}
-												onClick={onRequestBloglistByClick}>
+												onClick={onSelectSidebar}>
 												{sidebar.menu_name}
 											</Nav.Link>
 										</LinkContainer>

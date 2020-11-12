@@ -25,19 +25,19 @@ import {
 	onChangeBlogDescAct,
 	onChangeBlogPathAct,
 	onChangeBlogSeqAct
-	} from '../../components/Blog/BlogAction';
+	} from './BlogAction';
 
 import {
 	initTinyEditorAct
-} from '../TinyEditorComponent/TinyEditorComponentAction';
+} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row,Col,Form, Button, Badge,Container} from "react-bootstrap";
 import './Blog.css';
 
-import TinyEditorComponent from '../TinyEditorComponent/TinyEditorComponent';
-import CategoryModal from '../CategoryModal/CategoryModal';
-import TagModal from '../TagModal/TagModal';
+import TinyEditorComponent from '../../components/TinyEditorComponent/TinyEditorComponent';
+import CategoryModal from '../../components/CategoryModal/CategoryModal';
+import TagModal from '../../components/TagModal/TagModal';
 
 
 const mapStateToProps =(state) => {

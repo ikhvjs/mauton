@@ -3,55 +3,54 @@ import {
   REQUEST_BLOGLIST_PENDING,
   REQUEST_BLOGLIST_SUCCESS,
   REQUEST_BLOGLIST_FAILED,
-  REQUEST_BLOGLIST_C_PENDING,
-  REQUEST_BLOGLIST_C_SUCCESS,
-  REQUEST_BLOGLIST_C_FAILED,
   SEARCH_BLOGLIST_PENDING,
   SEARCH_BLOGLIST_SUCCESS,
   SEARCH_BLOGLIST_FAILED,
-  CLEAR_SEARCH_BLOGLIST
+  CLEAR_SEARCH_BLOGLIST,
+  ONCHANGE_SEARCH_BLOGLIST_BLOG_TITLE,
+  ONCHANGE_SEARCH_BLOGLIST_CATEGORY_NAME,
+  ONCHANGE_SEARCH_BLOGLIST_TAG_NAME
  } from '../../constants';
 
 
-export const requestBloglistAct = (sidebarMenuPath) => (dispatch) =>{
+export const requestBlogListAct = (sidebarMenuID) => (dispatch,getState) =>{
   dispatch({ type: REQUEST_BLOGLIST_PENDING })
-    fetch(`${API_PORT}/bloglist/path/${sidebarMenuPath}`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
+    fetch(`${API_PORT}/bloglist/request`, {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${getState().authRdc.token}`
+          },
+          body: JSON.stringify({
+            userID: getState().authRdc.userID,
+            menu2ID:sidebarMenuID
+          })
         })
     .then(response => response.json())
     .then(data => dispatch({ type: REQUEST_BLOGLIST_SUCCESS, payload: data }))
     .catch(error => dispatch({ type: REQUEST_BLOGLIST_FAILED, payload: error }))
 };
 
-
-
-export const requestBloglistByClickAct = (sidebarMenuID) => (dispatch) =>{
-  dispatch({ type: REQUEST_BLOGLIST_C_PENDING })
-    fetch(`${API_PORT}/bloglist/id/${sidebarMenuID}`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_BLOGLIST_C_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_BLOGLIST_C_FAILED, payload: error }))
-};
-
-
-export const selectSearchBloglistAct = (event,sidebarMenuPath) => {
-  const searchBloglist ={};
-  Object.assign(searchBloglist,{menu_path:sidebarMenuPath});
-  const inputNode = event.target.parentNode.parentNode.querySelectorAll("div > input.form-control")
-  console.log('selectSearchBloglistAct inputNode',inputNode);
-  inputNode.forEach((node)=>{
-    Object.assign(searchBloglist,  {[node.name]: node.value})
-  })
-  
-  return searchBloglist;
-
+export const clearSearchBlogListAct = (event) => {
+  return { type: CLEAR_SEARCH_BLOGLIST };
 }
 
-export const searchBloglistAct = (searchBloglist) => (dispatch) => {
+export const onchangeSearchBlogTitleAct = (event) => {
+  return ({ type: ONCHANGE_SEARCH_BLOGLIST_BLOG_TITLE, payload: event.target.value });
+}
+
+export const onchangeSearchCategoryNameAct = (event) => {
+  return ({ type: ONCHANGE_SEARCH_BLOGLIST_CATEGORY_NAME, payload: event.target.value });
+}
+
+export const onchangeSearchTagNameAct = (event) => {
+  return ({ type: ONCHANGE_SEARCH_BLOGLIST_TAG_NAME, payload: event.target.value });
+}
+
+
+
+export const searchBlogListAct = (searchBloglist) => (dispatch) => {
   console.log('searchBloglist ',searchBloglist);
   dispatch({ type: SEARCH_BLOGLIST_PENDING })
     fetch(`${API_PORT}/bloglist/search`, {
@@ -73,14 +72,3 @@ export const searchBloglistAct = (searchBloglist) => (dispatch) => {
 
 
 
-export const clearSearchBloglistAct = (event) => {
-  const selectedNode = event.target.parentNode.parentNode;
-  const inputNode = selectedNode.querySelectorAll('div > input[name]');
-
-  inputNode.forEach((node)=>{
-    node.value="";
-  })
-
-  return { type: CLEAR_SEARCH_BLOGLIST };
-
-}

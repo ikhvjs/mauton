@@ -2,9 +2,14 @@ import {
   API_PORT,
   REQUEST_SIDEBAR_PENDING,
   REQUEST_SIDEBAR_SUCCESS,
-  REQUEST_SIDEBAR_FAILED
+  REQUEST_SIDEBAR_FAILED,
+  SELECT_SIDEBAR
 } from '../../constants';
 
+
+export const selectSidebarAct = (sidebarMenuID) => {
+  return ({type:SELECT_SIDEBAR, payload:sidebarMenuID})
+}
 
 export const requestSidebarAct = () => (dispatch,getState) => {
   let resStatus;

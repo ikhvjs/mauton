@@ -22,7 +22,7 @@ import {
 	onChangeBlogDescAct,
 	onChangeBlogPathAct,
 	onChangeBlogSeqAct
-	} from '../../components/Blog/BlogAction';
+	} from './BlogAction';
 
 // import {
 // 	initTinyEditorAct
@@ -33,8 +33,8 @@ import {Row,Col,Form, Button, Badge,Container} from "react-bootstrap";
 import './Blog.css';
 
 import TinyEditorComponent from '../TinyEditorComponent/TinyEditorComponent';
-import CategoryModal from '../CategoryModal/CategoryModal';
-import TagModal from '../TagModal/TagModal';
+import CategoryModal from '../../components/CategoryModal/CategoryModal';
+import TagModal from '../../components/TagModal/TagModal';
 
 
 const mapStateToProps =(state) => {

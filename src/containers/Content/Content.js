@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Switch, Route, withRouter } from "react-router-dom";
-import Bloglist from '../Bloglist/Bloglist';
+import BlogList from '../BlogList/BlogList';
 import Sidebar from '../Sidebar/Sidebar';
 import { Col} from "react-bootstrap";
 
@@ -20,8 +20,8 @@ class Content extends Component {
 						<Route exact path={match.path}>
 							<h3>Please select a topic in the blue menu</h3>
 						</Route>
-						<Route path={`${match.path}/:sidebarMenuPath`}>
-							<Bloglist/>
+						<Route path={`${match.path}/:sidebarMenuID`}>
+							<BlogList/>
 						</Route>
 						{/* <Route path="*">
 							<Page404 />
