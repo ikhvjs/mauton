@@ -7,8 +7,8 @@ import {
 	onchangeSearchMenu2ParentNameAct,
 	clearSearchMenu2Act,
 	selectCreateMenu2Act,
-	// selectDeleteMenu2Act,
-	// selectUpdateMenu2Act
+	selectDeleteMenu2Act,
+	selectUpdateMenu2Act
 } from './Menu2Action';
 
 import { requestMenu1Act } from '../Menu1/Menu1Action';
@@ -16,8 +16,8 @@ import { requestMenu1Act } from '../Menu1/Menu1Action';
 import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
 import './Menu2.css';
 import Menu2Create from './Menu2Create';
-// import Menu2Delete from './Menu2Delete';
-// import Menu2Update from './Menu2Update';
+import Menu2Delete from './Menu2Delete';
+import Menu2Update from './Menu2Update';
 import Menu2ErrorAlert   from './Menu2ErrorAlert';
 
 const mapStateToProps = (state) => {
@@ -46,11 +46,14 @@ const mapDispatchToProps = (dispatch) => {
 		onSelectCreateMenu2: () =>{
 			dispatch(requestMenu1Act());
 			dispatch(selectCreateMenu2Act());
+		},
+		onSelectDeleteMenu2: (event) =>
+			dispatch(selectDeleteMenu2Act(event)),
+		onSelectUpdateMenu2: (event) =>{
+			dispatch(requestMenu1Act());
+			dispatch(selectUpdateMenu2Act(event));
 		}
-		// onSelectDeleteMenu2: (event) =>
-		// 	dispatch(selectDeleteMenu2Act(event)),
-		// onSelectUpdateMenu2: (event) =>
-		// 	dispatch(selectUpdateMenu2Act(event))
+			
 	}
 }
 
@@ -157,7 +160,7 @@ class Menu2 extends Component  {
 															<Button 
 																menu2-id={menu2.menu_id} 
 																menu2-name={menu2.menu_name}
-																menu2-parent-id={menu2.parent_menu_id}
+																menu2-parent-menu-id={menu2.parent_menu_id}
 																menu2-parent-name={menu2.parent_menu_name}
 																menu2-seq={menu2.seq}
 																className="mb-1 mx-1"
@@ -189,8 +192,8 @@ class Menu2 extends Component  {
 					</Row>
 				</Col>
 				<Menu2Create/>
-				{/* <Menu2Delete/> */}
-				{/* <Menu2Update/> */}
+				<Menu2Delete/>
+				<Menu2Update/>
 			</Row>
 		)
 	}

@@ -3,7 +3,6 @@ import {
   REQUEST_MENU2_PENDING,
   REQUEST_MENU2_SUCCESS,
   REQUEST_MENU2_FAILED,
-  
   SEARCH_MENU2_PENDING,
   SEARCH_MENU2_SUCCESS,
   SEARCH_MENU2_FAILED,
@@ -11,18 +10,8 @@ import {
   ONCHANGE_SEARCH_MENU2_PARENT_NAME,
   CLEAR_SEARCH_MENU2,
   SELECT_CREATE_MENU2,
-
-  POST_MENU2_PENDING,
-  POST_MENU2_SUCCESS,
-  POST_MENU2_FAILED,
-  DELETE_MENU2_PENDING,
-  DELETE_MENU2_SUCCESS,
-  DELETE_MENU2_FAILED,
-  SELECT_CREATE_PARENT_MENU_NAME,
-  SELECT_UPDATE_PARENT_MENU_NAME,
-  CLEAR_CREATE_MENU2,
-  SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME,
-  CLEAR_SELECT_PARENT_MENU
+  SELECT_DELETE_MENU2,
+  SELECT_UPDATE_MENU2
  } from '../../constants';
 
 export const requestMenu2Act = () => (dispatch,getState) => {
@@ -74,6 +63,10 @@ export const onchangeSearchMenu2ParentNameAct = (event) => {
   return ({ type: ONCHANGE_SEARCH_MENU2_PARENT_NAME, payload: event.target.value });
 }
 
+export const clearSearchMenu2Act = () => {
+  return ({ type: CLEAR_SEARCH_MENU2 });
+}
+
 export const searchMenu2Act = () => (dispatch,getState) =>{
   let resStatus;
   dispatch({ type: SEARCH_MENU2_PENDING });
@@ -118,71 +111,22 @@ export const selectCreateMenu2Act = () => {
   return ({type:SELECT_CREATE_MENU2})
 }
 
-export const postMenu2Act = (menu2) => (dispatch) =>{
-  dispatch({ type: POST_MENU2_PENDING })
-  fetch(`${API_PORT}/menu2/create`, {
-        method: 'post',
-        headers: {'Content-Type': 'application/json',
-                  'Accept': 'application/json'},
-        body: JSON.stringify({
-          menu_name: menu2.menu_name,
-          menu_path: menu2.menu_path,
-          seq:menu2.seq,
-          parent_menu_id:menu2.parent_menu_id
-        })
-      }
-  )
-  .then(response => response.json())
-  .then(data => dispatch({ type: POST_MENU2_SUCCESS }))
-  .catch(error => dispatch({ type: POST_MENU2_FAILED, payload: error }))
-
-}
-
-export const clearCreateMenu2Act = () => {
-  return ({ type: CLEAR_CREATE_MENU2 });
-}
-
 export const selectDeleteMenu2Act = (event) => {
-  return event.target.parentNode.parentNode.id;
+  const menu2ID = Number(event.target.getAttribute('menu2-id'));
+  const menu2Name = event.target.getAttribute('menu2-name');
+  return {type:SELECT_DELETE_MENU2, payload:{deleteMenu2Name:menu2Name,deleteMenu2ID:menu2ID}}
 }
 
-export const deleteMenu2Act = (menuID) => (dispatch) =>{
-  dispatch({ type: DELETE_MENU2_PENDING })
-  fetch(`${API_PORT}/menu2/delete`, {
-        method: 'delete',
-        headers: {'Content-Type': 'application/json',
-                  'Accept': 'application/json'},
-        body: JSON.stringify({
-          menu_id: menuID
-        })
-      }
-  )
-  .then(response => response.json())
-  .then(data => dispatch({ type: DELETE_MENU2_SUCCESS}))
-  .catch(error => dispatch({ type: DELETE_MENU2_FAILED, payload: error }))
-}
-
-
-
-
-
-export const clearSearchMenu2Act = () => {
-  return ({ type: CLEAR_SEARCH_MENU2 });
-}
-
-export const selectCreateParentMenuNameAct = () =>{
-  return { type: SELECT_CREATE_PARENT_MENU_NAME };
-}
-
-export const selectUpdateParentMenuNameAct = () =>{
-  return { type: SELECT_UPDATE_PARENT_MENU_NAME };
-}
-
-
-export const setNotAllowUpdateParentMenuNameAct = () =>{
-  return { type: SET_NOT_ALLOW_UPDATE_PARENT_MENU_NAME };
-}
-
-export const clearSelectedParentMenuAct = () => {
-  return {type:CLEAR_SELECT_PARENT_MENU};
+export const selectUpdateMenu2Act = (event) => {
+  const menu2ID = Number(event.target.getAttribute('menu2-id'));
+  const menu2Name = event.target.getAttribute('menu2-name');
+  const menu2ParentMenuID = event.target.getAttribute('menu2-parent-menu-id');
+  const menu2ParentName = event.target.getAttribute('menu2-parent-name');
+  const menu2Seq = Number(event.target.getAttribute('menu2-seq'));
+  return {type:SELECT_UPDATE_MENU2, 
+    payload:{updateMenu2ID:menu2ID, 
+      updateMenu2Name:menu2Name,
+      updateMenu2ParentMenuID:menu2ParentMenuID,
+      updateMenu2ParentName:menu2ParentName,
+      updateMenu2Seq:menu2Seq}}
 }

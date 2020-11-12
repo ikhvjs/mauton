@@ -104,7 +104,7 @@ class Menu2Create extends Component {
                                 </Form.Label>
                             <Col sm={8}>
                                 <Form.Control as="select"
-                                    size="sm" name="seq"
+                                    size="sm" name="parent-menu-name"
                                     isValid={isCreateMenu2ParentMenuIDValid}
                                     isInvalid={(isCreateMenu2ParentMenuIDValid === null) 
                                                 ? null 
@@ -112,7 +112,7 @@ class Menu2Create extends Component {
                                     value={createMenu2ParentMenuID}
                                     onChange={onChangeCreateMenu2ParentMenuID}
                                 >
-                                    <option value="">Select Parent Menu</option>
+                                    <option value="" disabled={true}>Select Parent Menu</option>
                                     {menu1.map((menu1)=>{
                                         return(<option key={menu1.menu_id} value={menu1.menu_id}>{menu1.menu_name}</option>)
                                     })}
