@@ -13,7 +13,8 @@ import {
  } from '../../constants';
 
 
-export const requestBlogListAct = (sidebarMenuID) => (dispatch,getState) =>{
+export const requestBlogListAct = () => (dispatch,getState) =>{
+  let resStatus;
   dispatch({ type: REQUEST_BLOGLIST_PENDING })
     fetch(`${API_PORT}/bloglist/request`, {
           method: 'post',
@@ -24,12 +25,31 @@ export const requestBlogListAct = (sidebarMenuID) => (dispatch,getState) =>{
           },
           body: JSON.stringify({
             userID: getState().authRdc.userID,
-            menu2ID:sidebarMenuID
+            menu2ID:getState().sidebarRdc.sidebarMenuID
           })
         })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_BLOGLIST_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_BLOGLIST_FAILED, payload: error }))
+    .then(res => {
+      resStatus = res.status
+      return res.json()
+    })
+    .then(res => {
+      switch (resStatus) {
+        case 200:
+          return dispatch({ type: REQUEST_BLOGLIST_SUCCESS, payload: res })
+        case 500:
+          return dispatch({ type: REQUEST_BLOGLIST_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
+        default:
+          return dispatch({ type: REQUEST_BLOGLIST_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOGLIST-REQUEST-1), please try again' } })
+      }
+    })
+    .catch(
+      () => dispatch({
+        type: REQUEST_BLOGLIST_FAILED,
+        payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOGLIST-REQUEST-2), please try again' }
+      })
+    )
+    // .then(data => dispatch({ type: REQUEST_BLOGLIST_SUCCESS, payload: data }))
+    // .catch(error => dispatch({ type: REQUEST_BLOGLIST_FAILED, payload: error }))
 };
 
 export const clearSearchBlogListAct = (event) => {

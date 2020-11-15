@@ -8,7 +8,7 @@ import {
 	deleteBlogAct
 } from '../Blog/BlogAction';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import {Alert, Button} from "react-bootstrap";
 
 

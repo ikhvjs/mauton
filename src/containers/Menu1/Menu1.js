@@ -16,7 +16,7 @@ import './Menu1.css';
 import Menu1Create from './Menu1Create';
 import Menu1Delete from './Menu1Delete';
 import Menu1Update from './Menu1Update';
-import Menu1ErrorAlert   from './Menu1ErrorAlert';
+import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
 
 const mapStateToProps = (state) => {
   return {
@@ -127,7 +127,7 @@ class Menu1 extends Component  {
 									Loading...
 								</div>)
 								: (isRequestMenu1Failed
-									? (<Menu1ErrorAlert />)
+									? (<RequestErrorAlert />)
 									: (<Table striped hover bordered size="sm">
 											<thead>
 												<tr>

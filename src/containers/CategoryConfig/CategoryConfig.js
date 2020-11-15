@@ -17,7 +17,7 @@ import './CategoryConfig.css'
 import CategoryConfigCreate from './CategoryConfigCreate';
 import CategoryConfigDelete from './CategoryConfigDelete';
 import CategoryConfigUpdate from './CategoryConfigUpdate';
-import CategoryConfigErrorAlert   from './CategoryConfigErrorAlert';
+import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
 
 const mapStateToProps = (state) => {
 	return {
@@ -137,7 +137,7 @@ class CategoryConfig extends Component {
 									Loading...
 								</div>)
 								: (isRequestCategoryFailed
-									? (<CategoryConfigErrorAlert />)
+									? (<RequestErrorAlert />)
 									: (<Table striped hover bordered size="sm">
 											<thead>
 												<tr>

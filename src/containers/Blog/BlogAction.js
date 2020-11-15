@@ -3,6 +3,9 @@ import {
   REQUEST_BLOG_PENDING,
   REQUEST_BLOG_SUCCESS,
   REQUEST_BLOG_FAILED,
+  SELECT_BLOG,
+
+
   REQUEST_BLOG_C_PENDING,
   REQUEST_BLOG_C_SUCCESS,
   REQUEST_BLOG_C_FAILED,
@@ -41,16 +44,46 @@ import tinymce from 'tinymce/tinymce';
 
 import { isTagArrayEqual } from '../../utility/utility';
 
-export const requestBlogAct = (blogPath) => (dispatch) =>{
-  // console.log('normal blogPath',blogPath);
+
+export const selectBlogAct = (blogID) => {
+  return ({type:SELECT_BLOG, payload:blogID})
+}
+
+export const requestBlogAct = () => (dispatch,getState) =>{
+  let resStatus;
   dispatch({ type: REQUEST_BLOG_PENDING })
-    fetch(`${API_PORT}/blog/path/${blogPath}`, {
-          method: 'get',
-          headers: {'Content-Type': 'text/plain'}
-        })
-    .then(response => response.json())
-    .then(data => dispatch({ type: REQUEST_BLOG_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_BLOG_FAILED, payload: error }))
+  fetch(`${API_PORT}/blog/request`, {
+          method: 'post',
+          headers: {'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${getState().authRdc.token}`
+                  },
+          body: JSON.stringify({
+            userID: getState().authRdc.userID,
+            blogID: getState().blogRdc.selectBlogID
+          })
+  })
+  .then(res => {
+    resStatus = res.status
+    return res.json()
+  })
+  .then(res => {
+      switch (resStatus) {
+          case 200:
+              return dispatch({ type: REQUEST_BLOG_SUCCESS, payload: res})
+          case 500:
+              return dispatch({ type: REQUEST_BLOG_FAILED, payload: {Code:res.Code, errMessage:res.errMessage} })
+          default:
+              return dispatch({ type: REQUEST_BLOG_FAILED, payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:BLOG-REQUEST-1), please try again'} })
+      }
+  })
+  .catch( 
+    () =>dispatch({ type: REQUEST_BLOG_FAILED, 
+      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:BLOG-REQUEST-2), please try again'} })
+  )
+    // .then(response => response.json())
+    // .then(data => dispatch({ type: REQUEST_BLOG_SUCCESS, payload: data }))
+    // .catch(error => dispatch({ type: REQUEST_BLOG_FAILED, payload: error }))
 };
 
 export const requestBlogByClickAct = (blogPath) => (dispatch) =>{

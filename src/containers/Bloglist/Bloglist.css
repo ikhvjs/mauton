@@ -1,15 +1,3 @@
-.bloglist{
-	margin: 0.5rem; 
-}
-
-.hidden-container {
-	display: none;
-}
-
-.blog-container{
-	min-height: 100vh;
-}
-
-.card-header {
+.card-header-bloglist {
 	border-bottom: 1px solid #ffc107;
 }

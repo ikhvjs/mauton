@@ -16,7 +16,7 @@ import './TagConfig.css';
 import TagConfigCreate from './TagConfigCreate';
 import TagConfigDelete from './TagConfigDelete';
 import TagConfigUpdate from './TagConfigUpdate';
-import TagConfigErrorAlert from './TagConfigErrorAlert';
+import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
 
 
 const mapStateToProps = (state) => {
@@ -121,7 +121,7 @@ class TagConfig extends Component {
 									Loading...
 								</div>)
 								: (isRequestTagFailed
-									? (<TagConfigErrorAlert/>)
+									? (<RequestErrorAlert/>)
 									: (<Table striped hover bordered size="sm">
 										<thead>
 											<tr>
