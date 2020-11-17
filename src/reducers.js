@@ -236,9 +236,9 @@ export const sidebarRdc = (state = initialStateSidebar, action = {}) => {
 
 const initialStateBlog = {
   selectBlogID: "",
-  blog:{},
+  blog: {},
   isPendingRequestBlog: false,
-  isShowBlog:false,
+  isShowBlog: false,
   // isPendingBlogByClick: false,
   // isRefreshBloglistNeeded: false,
   // isCreateBlog: false,
@@ -260,16 +260,28 @@ const initialStateBlog = {
 
 export const blogRdc = (state = initialStateBlog, action = {}) => {
   switch (action.type) {
+    /*-----------------select Sidebar---------------------*/
+    case constants.SELECT_SIDEBAR:
+      return Object.assign({}, state, { isShowBlog: false })
     /*-----------------select Blog---------------------*/
     case constants.SELECT_BLOG:
-      return Object.assign({}, state, { selectBlogID: action.payload})
+      return Object.assign({}, state, { selectBlogID: action.payload })
     /*-----------------request Blog---------------------*/
     case constants.REQUEST_BLOG_PENDING:
       return Object.assign({}, state,
-        { isPendingRequestBlog: true, isRequestBlogFailed: false})
+        {
+          isPendingRequestBlog: true,
+          isRequestBlogFailed: false,
+          isShowBlog: false
+        })
     case constants.REQUEST_BLOG_SUCCESS:
       return Object.assign({}, state,
-        { isPendingRequestBlog: false, isRequestBlogFailed: false, blog: action.payload })
+        {
+          isPendingRequestBlog: false,
+          isRequestBlogFailed: false,
+          blog: action.payload,
+          isShowBlog: true
+        })
     case constants.REQUEST_BLOG_FAILED:
       switch (action.payload.Code) {
         case 'INTERNAL_SERVER_ERROR_BLOG_REQUEST':
@@ -1668,8 +1680,7 @@ export const menu2Rdc = (state = initialStateMenu2, action = {}) => {
         default://unhandled error
           return Object.assign({}, state,
             {
-              error: action.payload, isPendingRequestMenu2: false, isRequestMenu2Failed: true,
-              isShowRequestMenu2ErrAlert: true
+              error: action.payload, isPendingRequestMenu2: false, isRequestMenu2Failed: true
             })
       }
     case constants.ONCHANGE_SEARCH_MENU2_NAME:
@@ -2053,7 +2064,7 @@ export const blogListRdc = (state = initialStateBlogList, action = {}) => {
         {
           isPendingRequestBlogList: true,
           isRequestBlogListFailed: false,
-          isRefreshBlogListNeeded: false
+          isRefreshBlogListNeeded: false,
         })
     case constants.REQUEST_BLOGLIST_SUCCESS:
       return Object.assign({}, state,
@@ -2084,17 +2095,54 @@ export const blogListRdc = (state = initialStateBlogList, action = {}) => {
               isRequestBlogListFailed: true
             })
       }
-
-
-
+    /*------------------Search Bloglsit-----------------*/
+    case constants.ONCHANGE_SEARCH_BLOGLIST_BLOG_TITLE:
+      return Object.assign({}, state, { searchBlogTitle: action.payload })
+    case constants.ONCHANGE_SEARCH_BLOGLIST_CATEGORY_NAME:
+      return Object.assign({}, state, { searchCategoryName: action.payload })
+    case constants.ONCHANGE_SEARCH_BLOGLIST_TAG_NAME:
+      return Object.assign({}, state, { searchTagName: action.payload })
     case constants.SEARCH_BLOGLIST_PENDING:
-      return Object.assign({}, state, { isRefreshBloglistNeeded: false })
+      return Object.assign({}, state,
+        {
+          isPendingRequestBlogList: true,
+          isRequestBlogListFailed: false
+        })
     case constants.SEARCH_BLOGLIST_SUCCESS:
-      return Object.assign({}, state, { bloglist: action.payload })
+      return Object.assign({}, state,
+        {
+          isPendingRequestBlogList: false,
+          isRequestBlogListFailed: false,
+          blogList: action.payload
+        })
     case constants.SEARCH_BLOGLIST_FAILED:
-      return Object.assign({}, state, { error: action.payload })
+      switch (action.payload.Code) {
+        case 'INTERNAL_SERVER_ERROR_BLOGLIST_SEARCH':
+          return Object.assign({}, state,
+            {
+              isPendingRequestBlogList: false, isRequestBlogListFailed: true
+            })
+        case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+          return Object.assign({}, state,
+            {
+              isPendingRequestBlogList: false, isRequestBlogListFailed: true
+            })
+        default://unhandled error
+          return Object.assign({}, state,
+            {
+              error: action.payload,
+              isPendingRequestBlogList: false,
+              isRequestBlogListFailed: true,
+            })
+      }
     case constants.CLEAR_SEARCH_BLOGLIST:
-      return Object.assign({}, state, { isRefreshBloglistNeeded: true })
+      return Object.assign({}, state,
+        {
+          isRefreshBlogListNeeded: true,
+          searchBlogTitle: "",
+          searchCategoryName: "",
+          searchTagName: ""
+        })
     default:
       return state
   }
@@ -2156,6 +2204,12 @@ export const errorRdc = (state = initialStateError, action = {}) => {
           requestErrMsg: action.payload.errMessage
         })
     case constants.SEARCH_MENU2_FAILED:
+      return Object.assign({}, state,
+        {
+          isShowRequestErrAlert: true,
+          requestErrMsg: action.payload.errMessage
+        })
+    case constants.SEARCH_BLOGLIST_FAILED:
       return Object.assign({}, state,
         {
           isShowRequestErrAlert: true,

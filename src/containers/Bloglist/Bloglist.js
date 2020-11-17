@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestBlogList: () =>
 			dispatch(requestBlogListAct()),
-		onSelectBlog: (event) =>{
+		onSelectBlog: (event) => {
 			dispatch(selectBlogAct(event.target.getAttribute('blog-id')));
 			dispatch(requestBlogAct());
 		},
@@ -174,13 +174,13 @@ class BlogList extends Component {
 																</Card.Title>
 																<Card.Text>Tags:
 																	{blog.tags.map((tag, index) => {
-																					return (
-																						<Badge pill key={index}
-																							className="ml-1" variant="primary">
-																							{tag.tag_name}
-																						</Badge>
-																					)
-																				})}
+																	return (
+																		<Badge pill key={index}
+																			className="ml-1" variant="primary">
+																			{tag.tag_name}
+																		</Badge>
+																	)
+																})}
 																</Card.Text>
 																<LinkContainer to={`${this.props.match.url}/${blog.blog_id}`}>
 																	<Button size="sm" variant="link"
@@ -209,12 +209,10 @@ class BlogList extends Component {
 					)}
 				<Switch>
 					<Route path={`${this.props.match.url}/:blogID`}>
-						<Row id="blog-row-container">
-							{(isShowBlog)
-								? (<Blog />)
-								: (null)
-							}
-						</Row>
+						{(isShowBlog)
+							? (<Blog />)
+							: (null)
+						}
 					</Route>
 				</Switch>
 			</React.Fragment>

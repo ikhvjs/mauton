@@ -87,44 +87,61 @@ class Blog extends Component {
 			// onShowDeleteBlogAlert
 		} = this.props;
 
-		// const html = blog[0].blog_content ;
+		// const html = blog.blog_content ;
 
 		return (
-
-
-			<Col id="blog-col-container">
-				<Row>{blog[0].blog_title}</Row>
-				<Row>Category: <Badge pill variant="warning">{blog[0].blog_category_name}</Badge></Row>
-				<Row>Tags:
-				    {blog[0].tags.map((tag, index) => {
-					return (
-						<Badge pill key={index} className="blog-tag"
-							variant="primary">{tag.tag_name}</Badge>
-					)
-				})}
-				</Row>
-				<Row>{`Last updated on ${transformDate(blog[0].last_updated_date)}`}</Row>
-				<Row>
-					<Col xs={2}>
-						<Button variant="success" size="sm">
-							Update
-						</Button>
-					</Col>
-					<Col xs={2}>
-						<Button variant="danger" size="sm">
-							Delete
-						</Button>
-					</Col>
-					<Col xs="auto">
-					</Col>
-				</Row>
-				<Row>
-					{ReactHtmlParser(blog[0].blog_content)}
-				</Row>
-			</Col>
-
-
-
+			<Row id="blog-row-container">
+				<Col id="blog-col-container">
+					<Row>
+						<Col>
+							Blog Title: {blog.blog_title}
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							{ReactHtmlParser(blog.blog_content)}
+						</Col>
+					</Row>
+					<hr />
+					<Row>
+						<Col>
+							Category:
+							<Badge pill variant="warning" className="ml-1">
+								{blog.blog_category_name}
+							</Badge>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							Tags:
+							{blog.tags.map((tag, index) => {
+							return (
+								<Badge pill key={index} variant="primary" className="ml-1">
+									{tag.tag_name}
+								</Badge>
+							)
+						})}
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							{`Last updated on ${transformDate(blog.last_updated_date)}`}
+						</Col>
+					</Row>
+					<Row>
+						<Col xs={2} md={1}>
+							<Button variant="success" size="sm">
+								Update
+							</Button>
+						</Col>
+						<Col xs={2} md={1}>
+							<Button variant="danger" size="sm">
+								Delete
+							</Button>
+						</Col>
+					</Row>
+				</Col>
+			</Row>
 		)
 	}
 }
