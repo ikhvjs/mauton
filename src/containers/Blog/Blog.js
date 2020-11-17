@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-// import { withRouter } from "react-router";
 
 import { connect } from 'react-redux';
-
-// import BlogUpdate from './BlogUpdate';
 
 import {
 	requestBlogAct,
@@ -141,6 +138,7 @@ class Blog extends Component {
 						</Col>
 					</Row>
 				</Col>
+				
 			</Row>
 		)
 	}

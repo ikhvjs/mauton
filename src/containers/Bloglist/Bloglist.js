@@ -8,14 +8,16 @@ import {
 	clearSearchBlogListAct,
 	onchangeSearchBlogTitleAct,
 	onchangeSearchCategoryNameAct,
-	onchangeSearchTagNameAct
+	onchangeSearchTagNameAct,
 } from './BlogListAction';
-
-import { selectBlogAct, requestBlogAct } from '../Blog/BlogAction';
+import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
+import { requestTagAct } from '../TagConfig/TagConfigAction';
+import { selectBlogAct, requestBlogAct, selectCreateBlogAct } from '../Blog/BlogAction';
 
 // import { initTinyEditorAct } from '../../components/TinyEditorComponent/TinyEditorComponentAction';
 import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
 import Blog from '../Blog/Blog';
+import BlogCreate from '../Blog/BlogCreate';
 
 import { transformDate } from '../../utility/utility';
 import { CardColumns, Card, Button, Row, Form, Col, Badge, Spinner } from "react-bootstrap";
@@ -52,6 +54,12 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(onchangeSearchCategoryNameAct(event)),
 		onChangeSearchTagName: (event) =>
 			dispatch(onchangeSearchTagNameAct(event)),
+		onSelectCreateBlog: () =>{
+			dispatch(selectCreateBlogAct());
+			dispatch(requestCategoryAct());
+			dispatch(requestTagAct());
+		}
+			
 	}
 }
 
@@ -59,10 +67,9 @@ const mapDispatchToProps = (dispatch) => {
 class BlogList extends Component {
 
 	componentDidUpdate(prevProps) {
-		if (this.props.isRefreshBlogListNeeded === true) {
+		if (this.props.isRefreshBlogListNeeded) {
 			this.props.onRequestBlogList();
 		}
-
 
 		//scroll to top when click a blog
 		if (this.props.location.pathname !== prevProps.location.pathname) {
@@ -215,6 +222,7 @@ class BlogList extends Component {
 						}
 					</Route>
 				</Switch>
+				<BlogCreate/>
 			</React.Fragment>
 		)
 	}
@@ -222,4 +230,3 @@ class BlogList extends Component {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BlogList));
-// export default connect(mapStateToProps, mapDispatchToProps)(BlogList);

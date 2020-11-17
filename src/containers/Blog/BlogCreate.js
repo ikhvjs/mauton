@@ -1,237 +1,236 @@
-import React , { Component } from 'react';
-
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {
+	closeBlogCreateAct,
+	onchangeCreateBlogTitleAct,
+	onchangeCreateBlogCategoryIDAct,
+	onchangeCreateBlogTagAct,
+	onchangeCreateBlogSeqAct,
+	postBlogAct,
+} from './BlogCreateAction';
 
-import {  
-	withRouter 
-} from "react-router";
+import { Form, Button, Row, Col, Modal, Spinner } from "react-bootstrap";
 
-// import { LinkContainer } from 'react-router-bootstrap';
-
-import { 
-	// selectCreateBlogAct,
-	clickSaveBlogAct,
-	selectUpdateBlogCategoryAct,
-	clearSelectedBlogCategoryAct,
-	selectAddBlogTagAct,
-	deleteBlogTagAct,
-	// clearSelectedBlogTagAct,
-	clearCreateBlogFlagAct,
-	clearCreatedBlogAct,
-	onChangeBlogTitleAct,
-	onChangeBlogDescAct,
-	onChangeBlogPathAct,
-	onChangeBlogSeqAct
-	} from './BlogAction';
-
-// import {
-// 	initTinyEditorAct
-// 	} from '../../components/TinyEditorComponent/TinyEditorComponentAction';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {Row,Col,Form, Button, Badge,Container} from "react-bootstrap";
-import './Blog.css';
-
-import TinyEditorComponent from '../TinyEditorComponent/TinyEditorComponent';
-import CategoryModal from '../../components/CategoryModal/CategoryModal';
-import TagModal from '../../components/TagModal/TagModal';
-
-
-const mapStateToProps =(state) => {
+const mapStateToProps = (state) => {
 	return {
-	    // isCreateBlogByClick:state.blogRdc.isCreateBlogByClick,
-	    // isInitTinyEditorByClick:state.blogRdc.isInitTinyEditorByClick,
-	    selectedCategory:state.blogRdc.selectedCategory,
-	    selectedTag:state.blogRdc.selectedTag,
-	    onChangeBlogTitle:state.blogRdc.onChangeBlogTitle,
-	    onChangeBlogDesc:state.blogRdc.onChangeBlogDesc,
-	    onChangeBlogPath:state.blogRdc.onChangeBlogPath,
-	    onChangeBlogSeq:state.blogRdc.onChangeBlogSeq
-  }
+		isShowCreateBlog: state.blogRdc.isShowCreateBlog,
+		isCreateBlogTitleValid: state.blogRdc.isCreateBlogTitleValid,
+		isCreateBlogCategoryIDValid: state.blogRdc.isCreateBlogCategoryIDValid,
+		isCreateBlogTagValid: state.blogRdc.isCreateBlogTagValid,
+		isCreateBlogSeqValid: state.blogRdc.isCreateBlogSeqValid,
+		createBlogTitle: state.blogRdc.createBlogTitle,
+		createBlogCategoryID: state.blogRdc.createBlogCategoryID,
+		createBlogTag: state.blogRdc.createBlogTag,
+		createBlogSeq: state.blogRdc.createBlogSeq,
+		createBlogTitleErrMsg: state.blogRdc.createBlogTitleErrMsg,
+		createBlogCategoryIDErrMsg: state.blogRdc.createBlogCategoryIDErrMsg,
+		createBlogTagErrMsg: state.blogRdc.createBlogTagErrMsg,
+		createBlogSeqErrMsg: state.blogRdc.createBlogSeqErrMsg,
+		isPendingPostBlog: state.blogRdc.isPendingPostBlog,
+		categories: state.categoryRdc.categories,
+		tags: state.tagRdc.tags,
+	}
 }
 
-const mapDispatchToProps = (dispatch,ownProps) => {
+const mapDispatchToProps = (dispatch) => {
 	return {
-		// onSelectBlogCreate:()=>
-  //   		dispatch(selectCreateBlogAct()),
-        onSelectUpdateBlogCategory:()=>
-        	dispatch(selectUpdateBlogCategoryAct()),
-        onClearSelectedBlogCategory:()=>
-        	dispatch(clearSelectedBlogCategoryAct()),
-        onSelectAddBlogTag:()=>
-        	dispatch(selectAddBlogTagAct()),
-        onDeleteBlogTag:(event)=>
-        	dispatch(deleteBlogTagAct(event)),
-        // onClearSelectedBlogTag:()=>
-        // 	dispatch(clearSelectedBlogTagAct()),
-        onClickSaveBlog:(event)=>{
-        	dispatch(clickSaveBlogAct(event,ownProps.sidebarMenuPath));
-        	dispatch(clearCreatedBlogAct(event));
-        },
-        onClearCreateBlogFlag:()=>
-        	dispatch(clearCreateBlogFlagAct()),
-        onChangeCreateBlogTitle: (event)=>
-        	dispatch(onChangeBlogTitleAct(event.target.value)),
-        onChangeCreateBlogDesc: (event)=>
-        	dispatch(onChangeBlogDescAct(event.target.value)),
-        onChangeCreateBlogPath:(event)=>
-        	dispatch(onChangeBlogPathAct(event.target.value)),
-        onChangeCreateBlogSeq:(event)=>
-        	dispatch(onChangeBlogSeqAct(event.target.value)),
-        
-
-    }
-
+		onCloseBlogCreate: () =>
+			dispatch(closeBlogCreateAct()),
+		onChangeCreateBlogTitle: (event) =>
+			dispatch(onchangeCreateBlogTitleAct(event)),
+		onChangeCreateBlogCategoryID: (event) =>
+			dispatch(onchangeCreateBlogCategoryIDAct(event)),
+		onChangeCreateBlogTag: (event) =>
+			dispatch(onchangeCreateBlogTagAct(event)),
+		onChangeCreateBlogSeq: (event) =>
+			dispatch(onchangeCreateBlogSeqAct(event)),
+		onCreateBlog: () =>
+			dispatch(postBlogAct()),
+	}
 }
 
-class BlogCreate extends Component  {
+class BlogCreate extends Component {
 
-	componentDidMount() {
-		// initTinyEditorAct('blogCreateEditor');\
-	}
-
-
-	// componentDidUpdate(prevProps) {
-	// 	if (this.props.isCreateBlog !== prevProps.isCreateBlog){
-	// 		if (this.props.isCreateBlog === false) {
-	// 			this.props.onRemoveTinyEditor();
-	// 		}
-	// 	}
-		
-	// }
-
-	componentWillUnmount() {
-		// this.props.onClearSelectedBlogCategory();
-		// this.props.onClearSelectedBlogTag();
-		this.props.onClearCreateBlogFlag();
-	}
-
-	
-
-
-	render(){
-
+	render() {
 		const {
-			onClickSaveBlog,
-			onSelectUpdateBlogCategory,
-			selectedCategory,
-			onClearSelectedBlogCategory,
-			onSelectAddBlogTag,
-			selectedTag,
-			onDeleteBlogTag,
+			isShowCreateBlog,
+			onCloseBlogCreate,
+			isCreateBlogTitleValid,
+			isCreateBlogCategoryIDValid,
+			isCreateBlogTagValid,
+			isCreateBlogSeqValid,
+			createBlogTitle,
+			createBlogCategoryID,
+			createBlogTag,
+			createBlogSeq,
+			createBlogTitleErrMsg,
+			createBlogCategoryIDErrMsg,
+			createBlogTagErrMsg,
+			createBlogSeqErrMsg,
 			onChangeCreateBlogTitle,
-			onChangeCreateBlogDesc,
-			onChangeCreateBlogPath,
+			onChangeCreateBlogCategoryID,
+			onChangeCreateBlogTag,
 			onChangeCreateBlogSeq,
-			onChangeBlogTitle,
-			onChangeBlogDesc,
-			onChangeBlogPath,
-			onChangeBlogSeq
-			}=this.props;
+			isPendingPostBlog,
+			onCreateBlog,
+			categories,
+			tags,
+		} = this.props;
 
-			// console.log('match',this.props.match);
+		return (
+			<Modal size="xl" show={isShowCreateBlog} onHide={onCloseBlogCreate} backdrop="static">
+				<Modal.Header closeButton>
+					<Modal.Title>Create Blog Section</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form>
+						<Form.Group as={Row} controlId="formBlogTitle">
+							<Form.Label column sm={4}>
+								Blog Title:
+                                </Form.Label>
+							<Col sm={8}>
+								<Form.Control size="sm" name="blog-title"
+									isValid={isCreateBlogTitleValid}
+									isInvalid={(isCreateBlogTitleValid === null)
+										? null
+										: !isCreateBlogTitleValid}
+									type="text" placeholder="Enter Blog Title"
+									value={createBlogTitle}
+									onChange={onChangeCreateBlogTitle} />
+								<Form.Control.Feedback type="invalid">
+									{createBlogTitleErrMsg}
+								</Form.Control.Feedback>
+								<Form.Control.Feedback type="valid">
+									looks good
+                                </Form.Control.Feedback>
+							</Col>
+						</Form.Group>
 
+						<Form.Group as={Row} controlId="formBlogCategory">
+							<Form.Label column sm={4}>
+								Category:
+                                </Form.Label>
+							<Col sm={8}>
+								<Form.Control as="select"
+									size="sm" name="category-name"
+									isValid={isCreateBlogCategoryIDValid}
+									isInvalid={(isCreateBlogCategoryIDValid === null)
+										? null
+										: !isCreateBlogCategoryIDValid}
+									value={createBlogCategoryID}
+									onChange={onChangeCreateBlogCategoryID}
+								>
+									<option value="" disabled={true}>Select Category</option>
+									{categories.map((category) => {
+										return (
+											<option key={category.blog_category_id}
+												value={category.blog_category_id}>
+												{category.blog_category_name}
+											</option>)
+									})}
+								</Form.Control>
+								<Form.Control.Feedback type="invalid">
+									{createBlogCategoryIDErrMsg}
+								</Form.Control.Feedback>
+								<Form.Control.Feedback type="valid">
+									looks good
+                                </Form.Control.Feedback>
+							</Col>
+						</Form.Group>
 
-		return(
-			<Container>
-			<Row>
-				<h1>Create Blog</h1>
-			</Row>
-			<Form>
-				<Form.Group as={Row}>
-					<Form.Label column sm="2">Blog Title:</Form.Label>
-					<Col sm="8">
-					      <Form.Control name="blog_title" size="sm" 
-					      	type="text" placeholder="Enter Blog Title" 
-					      	value={onChangeBlogTitle}
-					      	onChange={onChangeCreateBlogTitle}
-					      	/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row}>
-					<Form.Label column sm="2">Blog Description:</Form.Label>
-					<Col sm="8">
-					      <Form.Control name="blog_desc" size="sm" 
-					      	type="text" placeholder="Enter Blog Description" 
-					      	value={onChangeBlogDesc}
-					      	onChange={onChangeCreateBlogDesc}
-					      	/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row}>
-					<Form.Label column sm="2">Blog Path:</Form.Label>
-					<Col sm="5">
-					      <Form.Control name="blog_path" size="sm" 
-					      	type="text" placeholder="Enter Blog Path" 
-					      	value={onChangeBlogPath}
-					      	onChange={onChangeCreateBlogPath}
-					      	/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row}>
-					<Form.Label column sm="2">Blog Category:</Form.Label>
-					<Col sm="5">
-					      <Form.Control readOnly size="sm" 
-					      	type="text" placeholder="Change Blog Category" 
-					      	name="blog_category_name"
-					      	id={selectedCategory.blog_category_id}
-					      	defaultValue={selectedCategory.blog_category_name}
-					      	/>
-					</Col>
-					<Col sm="0.5">
-						<Button variant="link" size="sm" 
-							onClick={onSelectUpdateBlogCategory}>Change</Button>
-					</Col>
-					<Col sm="1">
-						<Button variant="secondary" size="sm" onClick={onClearSelectedBlogCategory}>
-							Clear</Button>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row}>
-					<Form.Label column sm="2">Blog Tag(s):</Form.Label>
-					<Col name="blogtag" sm="auto">
-						<Row className="pl-3">
-						{selectedTag.map((tag,index)=>{
-							return (
-								<Col className="px-0 mr-2" sm="auto" 
-									id={tag.tag_id} key={index} 
-									name={tag.tag_name} title={index}>
-									<Badge variant="primary">{`${tag.tag_name} `}</Badge>
-									<Button onClick={onDeleteBlogTag} 
-										className="pl-0 pb-0" variant="link">x</Button>
-								</Col>
-							)
-						})}
-						</Row>
-					</Col>
-					<Col sm="0.5">
-						<Button variant="link" size="sm" onClick={onSelectAddBlogTag}>
-							Add Tags
-						</Button>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row}>
-					<Form.Label column sm="2">Seq:</Form.Label>
-					<Col sm="2">
-					      <Form.Control name="seq" 
-					      size="sm" type="text" placeholder="Enter Seq" 
-					      value={onChangeBlogSeq}
-					      onChange={onChangeCreateBlogSeq}
-					      	/>
-					</Col>
-				</Form.Group>
-				<Button variant="success" size="sm" onClick={onClickSaveBlog}>Save</Button>
-			</Form>
-			<br/>
-			<Row>
-				<TinyEditorComponent id='blogCreateEditor' />
-			</Row>
-			<CategoryModal />
-			<TagModal />
-	       </Container>
+						<Form.Group as={Row} controlId="formBlogTag">
+							<Form.Label column sm={4}>
+								Tag:
+                                </Form.Label>
+							<Col sm={8}>
+								<Form.Control as="select"  multiple
+									size="sm" name="category-name"
+									isValid={isCreateBlogTagValid}
+									isInvalid={(isCreateBlogTagValid === null)
+										? null
+										: !isCreateBlogTagValid}
+									value={createBlogTag}
+									onChange={onChangeCreateBlogTag}
+								>
+									<option value="" disabled={true}>Select Category</option>
+									{tags.map((tag) => {
+										return (
+											<option key={tag.tag_id}
+												value={tag.tag_id}>
+												{tag.tag_name}
+											</option>)
+									})}
+								</Form.Control>
+								<Form.Control.Feedback type="invalid">
+									{createBlogTagErrMsg}
+								</Form.Control.Feedback>
+								<Form.Control.Feedback type="valid">
+									looks good
+                                </Form.Control.Feedback>
+							</Col>
+						</Form.Group>
+
+						<Form.Group as={Row} controlId="formBlogSeq">
+							<Form.Label column sm={4}>
+								Seq:
+                                </Form.Label>
+							<Col sm={8}>
+								<Form.Control size="sm" name="seq"
+									isValid={isCreateBlogSeqValid}
+									isInvalid={(isCreateBlogSeqValid === null)
+										? null
+										: !isCreateBlogSeqValid}
+									type="text" placeholder="Enter seq"
+									value={createBlogSeq}
+									onChange={onChangeCreateBlogSeq} />
+								<Form.Control.Feedback type="invalid">
+									{createBlogSeqErrMsg}
+								</Form.Control.Feedback>
+								<Form.Control.Feedback type="valid">
+									looks good
+                                </Form.Control.Feedback>
+							</Col>
+						</Form.Group>
+						{
+							isPendingPostBlog
+								? (<div className="row d-flex align-items-center justify-content-end">
+									<Spinner
+										as="span"
+										animation="grow"
+										size="sm"
+										role="status"
+										aria-hidden="true"
+									/>
+									Loading...
+								</div>)
+								: (<Row className="d-flex justify-content-end">
+									<Button
+										className="mb-1 mx-1"
+										name="create" onClick={onCreateBlog}
+										variant="primary" size="sm"
+										disabled={!isCreateBlogTitleValid
+											|| !isCreateBlogSeqValid
+											}>
+										Create
+                                </Button>
+									<Button
+										className="mb-1 mx-1"
+										name="cancel-create" onClick={onCloseBlogCreate}
+										variant="secondary" size="sm">
+										Cancel
+                                </Button>
+								</Row>)
+						}
+
+					</Form>
+				</Modal.Body>
+			</Modal>
 		)
-			
+
+
 	}
+
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BlogCreate));
+
+export default connect(mapStateToProps, mapDispatchToProps)(BlogCreate)
