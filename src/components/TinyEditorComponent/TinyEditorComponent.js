@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
-// import { 
-//   initTinyEditorAct
-// } from './TinyEditorComponentAction';
+import {  initTinyEditorAct, removeTinyEditorAct } from './TinyEditorComponentAction';
 
 
 // import $ from 'jquery';
@@ -20,8 +18,10 @@ const mapStateToProps =(state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // onInitTinyEditor:(EditorID)=>
-    //   dispatch(initTinyEditorAct(EditorID))
+    onInitTinyEditor:(id)=>
+      dispatch(initTinyEditorAct(id)),
+    onRemoveTinyEditor:(id)=>
+      dispatch(removeTinyEditorAct(id))
   }
 
 }
@@ -30,9 +30,8 @@ const mapDispatchToProps = (dispatch) => {
 class TinyEditorComponent extends Component {
 
   componentDidMount() {
-    // const { id, onInitTinyEditor } = this.props;
-    // console.log('tiny didMount id',id);
-    // onInitTinyEditor(id);
+    const { id, onInitTinyEditor } = this.props;
+    onInitTinyEditor(id);
   }
 
   componentDidUpdate() {
@@ -44,6 +43,12 @@ class TinyEditorComponent extends Component {
     //   onInitTinyEditor(id);
     // }
   }
+
+  componentWillUnmount(){
+    const { id, onRemoveTinyEditor } = this.props;
+    onRemoveTinyEditor(id);
+  }
+
 
 
   render() {

@@ -1,5 +1,6 @@
 import {
-  INIT_TINY_EDITOR
+  INIT_TINY_EDITOR,
+  REMOVE_TINY_EDITOR
  } from '../../constants';
 
 // Import TinyMCE
@@ -28,7 +29,7 @@ import 'tinymce/plugins/autoresize';
 
 
 
-export const initTinyEditorAct = (id, actiontype)  => {
+export const initTinyEditorAct = (id)  => {
 
 
   tinymce.remove(`#${id}`);
@@ -56,17 +57,17 @@ export const initTinyEditorAct = (id, actiontype)  => {
       
   });
 
-  if (actiontype === 'CREATE'){
-    setTimeout(function () {
-      // clear content 
-      tinymce.get(id).setContent("");
-    },1)
-  }
+  // if (actiontype === 'CREATE'){
+  //   setTimeout(function () {
+  //     // clear content 
+  //     tinymce.get(id).setContent("");
+  //   },1)
+  // }
   
   return ({type:INIT_TINY_EDITOR})
 }
 
-// export const onRemoveTinyEditorAct =()=>{
-//   tinymce.remove();
-//   return ({type:REMOVE_TINY_EDITOR})
-// }
+export const removeTinyEditorAct =()=>{
+  tinymce.remove();
+  return ({type:REMOVE_TINY_EDITOR})
+}

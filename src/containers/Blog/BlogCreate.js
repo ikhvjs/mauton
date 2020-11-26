@@ -3,30 +3,36 @@ import { connect } from 'react-redux';
 import {
 	closeBlogCreateAct,
 	onchangeCreateBlogTitleAct,
-	onchangeCreateBlogCategoryIDAct,
+	onchangeCreateBlogCategoryAct,
 	onchangeCreateBlogTagAct,
 	onchangeCreateBlogSeqAct,
 	postBlogAct,
 } from './BlogCreateAction';
+import { customStyles } from './BlogCustomStyles';
+import TinyEditorComponent from '../../components/TinyEditorComponent/TinyEditorComponent';
 
 import { Form, Button, Row, Col, Modal, Spinner } from "react-bootstrap";
+import Select from 'react-select';
+import './Blog.css';
 
 const mapStateToProps = (state) => {
 	return {
 		isShowCreateBlog: state.blogRdc.isShowCreateBlog,
 		isCreateBlogTitleValid: state.blogRdc.isCreateBlogTitleValid,
-		isCreateBlogCategoryIDValid: state.blogRdc.isCreateBlogCategoryIDValid,
+		isCreateBlogCategoryValid: state.blogRdc.isCreateBlogCategoryValid,
 		isCreateBlogTagValid: state.blogRdc.isCreateBlogTagValid,
 		isCreateBlogSeqValid: state.blogRdc.isCreateBlogSeqValid,
 		createBlogTitle: state.blogRdc.createBlogTitle,
-		createBlogCategoryID: state.blogRdc.createBlogCategoryID,
+		createBlogCategory: state.blogRdc.createBlogCategory,
 		createBlogTag: state.blogRdc.createBlogTag,
 		createBlogSeq: state.blogRdc.createBlogSeq,
 		createBlogTitleErrMsg: state.blogRdc.createBlogTitleErrMsg,
-		createBlogCategoryIDErrMsg: state.blogRdc.createBlogCategoryIDErrMsg,
+		createBlogCategoryErrMsg: state.blogRdc.createBlogCategoryErrMsg,
 		createBlogTagErrMsg: state.blogRdc.createBlogTagErrMsg,
 		createBlogSeqErrMsg: state.blogRdc.createBlogSeqErrMsg,
 		isPendingPostBlog: state.blogRdc.isPendingPostBlog,
+		isPendingRequestCategory: state.categoryRdc.isPendingRequestCategory,
+		isPendingRequestTag: state.tagRdc.isPendingRequestTag,
 		categories: state.categoryRdc.categories,
 		tags: state.tagRdc.tags,
 	}
@@ -38,10 +44,10 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(closeBlogCreateAct()),
 		onChangeCreateBlogTitle: (event) =>
 			dispatch(onchangeCreateBlogTitleAct(event)),
-		onChangeCreateBlogCategoryID: (event) =>
-			dispatch(onchangeCreateBlogCategoryIDAct(event)),
-		onChangeCreateBlogTag: (event) =>
-			dispatch(onchangeCreateBlogTagAct(event)),
+		onChangeCreateBlogCategory: (selectValue) =>
+			dispatch(onchangeCreateBlogCategoryAct(selectValue)),
+		onChangeCreateBlogTag: (selectValue) =>
+			dispatch(onchangeCreateBlogTagAct(selectValue)),
 		onChangeCreateBlogSeq: (event) =>
 			dispatch(onchangeCreateBlogSeqAct(event)),
 		onCreateBlog: () =>
@@ -56,26 +62,30 @@ class BlogCreate extends Component {
 			isShowCreateBlog,
 			onCloseBlogCreate,
 			isCreateBlogTitleValid,
-			isCreateBlogCategoryIDValid,
+			isCreateBlogCategoryValid,
 			isCreateBlogTagValid,
 			isCreateBlogSeqValid,
 			createBlogTitle,
-			createBlogCategoryID,
+			createBlogCategory,
 			createBlogTag,
 			createBlogSeq,
 			createBlogTitleErrMsg,
-			createBlogCategoryIDErrMsg,
+			createBlogCategoryErrMsg,
 			createBlogTagErrMsg,
 			createBlogSeqErrMsg,
 			onChangeCreateBlogTitle,
-			onChangeCreateBlogCategoryID,
+			onChangeCreateBlogCategory,
 			onChangeCreateBlogTag,
 			onChangeCreateBlogSeq,
 			isPendingPostBlog,
 			onCreateBlog,
 			categories,
 			tags,
+			isPendingRequestCategory,
+			isPendingRequestTag,
 		} = this.props;
+
+		
 
 		return (
 			<Modal size="xl" show={isShowCreateBlog} onHide={onCloseBlogCreate} backdrop="static">
@@ -85,7 +95,7 @@ class BlogCreate extends Component {
 				<Modal.Body>
 					<Form>
 						<Form.Group as={Row} controlId="formBlogTitle">
-							<Form.Label column sm={4}>
+							<Form.Label column sm={2}>
 								Blog Title:
                                 </Form.Label>
 							<Col sm={8}>
@@ -107,30 +117,32 @@ class BlogCreate extends Component {
 						</Form.Group>
 
 						<Form.Group as={Row} controlId="formBlogCategory">
-							<Form.Label column sm={4}>
+							<Form.Label column sm={2}>
 								Category:
                                 </Form.Label>
 							<Col sm={8}>
-								<Form.Control as="select"
-									size="sm" name="category-name"
-									isValid={isCreateBlogCategoryIDValid}
-									isInvalid={(isCreateBlogCategoryIDValid === null)
-										? null
-										: !isCreateBlogCategoryIDValid}
-									value={createBlogCategoryID}
-									onChange={onChangeCreateBlogCategoryID}
-								>
-									<option value="" disabled={true}>Select Category</option>
-									{categories.map((category) => {
-										return (
-											<option key={category.blog_category_id}
-												value={category.blog_category_id}>
-												{category.blog_category_name}
-											</option>)
-									})}
-								</Form.Control>
+								<Select
+									className={`form-control form-control-sm p-0
+										${(isCreateBlogCategoryValid === null)
+											? null
+											: (isCreateBlogCategoryValid
+												? "is-valid"
+												: "is-invalid")}`
+									}
+									value={createBlogCategory}
+									isLoading={isPendingRequestCategory}
+									isClearable={false}
+									isSearchable={true}
+									name="category"
+									onChange={onChangeCreateBlogCategory}
+									options={categories.map((
+										{ blog_category_id: value, blog_category_name: label }) =>
+										({ value, label })
+									)}
+									styles={customStyles}
+								/>
 								<Form.Control.Feedback type="invalid">
-									{createBlogCategoryIDErrMsg}
+									{createBlogCategoryErrMsg}
 								</Form.Control.Feedback>
 								<Form.Control.Feedback type="valid">
 									looks good
@@ -139,28 +151,31 @@ class BlogCreate extends Component {
 						</Form.Group>
 
 						<Form.Group as={Row} controlId="formBlogTag">
-							<Form.Label column sm={4}>
+							<Form.Label column sm={2}>
 								Tag:
                                 </Form.Label>
 							<Col sm={8}>
-								<Form.Control as="select"  multiple
-									size="sm" name="category-name"
-									isValid={isCreateBlogTagValid}
-									isInvalid={(isCreateBlogTagValid === null)
-										? null
-										: !isCreateBlogTagValid}
+								<Select
+									className={`form-control form-control-sm p-0
+										${(isCreateBlogTagValid === null)
+											? null
+											: (isCreateBlogTagValid
+												? "is-valid"
+												: "is-invalid")}`
+									}
+									isMulti
 									value={createBlogTag}
+									isLoading={isPendingRequestTag}
+									isClearable={false}
+									isSearchable={true}
+									name="tag"
 									onChange={onChangeCreateBlogTag}
-								>
-									<option value="" disabled={true}>Select Category</option>
-									{tags.map((tag) => {
-										return (
-											<option key={tag.tag_id}
-												value={tag.tag_id}>
-												{tag.tag_name}
-											</option>)
-									})}
-								</Form.Control>
+									options={tags.map((
+										{ tag_id: value, tag_name: label }) =>
+										({ value, label })
+									)}
+									styles={customStyles}
+								/>
 								<Form.Control.Feedback type="invalid">
 									{createBlogTagErrMsg}
 								</Form.Control.Feedback>
@@ -171,10 +186,10 @@ class BlogCreate extends Component {
 						</Form.Group>
 
 						<Form.Group as={Row} controlId="formBlogSeq">
-							<Form.Label column sm={4}>
+							<Form.Label column sm={2}>
 								Seq:
                                 </Form.Label>
-							<Col sm={8}>
+							<Col sm={2}>
 								<Form.Control size="sm" name="seq"
 									isValid={isCreateBlogSeqValid}
 									isInvalid={(isCreateBlogSeqValid === null)
@@ -189,6 +204,13 @@ class BlogCreate extends Component {
 								<Form.Control.Feedback type="valid">
 									looks good
                                 </Form.Control.Feedback>
+							</Col>
+						</Form.Group>
+
+
+						<Form.Group as={Row} controlId="formBlogContent">
+							<Col>
+								<TinyEditorComponent id="blog-content"/>
 							</Col>
 						</Form.Group>
 						{
@@ -210,7 +232,7 @@ class BlogCreate extends Component {
 										variant="primary" size="sm"
 										disabled={!isCreateBlogTitleValid
 											|| !isCreateBlogSeqValid
-											}>
+										}>
 										Create
                                 </Button>
 									<Button

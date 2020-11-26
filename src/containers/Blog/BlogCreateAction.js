@@ -33,48 +33,56 @@ export const onchangeCreateBlogTitleAct = (event) => {
     return { type: ONCHANGE_CREATE_BLOG_TITLE, payload: { blogTitle: blogTitle, isValid: true } };
 }
 
-const checkCreateBlogCategoryID = (blogCategoryID) => {
-    if (!blogCategoryID) {
+const checkCreateBlogCategory = (createBlogCategory) => {
+    if (!createBlogCategory.value) {
         return { isValid: false, errorMsg: `please select category` }
     }
 
     return { isValid: true };
 }
 
-export const onchangeCreateBlogCategoryIDAct = (event) => {
-    const blogCategoryID = event.target.value;
-    const result = checkCreateBlogCategoryID(blogCategoryID);
+export const onchangeCreateBlogCategoryAct = (selectValue) => {
+    const createBlogCategory = selectValue;
+    const result = checkCreateBlogCategory(createBlogCategory);
     if (!result.isValid) {
-        return { type: ONCHANGE_CREATE_BLOG_CATEGORY_NAME, payload: { blogCategoryID: blogCategoryID, isValid: false, errorMsg: result.errorMsg } };
+        return {
+            type: ONCHANGE_CREATE_BLOG_CATEGORY_NAME,
+            payload: { createBlogCategory: createBlogCategory, isValid: false, errorMsg: result.errorMsg }
+        };
     }
-    return { type: ONCHANGE_CREATE_BLOG_CATEGORY_NAME, payload: { blogCategoryID: blogCategoryID, isValid: true } };
+    return {
+        type: ONCHANGE_CREATE_BLOG_CATEGORY_NAME,
+        payload: { createBlogCategory: createBlogCategory, isValid: true }
+    };
 }
 
-// const checkCreateBlogTagID = (blogTagID) => {
-//     if (!blogTagID) {
-//         return { isValid: false, errorMsg: `please select tag` }
-//     }
+const checkCreateBlogTag = (createBlogTag) => {
+    if (createBlogTag === null) {
+        return { isValid: false, errorMsg: `please select tag` }
+    }
 
-//     return { isValid: true };
-// }
+    return { isValid: true };
+}
 
-export const onchangeCreateBlogTagAct = (event) => {
-    const blogTagID = event.target.value;
-    // const result = checkCreateBlogTagID(blogTagID);
-    // if (!result.isValid) {
-    //     return { type: ONCHANGE_CREATE_BLOG_TAG, payload: { blogTagID: blogTagID, isValid: false, errorMsg: result.errorMsg } };
-    // }
-    return { type: ONCHANGE_CREATE_BLOG_TAG, payload: { blogTagID: blogTagID, isValid: true } };
+export const onchangeCreateBlogTagAct = (selectValue) => {
+    const createBlogTag = selectValue;
+    const result = checkCreateBlogTag(createBlogTag);
+    if (!result.isValid) {
+        return { type: ONCHANGE_CREATE_BLOG_TAG, 
+            payload: { createBlogTag: createBlogTag, isValid: false, errorMsg: result.errorMsg } };
+    }
+    return { type: ONCHANGE_CREATE_BLOG_TAG, 
+        payload: { createBlogTag: createBlogTag, isValid: true } };
 }
 
 
 const checkCreateBlogSeq = (blogSeq) => {
     if (!blogSeq) {
         return { isValid: false, errorMsg: `Please enter seq` }
-    }else if(isNaN(Number(blogSeq))) {
+    } else if (isNaN(Number(blogSeq))) {
         return { isValid: false, errorMsg: `Seq must be a number` }
-    }else if (Number(blogSeq)<1||Number(blogSeq)>1000){
-        return {isValid:false, errorMsg: `Seq must be between 1 to 1000`}
+    } else if (Number(blogSeq) < 1 || Number(blogSeq) > 1000) {
+        return { isValid: false, errorMsg: `Seq must be between 1 to 1000` }
     }
 
     return { isValid: true };
@@ -107,24 +115,24 @@ export const postBlogAct = () => (dispatch, getState) => {
             userID: getState().authRdc.userID
         })
     })
-    .then(res => {
-        resStatus = res.status
-        return res.json()
-    })
-    .then(res => {
-        switch (resStatus) {
-            case 200:
-                return dispatch({ type: POST_BLOG_SUCCESS, payload: res })
-            case 400:
-                return dispatch({ type: POST_BLOG_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
-            case 500:
-                return dispatch({ type: POST_BLOG_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
-            default:
-                return dispatch({ type: POST_BLOG_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOG-Create-1), please try again' } })
-        }
-    })
-    .catch(
-        () => dispatch({ type: POST_BLOG_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOG-Create-2), please try again' } })
-    )
+        .then(res => {
+            resStatus = res.status
+            return res.json()
+        })
+        .then(res => {
+            switch (resStatus) {
+                case 200:
+                    return dispatch({ type: POST_BLOG_SUCCESS, payload: res })
+                case 400:
+                    return dispatch({ type: POST_BLOG_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
+                case 500:
+                    return dispatch({ type: POST_BLOG_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
+                default:
+                    return dispatch({ type: POST_BLOG_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOG-Create-1), please try again' } })
+            }
+        })
+        .catch(
+            () => dispatch({ type: POST_BLOG_FAILED, payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOG-Create-2), please try again' } })
+        )
 }
 

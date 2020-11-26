@@ -244,41 +244,19 @@ const initialStateBlog = {
   isShowCreateBlog: false,
   isPendingPostBlog: false,
   isCreateBlogTitleValid:null,
-  isCreateBlogCategoryIDValid:null,
+  isCreateBlogCategoryValid:null,
   isCreateBlogTagValid:null,
   isCreateBlogSeqValid:null,
   createBlogTitle: "",
-  createBlogCategoryID: "",
+  createBlogCategory: { value: '', label: 'Select Category' },
   createBlogTag: [],
   createBlogSeq: "",
   createBlogTitleErrMsg:"",
-  createBlogCategoryIDErrMsg:"",
+  createBlogCategoryErrMsg:"",
   createBlogTagErrMsg:"",
   createBlogSeqErrMsg:"",
   //delete blog
   
-
-
-
-
-
-
-  // isPendingBlogByClick: false,
-  
-  // isCreateBlog: false,
-  // isShowCategoryModal: false,
-  // isShowTagModal: false,
-  // isUpdateBlog: false,
-  // isShowDeleteBlogAlert: false,
-  // blogCategory: [],
-  // blogTag: [],
-  // blog: [],
-  // selectedTag: [],
-  // selectedCategory: [],
-  // onChangeBlogTitle: [],
-  // onChangeBlogDesc: [],
-  // onChangeBlogPath: [],
-  // onChangeBlogSeq: []
 
 }
 
@@ -325,7 +303,8 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
       return Object.assign({}, state, 
         { isShowCreateBlog: false ,
           isCreateBlogTitleValid: null, createBlogTitle: "", createBlogTitleErrMsg: "",
-          isCreateBlogCategoryIDValid: null, createBlogCategoryID: "", createBlogCategoryIDErrMsg: "",
+          isCreateBlogCategoryValid: null, createBlogCategory: state.createBlogCategory, createBlogCategoryErrMsg: "",
+          isCreateBlogTagValid: null, createBlogTag: state.createBlogTag, createBlogTagErrMsg: "",
           isCreateBlogSeqValid: null, createBlogSeq: "", createBlogSeqErrMsg: ""
         })
       case constants.POST_BLOG_PENDING:
@@ -337,7 +316,7 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
             {
               isPendingPostBlog: false, isShowCreateBlog: false,
               isCreateBlogTitleValid: null, createBlogTitle: "", createBlogTitleErrMsg: "",
-              isCreateBlogCategoryIDValid: null, createBlogCategoryID: "", createBlogCategoryIDErrMsg: "",
+              isCreateBlogCategoryValid: null, createBlogCategory: state.createBlogCategory, createBlogCategoryErrMsg: "",
               isCreateBlogSeqValid: null, createBlogSeq: "", createBlogSeqErrMsg: ""
             })
         case constants.POST_BLOG_FAILED:
@@ -354,7 +333,7 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
                 {
                   isPendingPostBlog: false,
                   isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
-                  isCreateBlogCategoryIDValid: false, createBlogCategoryIDErrMsg: action.payload.errMessage,
+                  isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
                   isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
                 })
             case 'BLOG_DUPLICATE_BLOG_TITLE':
@@ -374,7 +353,7 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
                 {
                   isPendingPostBlog: false,
                   isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
-                  isCreateBlogCategoryIDValid: false, createBlogCategoryIDErrMsg: action.payload.errMessage,
+                  isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
                   isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
                 })
             default://unhandled error
@@ -383,10 +362,10 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
                   error: action.payload,
                   isPendingPostBlog: false,
                   createBlogTitle: "",
-                  createBlogCategoryID: "",
+                  createBlogCategory: state.createBlogCategory,
                   createBlogSeq: "",
                   isCreateBlogTitleValid: null, createBlogTitleErrMsg: "",
-                  isCreateBlogCategoryIDValid: null, createBlogCategoryIDErrMsg: "",
+                  isCreateBlogCategoryValid: null, createBlogCategoryErrMsg: "",
                   isCreateBlogSeqValid: null, createBlogSeqErrMsg: ""
                 })
           }
@@ -414,16 +393,16 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
             case false:
               return Object.assign({}, state,
                 {
-                  createBlogCategoryID: action.payload.blogCategoryID,
-                  createBlogCategoryIDErrMsg: action.payload.errorMsg,
-                  isCreateBlogCategoryIDValid: false
+                  createBlogCategory: action.payload.createBlogCategory,
+                  createBlogCategoryErrMsg: action.payload.errorMsg,
+                  isCreateBlogCategoryValid: false
                 })
             case true:
               return Object.assign({}, state,
                 {
-                  createBlogCategoryID: action.payload.blogCategoryID,
-                  createBlogCategoryIDErrMsg: "",
-                  isCreateBlogCategoryIDValid: true
+                  createBlogCategory: action.payload.createBlogCategory,
+                  createBlogCategoryErrMsg: "",
+                  isCreateBlogCategoryValid: true
                 })
             default:
               return state
@@ -433,14 +412,14 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
             case false:
               return Object.assign({}, state,
                 {
-                  createBlogTag: [...state.createBlogTag,action.payload.blogTagID],
+                  createBlogTag: action.payload.createBlogTag,
                   createBlogTagErrMsg: action.payload.errorMsg,
                   isCreateBlogTagValid: false
                 })
             case true:
               return Object.assign({}, state,
                 {
-                  createBlogTag: [...state.createBlogTag,action.payload.blogTagID],
+                  createBlogTag: action.payload.createBlogTag,
                   createBlogTagErrMsg: "",
                   isCreateBlogTagValid: true
                 })
@@ -576,13 +555,15 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
     //TinyMCE Editor
     case constants.INIT_TINY_EDITOR:
       return Object.assign({}, state, {})
-    default:
-      return state
+    case constants.REMOVE_TINY_EDITOR:
+      return Object.assign({}, state, {})
     //Delete Blog Alert
     case constants.CLOSE_DELETE_BLOG_ALERT:
       return Object.assign({}, state, { isShowDeleteBlogAlert: false })
     case constants.SHOW_DELETE_BLOG_ALERT:
       return Object.assign({}, state, { isShowDeleteBlogAlert: true })
+    default:
+      return state
   }
 }
 
