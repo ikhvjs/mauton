@@ -243,20 +243,39 @@ const initialStateBlog = {
   //create blog
   isShowCreateBlog: false,
   isPendingPostBlog: false,
-  isCreateBlogTitleValid:null,
-  isCreateBlogCategoryValid:null,
-  isCreateBlogTagValid:null,
-  isCreateBlogSeqValid:null,
+  isCreateBlogTitleValid: null,
+  isCreateBlogCategoryValid: null,
+  isCreateBlogTagValid: null,
+  isCreateBlogSeqValid: null,
   createBlogTitle: "",
   createBlogCategory: { value: '', label: 'Select Category' },
   createBlogTag: [],
   createBlogSeq: "",
-  createBlogTitleErrMsg:"",
-  createBlogCategoryErrMsg:"",
-  createBlogTagErrMsg:"",
-  createBlogSeqErrMsg:"",
+  createBlogTitleErrMsg: "",
+  createBlogCategoryErrMsg: "",
+  createBlogTagErrMsg: "",
+  createBlogSeqErrMsg: "",
   //delete blog
-  
+  isShowDeleteBlog: false,
+  deleteBlogTitle: null,
+  isPendingDeleteBlog: false,
+  isDeleteBlogFailed: false,
+  deleteBlogErrMsg: "",
+  //update blog
+  isShowUpdateBlog: false,
+  isPendingUpdateBlog: false,
+  isUpdateBlogTitleValid: true,
+  isUpdateBlogCategoryValid: true,
+  isUpdateBlogTagValid: true,
+  isUpdateBlogSeqValid: true,
+  updateBlogTitle: "",
+  updateBlogCategory: { value: '', label: 'Select Category' },
+  updateBlogTag: [],
+  updateBlogSeq: "",
+  updateBlogTitleErrMsg: "",
+  updateBlogCategoryErrMsg: "",
+  updateBlogTagErrMsg: "",
+  updateBlogSeqErrMsg: "",
 
 }
 
@@ -300,268 +319,297 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
     case constants.SELECT_CREATE_BLOG:
       return Object.assign({}, state, { isShowCreateBlog: true })
     case constants.CLOSE_CREATE_BLOG:
-      return Object.assign({}, state, 
-        { isShowCreateBlog: false ,
+      return Object.assign({}, state,
+        {
+          isShowCreateBlog: false,
           isCreateBlogTitleValid: null, createBlogTitle: "", createBlogTitleErrMsg: "",
-          isCreateBlogCategoryValid: null, createBlogCategory: state.createBlogCategory, createBlogCategoryErrMsg: "",
-          isCreateBlogTagValid: null, createBlogTag: state.createBlogTag, createBlogTagErrMsg: "",
+          isCreateBlogCategoryValid: null, createBlogCategory: { value: '', label: 'Select Category' }, createBlogCategoryErrMsg: "",
+          isCreateBlogTagValid: null, createBlogTag: [], createBlogTagErrMsg: "",
           isCreateBlogSeqValid: null, createBlogSeq: "", createBlogSeqErrMsg: ""
         })
-      case constants.POST_BLOG_PENDING:
-        return Object.assign({}, state, {isPendingPostBlog: true})
+    case constants.POST_BLOG_PENDING:
+      return Object.assign({}, state, { isPendingPostBlog: true })
 
 
-        case constants.POST_BLOG_SUCCESS:
+    case constants.POST_BLOG_SUCCESS:
+      return Object.assign({}, state,
+        {
+          isPendingPostBlog: false, isShowCreateBlog: false,
+          isCreateBlogTitleValid: null, createBlogTitle: "", createBlogTitleErrMsg: "",
+          isCreateBlogCategoryValid: null, createBlogCategory: { value: '', label: 'Select Category' }, createBlogCategoryErrMsg: "",
+          isCreateBlogTagValid: null, createBlogTag: [], createBlogTagErrMsg: "",
+          isCreateBlogSeqValid: null, createBlogSeq: "", createBlogSeqErrMsg: ""
+        })
+    case constants.POST_BLOG_FAILED:
+      switch (action.payload.Code) {
+        case 'BLOG_MANDATORY_FIELD':
           return Object.assign({}, state,
             {
-              isPendingPostBlog: false, isShowCreateBlog: false,
-              isCreateBlogTitleValid: null, createBlogTitle: "", createBlogTitleErrMsg: "",
-              isCreateBlogCategoryValid: null, createBlogCategory: state.createBlogCategory, createBlogCategoryErrMsg: "",
-              isCreateBlogSeqValid: null, createBlogSeq: "", createBlogSeqErrMsg: ""
+              isPendingPostBlog: false,
+              isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
+              isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
+              isCreateBlogTagValid: false, createBlogTagErrMsg: action.payload.errMessage,
+              isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
             })
-        case constants.POST_BLOG_FAILED:
-          switch (action.payload.Code) {
-            case 'BLOG_MANDATORY_FIELD':
-              return Object.assign({}, state,
-                {
-                  isPendingPostBlog: false,
-                  isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
-                  isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
-                })
-            case 'INTERNAL_SERVER_ERROR_BLOG_CHECK_DUP':
-              return Object.assign({}, state,
-                {
-                  isPendingPostBlog: false,
-                  isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
-                  isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
-                  isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
-                })
-            case 'BLOG_DUPLICATE_BLOG_TITLE':
-              return Object.assign({}, state,
-                {
-                  isPendingPostBlog: false,
-                  isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage
-                })
-            case 'INTERNAL_SERVER_ERROR_BLOG_INSERT':
-              return Object.assign({}, state,
-                {
-                  isPendingPostBlog: false,
-                  isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage
-                })
-            case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
-              return Object.assign({}, state,
-                {
-                  isPendingPostBlog: false,
-                  isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
-                  isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
-                  isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
-                })
-            default://unhandled error
-              return Object.assign({}, state,
-                {
-                  error: action.payload,
-                  isPendingPostBlog: false,
-                  createBlogTitle: "",
-                  createBlogCategory: state.createBlogCategory,
-                  createBlogSeq: "",
-                  isCreateBlogTitleValid: null, createBlogTitleErrMsg: "",
-                  isCreateBlogCategoryValid: null, createBlogCategoryErrMsg: "",
-                  isCreateBlogSeqValid: null, createBlogSeqErrMsg: ""
-                })
-          }
-        case constants.ONCHANGE_CREATE_BLOG_TITLE:
-          switch (action.payload.isValid) {
-            case false:
-              return Object.assign({}, state,
-                {
-                  createBlogTitle: action.payload.blogTitle,
-                  createBlogTitleErrMsg: action.payload.errorMsg,
-                  isCreateBlogTitleValid: false
-                })
-            case true:
-              return Object.assign({}, state,
-                {
-                  createBlogTitle: action.payload.blogTitle,
-                  createBlogTitleErrMsg: "",
-                  isCreateBlogTitleValid: true
-                })
-            default:
-              return state
-          }
-        case constants.ONCHANGE_CREATE_BLOG_CATEGORY_NAME:
-          switch (action.payload.isValid) {
-            case false:
-              return Object.assign({}, state,
-                {
-                  createBlogCategory: action.payload.createBlogCategory,
-                  createBlogCategoryErrMsg: action.payload.errorMsg,
-                  isCreateBlogCategoryValid: false
-                })
-            case true:
-              return Object.assign({}, state,
-                {
-                  createBlogCategory: action.payload.createBlogCategory,
-                  createBlogCategoryErrMsg: "",
-                  isCreateBlogCategoryValid: true
-                })
-            default:
-              return state
-          }
-        case constants.ONCHANGE_CREATE_BLOG_TAG:
-          switch (action.payload.isValid) {
-            case false:
-              return Object.assign({}, state,
-                {
-                  createBlogTag: action.payload.createBlogTag,
-                  createBlogTagErrMsg: action.payload.errorMsg,
-                  isCreateBlogTagValid: false
-                })
-            case true:
-              return Object.assign({}, state,
-                {
-                  createBlogTag: action.payload.createBlogTag,
-                  createBlogTagErrMsg: "",
-                  isCreateBlogTagValid: true
-                })
-            default:
-              return state
-          }
-        case constants.ONCHANGE_CREATE_BLOG_SEQ:
-          switch (action.payload.isValid) {
-            case false:
-              return Object.assign({}, state,
-                {
-                  createBlogSeq: action.payload.blogSeq,
-                  createBlogSeqErrMsg: action.payload.errorMsg,
-                  isCreateBlogSeqValid: false
-                })
-            case true:
-              return Object.assign({}, state,
-                {
-                  createBlogSeq: action.payload.blogSeq,
-                  createBlogSeqErrMsg: "",
-                  isCreateBlogSeqValid: true
-                })
-            default:
-              return state
-          }
-
-
-
-
-
-
-
-    case constants.SELECT_CREATE_BLOG_C:
-      return Object.assign({}, state, { isCreateBlog: true })
-    case constants.CLEAR_CREATE_BLOG_FLAG:
-      return Object.assign({}, state, { isCreateBlog: false })
-    case constants.SELECT_UPDATE_BLOG_CATEGORY:
-      return Object.assign({}, state, { isShowCategoryModal: true })
-    case constants.CLEAR_SELECT_BLOG_CATEGORY:
-      return Object.assign({}, state, { selectedCategory: {} })
-    case constants.SELECT_ADD_BLOG_TAG:
-      return Object.assign({}, state, { isShowTagModal: true })
-    case constants.DELETE_BLOG_TAG:
-      return Object.assign({}, state, { selectedTag: action.payload })
-    case constants.CLEAR_SELECT_BLOG_TAG:
-      return Object.assign({}, state, { selectedTag: [] })
-    
-    case constants.UPDATE_BLOG:
-      return Object.assign({}, state, { isUpdateBlog: true })
-    case constants.EXIT_UPDATE_BLOG:
-      return Object.assign({}, state, { isUpdateBlog: false })
-    case constants.INIT_SELECTED_BLOG_TAG:
-      return Object.assign({}, state, { selectedTag: [...action.payload] })
-    case constants.INIT_SELECTED_BLOG_CATEGORY:
-      return Object.assign({}, state, { selectedCategory: action.payload })
-    case constants.ONCHANGE_BLOG_TITLE:
-      return Object.assign({}, state, { onChangeBlogTitle: action.payload })
-    case constants.ONCHANGE_BLOG_DESC:
-      return Object.assign({}, state, { onChangeBlogDesc: action.payload })
-    case constants.ONCHANGE_BLOG_PATH:
-      return Object.assign({}, state, { onChangeBlogPath: action.payload })
-    case constants.ONCHANGE_BLOG_SEQ:
-      return Object.assign({}, state, { onChangeBlogSeq: action.payload })
-    case constants.CLEAR_ONCHANGE_BLOG:
-      return Object.assign({}, state, {
-        selectedTag: [],
-        selectedCategory: {},
-        onChangeBlogTitle: "",
-        onChangeBlogDesc: "",
-        onChangeBlogPath: "",
-        onChangeBlogSeq: ""
-      })
-    case constants.INIT_UPDATE_BLOG_TITLE:
-      return Object.assign({}, state, { onChangeBlogTitle: action.payload });
-    case constants.INIT_UPDATE_BLOG_DESC:
-      return Object.assign({}, state, { onChangeBlogDesc: action.payload });
-    case constants.INIT_UPDATE_BLOG_PATH:
-      return Object.assign({}, state, { onChangeBlogPath: action.payload });
-    case constants.INIT_UPDATE_BLOG_SEQ:
-      return Object.assign({}, state, { onChangeBlogSeq: action.payload });
-    case constants.UPDATE_BLOG_PENDING:
-      return Object.assign({}, state, {});
-    case constants.UPDATE_BLOG_SUCCESS:
-      return Object.assign({}, state, { isUpdateBlog: false });
-    case constants.UPDATE_BLOG_FAILED:
-      return Object.assign({}, state, { error: action.payload });
+        case 'INTERNAL_SERVER_ERROR_BLOG_CHECK_DUP':
+          return Object.assign({}, state,
+            {
+              isPendingPostBlog: false,
+              isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
+              isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
+              isCreateBlogTagValid: false, createBlogTagErrMsg: action.payload.errMessage,
+              isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
+            })
+        case 'BLOG_DUPLICATE_BLOG_TITLE':
+          return Object.assign({}, state,
+            {
+              isPendingPostBlog: false,
+              isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage
+            })
+        case 'INTERNAL_SERVER_ERROR_BLOG_INSERT':
+          return Object.assign({}, state,
+            {
+              isPendingPostBlog: false,
+              isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
+              isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
+              isCreateBlogTagValid: false, createBlogTagErrMsg: action.payload.errMessage,
+              isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
+            })
+        case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+          return Object.assign({}, state,
+            {
+              isPendingPostBlog: false,
+              isCreateBlogTitleValid: false, createBlogTitleErrMsg: action.payload.errMessage,
+              isCreateBlogCategoryValid: false, createBlogCategoryErrMsg: action.payload.errMessage,
+              isCreateBlogTagValid: false, createBlogTagErrMsg: action.payload.errMessage,
+              isCreateBlogSeqValid: false, createBlogSeqErrMsg: action.payload.errMessage
+            })
+        default://unhandled error
+          return Object.assign({}, state,
+            {
+              error: action.payload,
+              isPendingPostBlog: false,
+              createBlogTitle: "",
+              createBlogCategory: { value: '', label: 'Select Category' },
+              createBlogTag: [],
+              createBlogSeq: "",
+              isCreateBlogTitleValid: null, createBlogTitleErrMsg: "",
+              isCreateBlogCategoryValid: null, createBlogCategoryErrMsg: "",
+              isCreateBlogTagValid: null, createBlogTagErrMsg: "",
+              isCreateBlogSeqValid: null, createBlogSeqErrMsg: ""
+            })
+      }
+    case constants.ONCHANGE_CREATE_BLOG_TITLE:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              createBlogTitle: action.payload.blogTitle,
+              createBlogTitleErrMsg: action.payload.errorMsg,
+              isCreateBlogTitleValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              createBlogTitle: action.payload.blogTitle,
+              createBlogTitleErrMsg: "",
+              isCreateBlogTitleValid: true
+            })
+        default:
+          return state
+      }
+    case constants.ONCHANGE_CREATE_BLOG_CATEGORY_NAME:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              createBlogCategory: action.payload.createBlogCategory,
+              createBlogCategoryErrMsg: action.payload.errorMsg,
+              isCreateBlogCategoryValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              createBlogCategory: action.payload.createBlogCategory,
+              createBlogCategoryErrMsg: "",
+              isCreateBlogCategoryValid: true
+            })
+        default:
+          return state
+      }
+    case constants.ONCHANGE_CREATE_BLOG_TAG:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              createBlogTag: action.payload.createBlogTag,
+              createBlogTagErrMsg: action.payload.errorMsg,
+              isCreateBlogTagValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              createBlogTag: action.payload.createBlogTag,
+              createBlogTagErrMsg: "",
+              isCreateBlogTagValid: true
+            })
+        default:
+          return state
+      }
+    case constants.ONCHANGE_CREATE_BLOG_SEQ:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              createBlogSeq: action.payload.blogSeq,
+              createBlogSeqErrMsg: action.payload.errorMsg,
+              isCreateBlogSeqValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              createBlogSeq: action.payload.blogSeq,
+              createBlogSeqErrMsg: "",
+              isCreateBlogSeqValid: true
+            })
+        default:
+          return state
+      }
+    /*----------------delete Blog-----------------------*/
     case constants.DELETE_BLOG_PENDING:
-      return Object.assign({}, state, {});
+      return Object.assign({}, state, { isPendingDeleteBlog: true })
     case constants.DELETE_BLOG_SUCCESS:
-      return Object.assign({}, state, { blog: [], isRefreshBloglistNeeded: true });
+      return Object.assign({}, state,
+        {
+          isPendingDeleteBlog: false, isDeleteBlogFailed: false, isShowBlog: false,
+          isShowDeleteBlog: false, deleteBlogTitle: null, deleteBlogID: null
+        })
     case constants.DELETE_BLOG_FAILED:
-      return Object.assign({}, state, { error: action.payload });
-    //Blog Category Modal
-    case constants.REQUEST_CATEGORY_MODAL_PENDING:
-      return Object.assign({}, state, { isRefreshCategoryNeeded: false })
-    case constants.REQUEST_CATEGORY_MODAL_SUCCESS:
-      return Object.assign({}, state, { blogCategory: action.payload })
-    case constants.REQUEST_CATEGORY_MODAL_FAILED:
-      return Object.assign({}, state, { error: action.payload })
-    case constants.SEARCH_CATEGORY_MODAL_PENDING:
-      return Object.assign({}, state, {})
-    case constants.SEARCH_CATEGORY_MODAL_SUCCESS:
-      return Object.assign({}, state, { blogCategory: action.payload })
-    case constants.SEARCH_CATEGORY_MODAL_FAILED:
-      return Object.assign({}, state, { error: action.payload })
-    case constants.CLEAR_SEARCH_CATEGORY_MODAL:
-      return Object.assign({}, state, { isRefreshCategoryNeeded: true })
-    case constants.SELECT_CATEGORY_MODAL:
+      switch (action.payload.Code) {
+        case 'INTERNAL_SERVER_ERROR_BLOG_DELETE':
+          return Object.assign({}, state,
+            {
+              isPendingDeleteBlog: false,
+              isDeleteBlogFailed: true,
+              deleteBlogErrMsg: action.payload.errMessage
+            })
+        case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+          return Object.assign({}, state,
+            {
+              isPendingDeleteBlog: false,
+              isDeleteBlogFailed: true,
+              deleteBlogErrMsg: action.payload.errMessage
+            })
+        default://unhandled error
+          return Object.assign({}, state,
+            {
+              error: action.payload,
+              isPendingDeleteBlog: false,
+              isDeleteBlogFailed: true
+            })
+      }
+    case constants.SELECT_DELETE_BLOG:
+      return Object.assign({}, state, { isShowDeleteBlog: true })
+    case constants.CLOSE_DELETE_BLOG:
       return Object.assign({}, state,
-        { selectedCategory: action.payload, isShowCategoryModal: false })
-    case constants.CLOSE_CATEGORY_MODAL:
-      return Object.assign({}, state, { isShowCategoryModal: false })
-    //Tag Modal
-    case constants.REQUEST_TAG_MODAL_PENDING:
-      return Object.assign({}, state, { isRefreshTagNeeded: false })
-    case constants.REQUEST_TAG_MODAL_SUCCESS:
-      return Object.assign({}, state, { blogTag: action.payload })
-    case constants.REQUEST_TAG_MODAL_FAILED:
-      return Object.assign({}, state, { error: action.payload })
-    case constants.SEARCH_TAG_MODAL_PENDING:
-      return Object.assign({}, state, {})
-    case constants.SEARCH_TAG_MODAL_SUCCESS:
-      return Object.assign({}, state, { blogTag: action.payload })
-    case constants.SEARCH_TAG_MODAL_FAILED:
-      return Object.assign({}, state, { error: action.payload })
-    case constants.CLEAR_SEARCH_TAG_MODAL:
-      return Object.assign({}, state, { isRefreshTagNeeded: true })
-    case constants.SELECT_TAG_MODAL:
+        {
+          isShowDeleteBlog: false, isDeleteBlogFailed: false, deleteBlogErrMsg: null
+        })
+    /*----------------update Blog-----------------------*/
+    case constants.SELECT_UPDATE_BLOG:
       return Object.assign({}, state,
-        { selectedTag: [...state.selectedTag, action.payload], isShowTagModal: false })
-    case constants.CLOSE_TAG_MODAL:
-      return Object.assign({}, state, { isShowTagModal: false })
-    //TinyMCE Editor
-    case constants.INIT_TINY_EDITOR:
-      return Object.assign({}, state, {})
-    case constants.REMOVE_TINY_EDITOR:
-      return Object.assign({}, state, {})
-    //Delete Blog Alert
-    case constants.CLOSE_DELETE_BLOG_ALERT:
-      return Object.assign({}, state, { isShowDeleteBlogAlert: false })
-    case constants.SHOW_DELETE_BLOG_ALERT:
-      return Object.assign({}, state, { isShowDeleteBlogAlert: true })
+        {
+          isShowUpdateBlog: true,
+          isUpdateBlogTitleValid: true, updateBlogTitle: action.payload.updateBlogTitle,
+          isUpdateBlogCategoryValid: true, updateBlogCategory: action.payload.updateBlogCategory,
+          isUpdateBlogTagValid: true, updateBlogTag: action.payload.updateBlogTag,
+          isUpdateBlogSeqValid: true, updateBlogSeq: action.payload.updateBlogSeq,
+        })
+    case constants.CLOSE_UPDATE_BLOG:
+      return Object.assign({}, state,
+        {
+          isShowUpdateBlog: false,
+          isUpdateBlogTitleValid: true, updateBlogTitle: "", updateBlogTitleErrMsg: "",
+          isUpdateBlogCategoryValid: true, updateBlogCategory: { value: '', label: 'Select Category' }, updateBlogCategoryErrMsg: "",
+          isUpdateBlogTagValid: true, updateBlogTag: [], updateBlogTagErrMsg: "",
+          isUpdateBlogSeqValid: true, updateBlogSeq: "", UpdateBlogSeqErrMsg: ""
+        })
+    case constants.ONCHANGE_UPDATE_BLOG_TITLE:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              updateBlogTitle: action.payload.blogTitle,
+              updateBlogTitleErrMsg: action.payload.errorMsg,
+              isUpdateBlogTitleValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              updateBlogTitle: action.payload.blogTitle,
+              updateBlogTitleErrMsg: "",
+              isUpdateBlogTitleValid: true
+            })
+        default:
+          return state
+      }
+    case constants.ONCHANGE_UPDATE_BLOG_CATEGORY_NAME:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              updateBlogCategory: action.payload.updateBlogCategory,
+              updateBlogCategoryErrMsg: action.payload.errorMsg,
+              isUpdateBlogCategoryValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              updateBlogCategory: action.payload.updateBlogCategory,
+              updateBlogCategoryErrMsg: "",
+              isUpdateBlogCategoryValid: true
+            })
+        default:
+          return state
+      }
+    case constants.ONCHANGE_UPDATE_BLOG_TAG:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              updateBlogTag: action.payload.updateBlogTag,
+              updateBlogTagErrMsg: action.payload.errorMsg,
+              isUpdateBlogTagValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              updateBlogTag: action.payload.updateBlogTag,
+              updateBlogTagErrMsg: "",
+              isUpdateBlogTagValid: true
+            })
+        default:
+          return state
+      }
+    case constants.ONCHANGE_UPDATE_BLOG_SEQ:
+      switch (action.payload.isValid) {
+        case false:
+          return Object.assign({}, state,
+            {
+              updateBlogSeq: action.payload.blogSeq,
+              updateBlogSeqErrMsg: action.payload.errorMsg,
+              isUpdateBlogSeqValid: false
+            })
+        case true:
+          return Object.assign({}, state,
+            {
+              updateBlogSeq: action.payload.blogSeq,
+              updateBlogSeqErrMsg: "",
+              isUpdateBlogSeqValid: true
+            })
+        default:
+          return state
+      }
     default:
       return state
   }
@@ -2297,11 +2345,15 @@ export const blogListRdc = (state = initialStateBlogList, action = {}) => {
           searchCategoryName: "",
           searchTagName: ""
         })
-    /*-------------------------post Blog---------------------------*/ 
+    /*-------------------------post Blog---------------------------*/
     case constants.POST_BLOG_SUCCESS:
-        return Object.assign({}, state,{ isRefreshBlogListNeeded: true })
+      return Object.assign({}, state, { isRefreshBlogListNeeded: true })
+    /*-------------------------delete Blog---------------------------*/
+    case constants.DELETE_BLOG_SUCCESS:
+      return Object.assign({}, state, { isRefreshBlogListNeeded: true })
     default:
       return state
+
   }
 }
 

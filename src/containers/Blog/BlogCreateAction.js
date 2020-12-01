@@ -10,6 +10,8 @@ import {
     POST_BLOG_FAILED,
 } from '../../constants';
 
+import tinymce from 'tinymce/tinymce';
+
 export const closeBlogCreateAct = () => {
     return ({ type: CLOSE_CREATE_BLOG })
 }
@@ -42,7 +44,7 @@ const checkCreateBlogCategory = (createBlogCategory) => {
 }
 
 export const onchangeCreateBlogCategoryAct = (selectValue) => {
-    const createBlogCategory = selectValue;
+    const createBlogCategory = (selectValue===null)?{ value: '', label: 'Select Category' }:selectValue;
     const result = checkCreateBlogCategory(createBlogCategory);
     if (!result.isValid) {
         return {
@@ -110,9 +112,12 @@ export const postBlogAct = () => (dispatch, getState) => {
         },
         body: JSON.stringify({
             blogTitle: getState().blogRdc.createBlogTitle,
-            blogCategoryName: getState().blogRdc.createBlogCategoryName,
-            seq: getState().blogRdc.createBlogSeq,
-            userID: getState().authRdc.userID
+            blogCategoryID: getState().blogRdc.createBlogCategory.value,
+            blogTag: getState().blogRdc.createBlogTag,
+            blogSeq: getState().blogRdc.createBlogSeq,
+            blogContent: tinymce.get('create-blog-content').getContent(),
+            userID: getState().authRdc.userID,
+            sidebarMenuID: getState().sidebarRdc.sidebarMenuID
         })
     })
         .then(res => {

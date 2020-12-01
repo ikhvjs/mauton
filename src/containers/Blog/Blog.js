@@ -1,23 +1,15 @@
 import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-
 import { connect } from 'react-redux';
 
-import {
-	requestBlogAct,
-	// updateBlogAct,
-	// exitUpdateBlogAct
-	// deleteBlogAct
-} from './BlogAction';
+import { requestBlogAct, selectDeleteBlogAct, selectUpdateBlogAct} from './BlogAction';
+import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
+import { requestTagAct } from '../TagConfig/TagConfigAction';
 
-// import {
-// 	showDeleteBlogAlertAct
-// } from '../DeleteBlogAlert/DeleteBlogAlertAction';
-
-// import DeleteBlogAlert from '../../components/DeleteBlogAlert/DeleteBlogAlert';
+import BlogDelete from './BlogDelete';
+import BlogUpdate from './BlogUpdate';
 
 import { transformDate } from '../../utility/utility';
-
 
 import { Col, Badge, Button, Row } from "react-bootstrap";
 import './Blog.css';
@@ -27,8 +19,6 @@ import './Blog.css';
 const mapStateToProps = (state) => {
 	return {
 		blog: state.blogRdc.blog,
-		// isPendingBlogByClick: state.blogRdc.isPendingBlogByClick,
-		// isUpdateBlog: state.blogRdc.isUpdateBlog
 	}
 }
 
@@ -36,55 +26,25 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestBlog: () =>
 			dispatch(requestBlogAct()),
-		// onUpdateBlog:()=>
-		// 	dispatch(updateBlogAct()),
-		// onExitUpdateBlog:()=>
-		// 	dispatch(exitUpdateBlogAct()),
-		// onDeleteBlog:()=>
-		// 	dispatch(deleteBlogAct()),
-		// onShowDeleteBlogAlert:()=>
-		// 	dispatch(showDeleteBlogAlertAct())
+		onSelectDeleteBlog:()=>
+			dispatch(selectDeleteBlogAct()),
+		onSelectUpdateBlog:()=>{
+			dispatch(selectUpdateBlogAct());
+			dispatch(requestCategoryAct());
+			dispatch(requestTagAct());
+		}
+			
 	}
 }
 
 class Blog extends Component {
 
-	componentDidMount() {
-		// const { isPendingBlogByClick, onRequestBlog } = this.props;
-		// const { blogPath } = this.props.match.params;
-		// if (isPendingBlogByClick === false){
-		// 	onRequestBlog(blogPath);
-		// }
-	}
-
-	componentDidUpdate(prevProps) {
-		// const {isUpdateBlog, onRequestBlog} = this.props;
-		// const { blogPath } = this.props.match.params;
-
-		// if (isUpdateBlog !== prevProps.isUpdateBlog) {
-		// 	if (isUpdateBlog === false){
-		// 		onRequestBlog(blogPath);
-		// 	}
-		// }
-
-	}
-
-	componentWillUnmount() {
-		// if (this.props.isUpdateBlog === true) {
-		// 	this.props.onExitUpdateBlog();
-		// }
-	}
-
 	render() {
 		const {
 			blog,
-			// onUpdateBlog,
-			// onDeleteBlog,
-			// isUpdateBlog,
-			// onShowDeleteBlogAlert
+			onSelectDeleteBlog,
+			onSelectUpdateBlog,
 		} = this.props;
-
-		// const html = blog.blog_content ;
 
 		return (
 			<Row id="blog-row-container">
@@ -127,22 +87,25 @@ class Blog extends Component {
 					</Row>
 					<Row>
 						<Col xs={2} md={1}>
-							<Button variant="success" size="sm">
+							<Button variant="success" size="sm"
+							onClick={onSelectUpdateBlog}>
 								Update
 							</Button>
 						</Col>
 						<Col xs={2} md={1}>
-							<Button variant="danger" size="sm">
+							<Button variant="danger" size="sm" 
+								onClick={onSelectDeleteBlog}
+							>
 								Delete
 							</Button>
 						</Col>
 					</Row>
 				</Col>
-				
+				<BlogDelete />
+				<BlogUpdate />
 			</Row>
 		)
 	}
 }
 
-// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Blog));
 export default connect(mapStateToProps, mapDispatchToProps)(Blog);

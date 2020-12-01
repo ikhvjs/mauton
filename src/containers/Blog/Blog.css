@@ -1,0 +1,15 @@
+.modal-error-alert{
+	color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.delete-blog-err-msg{
+    color: red;
+}
+
+/* set tools bar of tiny to z-0, so that not blocking the selection of Category */
+.tiny-container{
+    position: relative;
+    z-index: 0;
+}

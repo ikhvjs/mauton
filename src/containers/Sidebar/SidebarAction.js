@@ -8,7 +8,7 @@ import {
 
 
 export const selectSidebarAct = (sidebarMenuID) => {
-  return ({type:SELECT_SIDEBAR, payload:sidebarMenuID})
+  return ({type:SELECT_SIDEBAR, payload:Number(sidebarMenuID)})
 }
 
 export const requestSidebarAct = () => (dispatch,getState) => {

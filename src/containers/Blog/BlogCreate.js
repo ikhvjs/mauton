@@ -131,7 +131,7 @@ class BlogCreate extends Component {
 									}
 									value={createBlogCategory}
 									isLoading={isPendingRequestCategory}
-									isClearable={false}
+									isClearable={true}
 									isSearchable={true}
 									name="category"
 									onChange={onChangeCreateBlogCategory}
@@ -209,8 +209,8 @@ class BlogCreate extends Component {
 
 
 						<Form.Group as={Row} controlId="formBlogContent">
-							<Col>
-								<TinyEditorComponent id="blog-content"/>
+							<Col className="tiny-container">
+								<TinyEditorComponent id="create-blog-content"/>
 							</Col>
 						</Form.Group>
 						{
@@ -232,6 +232,8 @@ class BlogCreate extends Component {
 										variant="primary" size="sm"
 										disabled={!isCreateBlogTitleValid
 											|| !isCreateBlogSeqValid
+											|| !isCreateBlogCategoryValid
+											|| !isCreateBlogTagValid
 										}>
 										Create
                                 </Button>
