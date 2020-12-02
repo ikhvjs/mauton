@@ -1,13 +1,7 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
 import { initTinyEditorAct, removeTinyEditorAct } from './TinyEditorComponentAction';
 
 
-const mapStateToProps = (state) => {
-  return {
-    blogContent: state.blogRdc.blog.blog_content
-  }
-}
 
 class TinyEditorComponent extends Component {
 
@@ -17,8 +11,7 @@ class TinyEditorComponent extends Component {
   }
 
   componentWillUnmount() {
-    const { id } = this.props;
-    removeTinyEditorAct(id);
+    removeTinyEditorAct();
   }
 
   render() {
@@ -31,4 +24,4 @@ class TinyEditorComponent extends Component {
 
 }
 
-export default connect(mapStateToProps, null)(TinyEditorComponent)
+export default TinyEditorComponent

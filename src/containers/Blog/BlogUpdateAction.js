@@ -44,7 +44,7 @@ const checkUpdateBlogCategory = (updateBlogCategory) => {
 }
 
 export const onchangeUpdateBlogCategoryAct = (selectValue) => {
-    const updateBlogCategory = (selectValue===null)?{ value: '', label: 'Select Category' }:selectValue;
+    const updateBlogCategory = (selectValue === null) ? { value: '', label: 'Select Category' } : selectValue;
     const result = checkUpdateBlogCategory(updateBlogCategory);
     if (!result.isValid) {
         return {
@@ -70,11 +70,15 @@ export const onchangeUpdateBlogTagAct = (selectValue) => {
     const updateBlogTag = selectValue;
     const result = checkUpdateBlogTag(updateBlogTag);
     if (!result.isValid) {
-        return { type: ONCHANGE_UPDATE_BLOG_TAG, 
-            payload: { updateBlogTag: updateBlogTag, isValid: false, errorMsg: result.errorMsg } };
+        return {
+            type: ONCHANGE_UPDATE_BLOG_TAG,
+            payload: { updateBlogTag: updateBlogTag, isValid: false, errorMsg: result.errorMsg }
+        };
     }
-    return { type: ONCHANGE_UPDATE_BLOG_TAG, 
-        payload: { updateBlogTag: updateBlogTag, isValid: true } };
+    return {
+        type: ONCHANGE_UPDATE_BLOG_TAG,
+        payload: { updateBlogTag: updateBlogTag, isValid: true }
+    };
 }
 
 
@@ -111,11 +115,15 @@ export const updateBlogAct = () => (dispatch, getState) => {
             'Authorization': `Bearer ${getState().authRdc.token}`
         },
         body: JSON.stringify({
+            blogID: getState().blogRdc.selectBlogID,
             blogTitle: getState().blogRdc.updateBlogTitle,
             blogCategoryID: getState().blogRdc.updateBlogCategory.value,
-            blogTag: getState().blogRdc.updateBlogTag,
+            blogTag: getState().blogRdc.updateBlogTag.map((
+                { value: tag_id }) =>
+                ({ tag_id })
+            ),
             blogSeq: getState().blogRdc.updateBlogSeq,
-            blogContent: tinymce.get('update-blog-content').getContent(),
+            blogContent: tinymce.get('blog-content').getContent(),
             userID: getState().authRdc.userID,
             sidebarMenuID: getState().sidebarRdc.sidebarMenuID
         })

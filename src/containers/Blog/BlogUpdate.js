@@ -35,6 +35,7 @@ const mapStateToProps = (state) => {
 		isPendingRequestTag: state.tagRdc.isPendingRequestTag,
 		categories: state.categoryRdc.categories,
 		tags: state.tagRdc.tags,
+		updateBlogContent: state.blogRdc.blog.blog_content,
 	}
 }
 
@@ -83,6 +84,7 @@ class BlogUpdate extends Component {
 			tags,
 			isPendingRequestCategory,
 			isPendingRequestTag,
+			updateBlogContent,
 		} = this.props;
 
 
@@ -210,7 +212,7 @@ class BlogUpdate extends Component {
 
 						<Form.Group as={Row} controlId="formBlogContent">
 							<Col className="tiny-container">
-								<TinyEditorComponent id="update-blog-content" />
+								<TinyEditorComponent id="blog-content" blogContent={updateBlogContent} />
 							</Col>
 						</Form.Group>
 						{

@@ -19,6 +19,7 @@ import './Blog.css';
 const mapStateToProps = (state) => {
 	return {
 		blog: state.blogRdc.blog,
+		isRefreshBlogNeeded: state.blogRdc.isRefreshBlogNeeded,
 	}
 }
 
@@ -38,6 +39,13 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 class Blog extends Component {
+
+	componentDidUpdate() {
+		if (this.props.isRefreshBlogNeeded === true) {
+			this.props.onRequestBlog();
+		}
+		
+	}
 
 	render() {
 		const {

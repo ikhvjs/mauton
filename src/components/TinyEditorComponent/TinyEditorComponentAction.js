@@ -25,7 +25,6 @@ import 'tinymce/plugins/autoresize';
 
 
 export const initTinyEditorAct = (id,blogContent="") => {
-  
     tinymce.init({
       selector: `#${id}`,
       width: '100%',
@@ -54,6 +53,6 @@ export const initTinyEditorAct = (id,blogContent="") => {
     },1)
 }
 
-export const removeTinyEditorAct = (id) => {
-  tinymce.remove(`#${id}`);
+export const removeTinyEditorAct = () => {
+  tinymce.remove();
 }

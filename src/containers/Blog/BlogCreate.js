@@ -210,7 +210,7 @@ class BlogCreate extends Component {
 
 						<Form.Group as={Row} controlId="formBlogContent">
 							<Col className="tiny-container">
-								<TinyEditorComponent id="create-blog-content"/>
+								<TinyEditorComponent id="blog-content"/>
 							</Col>
 						</Form.Group>
 						{

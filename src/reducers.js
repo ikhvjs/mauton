@@ -240,6 +240,7 @@ const initialStateBlog = {
   //request blog
   isPendingRequestBlog: false,
   isShowBlog: false,
+  isRefreshBlogNeeded: false,
   //create blog
   isShowCreateBlog: false,
   isPendingPostBlog: false,
@@ -293,7 +294,8 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
         {
           isPendingRequestBlog: true,
           isRequestBlogFailed: false,
-          isShowBlog: false
+          isShowBlog: false,
+          isRefreshBlogNeeded: false
         })
     case constants.REQUEST_BLOG_SUCCESS:
       return Object.assign({}, state,
@@ -610,6 +612,69 @@ export const blogRdc = (state = initialStateBlog, action = {}) => {
         default:
           return state
       }
+      case constants.UPDATE_BLOG_PENDING:
+        return Object.assign({}, state, { isPendingUpdateBlog: true })
+      case constants.UPDATE_BLOG_SUCCESS:
+        return Object.assign({}, state,
+          {
+            isPendingUpdateBlog: false,
+            isShowUpdateBlog:false,
+            isRefreshBlogNeeded: true,
+            isUpdateBlogTitleValid: true, updateBlogTitle: "", updateBlogTitleErrMsg: "",
+            isUpdateBlogCategoryValid: true, updateBlogCategory: {value:"",label:"Select Category"}, updateBlogCategoryErrMsg: "",
+            isUpdateBlogTagValid: true, updateBlogTag: [], updateBlogTagErrMsg: "",
+            isUpdateBlogSeqValid: true, updateBlogSeq: "", updateBlogSeqErrMsg: ""
+          })
+      case constants.UPDATE_BLOG_FAILED:
+        switch (action.payload.Code) {
+          case 'BLOG_MANDATORY_FIELD':
+            return Object.assign({}, state,
+              {
+                isPendingUpdateBlog: false,
+                isUpdateBlogTitleValid: false, updateBlogTitleErrMsg: action.payload.errMessage,
+                isUpdateBlogSeqValid: false, updateBlogSeqErrMsg: action.payload.errMessage
+              })
+          case 'INTERNAL_SERVER_ERROR_BLOG_CHECK_DUP':
+            return Object.assign({}, state,
+              {
+                isPendingUpdateBlog: false,
+                isUpdateBlogTitleValid: false, updateBlogTitleErrMsg: action.payload.errMessage
+              })
+          case 'BLOG_DUPLICATE_BLOG_TITLE':
+            return Object.assign({}, state,
+              {
+                isPendingUpdateBlog: false,
+                isUpdateBlogTitleValid: false, updateBlogTitleErrMsg: action.payload.errMessage
+              })
+          case 'INTERNAL_SERVER_ERROR_BLOG_UPDATE':
+            return Object.assign({}, state,
+              {
+                isPendingUpdateBlog: false,
+                isUpdateBlogTitleValid: false, updateBlogTitleErrMsg: action.payload.errMessage,
+                isUpdateBlogCategoryValid: false, updateBlogCategoryErrMsg: action.payload.errMessage,
+                isUpdateBlogTagValid: false, updateBlogTagErrMsg: action.payload.errMessage,
+                isUpdateBlogSeqValid: false, updateBlogSeqErrMsg: action.payload.errMessage
+              })
+          case 'UNEXPECTED_INTERNAL_SERVER_ERROR':
+            return Object.assign({}, state,
+              {
+                isPendingUpdateBlog: false,
+                isUpdateBlogTitleValid: false, updateBlogTitleErrMsg: action.payload.errMessage,
+                isUpdateBlogCategoryValid: false, updateBlogCategoryErrMsg: action.payload.errMessage,
+                isUpdateBlogTagValid: false, updateBlogTagErrMsg: action.payload.errMessage,
+                isUpdateBlogSeqValid: false, updateBlogSeqErrMsg: action.payload.errMessage
+              })
+          default://unhandled error
+            return Object.assign({}, state,
+              {
+                error: action.payload,
+                isPendingUpdateBlog: false,
+                isUpdateBlogTitleValid: null, updateBlogTitleErrMsg: "",
+                isUpdateBlogCategoryValid: null, updateBlogCategoryErrMsg: "",
+                isUpdateBlogTagValid: null, updateBlogTagErrMsg: "",
+                isUpdateBlogSeqValid: null, updateBlogSeqErrMsg: ""
+              })
+        }
     default:
       return state
   }
