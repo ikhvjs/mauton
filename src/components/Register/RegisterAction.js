@@ -13,24 +13,24 @@ import {
 
 
 
-export const onChangeRegUserNameAct =(username)=>{
+export const onChangeRegisterUserNameAct =(username)=>{
     return ({type:ONCHANGE_REG_USER_NAME, payload:username})
 }
 
-export const onChangeRegEmailAct =(email)=>{
+export const onChangeRegisterEmailAct =(email)=>{
     return ({type:ONCHANGE_REG_EMAIL, payload:email})
 }
 
-export const onChangeRegPasswordAct =(password)=>{
+export const onChangeRegisterPasswordAct =(password)=>{
     return ({type:ONCHANGE_REG_PASSWORD, payload:password})
 }
 
 export const postUserAct =  (event,ownProps) => async (dispatch, getState) =>{
 
     event.preventDefault();
-    const username = getState().authRdc.onChangeUserName;
-    const email  = getState().authRdc.onChangeEmail;
-    const password  = getState().authRdc.onChangePassword;
+    const username = getState().authRdc.registerUserName;
+    const email  = getState().authRdc.registerEmail;
+    const password  = getState().authRdc.registerPassword;
     let resStatus = 0;
     
     
@@ -75,6 +75,6 @@ export const postUserAct =  (event,ownProps) => async (dispatch, getState) =>{
     }
 }
 
-export const clearRegUserAct =()=>{
+export const clearRegisterUserAct =()=>{
     return ({type:CLEAR_REG_USER})
 }

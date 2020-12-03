@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
-import { requestTopbarAct, selectTopbarAct } from './TopbarAction';
+import { requestTopbarAct, selectTopbarAct, userLogOutAct } from './TopbarAction';
 import { requestSidebarAct } from '../Sidebar/SidebarAction';
-import logo from './logo.png';
+import logo from '../../img/logo.png';
 
 const mapStateToProps = (state) => {
 	return {
 		topbar: state.topbarRdc.topbar,
 		isPendingRequestTopbar: state.topbarRdc.isPendingRequestTopbar,
-		isRequestTopbarFailed: state.topbarRdc.isRequestTopbarFailed
+		isRequestTopbarFailed: state.topbarRdc.isRequestTopbarFailed,
+		userName: state.authRdc.userName,
 	}
 }
 
@@ -18,10 +19,12 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestTopbar: () =>
 			dispatch(requestTopbarAct()),
-		onSelectTopbar: (event)=>{
+		onSelectTopbar: (event) => {
 			dispatch(selectTopbarAct(event.target.getAttribute('menu-id')));
 			dispatch(requestSidebarAct());
-			}
+		},
+		onUserLogOut: () =>
+			dispatch(userLogOutAct())
 	}
 }
 
@@ -32,7 +35,9 @@ class Topbar extends Component {
 			isPendingRequestTopbar,
 			onRequestTopbar,
 			isRequestTopbarFailed,
-			onSelectTopbar
+			onSelectTopbar,
+			userName,
+			onUserLogOut
 		} = this.props;
 		return (
 			<Navbar collapseOnSelect id="topbar" bg="light" variant="light" expand="lg"
@@ -88,6 +93,8 @@ class Topbar extends Component {
 							<Nav.Link id="dashboard" className='ml-auto'>Dashboard</Nav.Link>
 						</LinkContainer>
 					</Nav>
+					<Button variant="link">{userName}</Button>
+					<Button variant="outline-secondary" onClick={onUserLogOut}>LogOut</Button>
 				</Navbar.Collapse>
 			</Navbar>
 		);

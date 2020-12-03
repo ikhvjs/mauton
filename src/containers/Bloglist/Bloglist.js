@@ -14,7 +14,6 @@ import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
 import { requestTagAct } from '../TagConfig/TagConfigAction';
 import { selectBlogAct, requestBlogAct, selectCreateBlogAct } from '../Blog/BlogAction';
 
-// import { initTinyEditorAct } from '../../components/TinyEditorComponent/TinyEditorComponentAction';
 import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
 import Blog from '../Blog/Blog';
 import BlogCreate from '../Blog/BlogCreate';
@@ -188,6 +187,9 @@ class BlogList extends Component {
 																		</Badge>
 																	)
 																})}
+																</Card.Text>
+																<Card.Text>
+																	Seq:<Badge pill className="ml-1" variant="secondary">{blog.seq}</Badge>
 																</Card.Text>
 																<LinkContainer to={`${this.props.match.url}/${blog.blog_id}`}>
 																	<Button size="sm" variant="link"

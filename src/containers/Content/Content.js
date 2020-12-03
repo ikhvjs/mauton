@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Switch, Route, withRouter } from "react-router-dom";
 import BlogList from '../BlogList/BlogList';
 import Sidebar from '../Sidebar/Sidebar';
-import { Col} from "react-bootstrap";
+import { Col } from "react-bootstrap";
 
 class Content extends Component {
 
 	render() {
-		
+
 		const match = this.props.match;
 
 		return (
@@ -21,11 +21,8 @@ class Content extends Component {
 							<h3>Please select a topic in the blue menu</h3>
 						</Route>
 						<Route path={`${match.path}/:sidebarMenuID`}>
-							<BlogList/>
+							<BlogList />
 						</Route>
-						{/* <Route path="*">
-							<Page404 />
-						</Route> */}
 					</Switch>
 				</Col>
 			</React.Fragment>

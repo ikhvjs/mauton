@@ -6,7 +6,6 @@ import Menu1 from '../Menu1/Menu1';
 import Menu2 from '../Menu2/Menu2';
 import CategoryConfig from '../CategoryConfig/CategoryConfig';
 import TagConfig from '../TagConfig/TagConfig';
-import Page404 from '../../components/Page404/Page404';
 import { Col} from "react-bootstrap";
 
 
@@ -36,9 +35,6 @@ const Dashboard = () => {
 					</Route>
 					<Route exact path={`${match.path}/tag`}>
 						<TagConfig />
-					</Route>
-					<Route path="*">
-						<Page404 />
 					</Route>
 				</Switch>
 			</Col>

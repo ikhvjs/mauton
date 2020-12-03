@@ -3,7 +3,8 @@ import {
     REQUEST_TOPBAR_PENDING,
     REQUEST_TOPBAR_SUCCESS,
     REQUEST_TOPBAR_FAILED,
-    SELECT_TOPBAR_MENU_ID
+    SELECT_TOPBAR_MENU_ID,
+    USER_LOG_OUT
    } from '../../constants';
 
 export const requestTopbarAct = () => (dispatch,getState) => {
@@ -43,3 +44,8 @@ export const requestTopbarAct = () => (dispatch,getState) => {
 export const selectTopbarAct = (topbarMenuID) => {
   return({type:SELECT_TOPBAR_MENU_ID, payload:Number(topbarMenuID)})
 };
+
+export const userLogOutAct = () => {
+  return({type:USER_LOG_OUT})
+};
+

@@ -1,13 +1,10 @@
 #cover {
-    background: #222 url('../../img/cat4.png') center center no-repeat;
+    background: #222 url('../../img/cat4.png') center no-repeat;
     background-size: cover;
     height: 100%;
     display: flex;
     align-items: center;
     position: relative;
-}
-h1{
-    text-align: center;
 }
 
 #cover-caption {

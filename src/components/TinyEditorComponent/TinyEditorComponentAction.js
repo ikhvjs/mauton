@@ -28,8 +28,8 @@ export const initTinyEditorAct = (id,blogContent="") => {
     tinymce.init({
       selector: `#${id}`,
       width: '100%',
-      min_height: 800,
-      max_height: 800,
+      min_height: 400,
+      max_height: 400,
       menubar: false,
       skin: false,
       content_css: false,
