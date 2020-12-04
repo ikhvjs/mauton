@@ -344,6 +344,9 @@ const tagRdc = (state = initialStateTag, action = {}) => {
                             isUpdateTagSeqValid: null, updateTagSeqErrMsg: ""
                         })
             }
+        /*----------user logout------------------*/
+        case constants.USER_LOG_OUT:
+            return Object.assign({}, state, initialStateTag)
         default:
             return state
     }

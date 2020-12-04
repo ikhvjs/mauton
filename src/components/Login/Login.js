@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { withGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 import './Login.css';
-import ValidationAlert from '../ValidationAlert/ValidationAlert';
+import ValidationErrorAlert from '../ValidationErrorAlert/ValidationErrorAlert';
 import { Container, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 
 import {
     onChangeLoginEmailAct,
     onChangeLoginPasswordAct,
     getUserAct,
-    clearLoginUserAct
+    clearLoginUserAct,
 } from './LoginAction';
 
 const mapStateToProps = (state) => {
@@ -58,18 +58,18 @@ class Login extends Component {
                 <Container id="cover-caption">
                     <Row>
                         <Col>
-                            <h1 className="text-center text-white">Welcome to Mauton!</h1>
+                            <h1 className="text-white">Welcome to Mauton!</h1>
                         </Col>
                     </Row>
                     <Row className="text-white">
                         <Col sm={10} md={8} lg={6} xl={5} className="mx-auto">
-                            <h1 className="py-2 text-center">Sign In</h1>
+                            <h1 className="py-2">Sign In</h1>
                             <Form>
                                 <Form.Group controlId="formEmail">
                                     <Form.Label >
                                         Email Address
                                         </Form.Label>
-                                    <Form.Control name="email"
+                                    <Form.Control name="email" disabled={isPendingGetUser}
                                         type="email" placeholder="Enter Email"
                                         value={loginEmail}
                                         onChange={onChangeLoginEmail} />
@@ -79,7 +79,7 @@ class Login extends Component {
                                     <Form.Label>
                                         Password
                                         </Form.Label>
-                                    <Form.Control name="password"
+                                    <Form.Control name="password" disabled={isPendingGetUser}
                                         type="password" placeholder="Enter Password"
                                         value={loginPassword}
                                         onChange={onChangeLoginPassword} />
@@ -101,7 +101,7 @@ class Login extends Component {
                                     Sign in
                                 </Button>
                             </Form>
-                            <ValidationAlert />
+                            <ValidationErrorAlert />
                             <p className="text-right">
                                 Not yet
                                 <a href="/mauton/register">

@@ -47,6 +47,9 @@ const sidebarRdc = (state = initialStateSidebar, action = {}) => {
                             isRequestSidebarFailed: true
                         })
             }
+        /*----------user logout------------------*/
+        case constants.USER_LOG_OUT:
+            return Object.assign({}, state, initialStateSidebar)
         default:
             return state
     }

@@ -1,23 +1,23 @@
 import React , { Component } from 'react';
 import { connect } from 'react-redux';
 import { 
-	closeAlertAct
-} from './ValidationAlertAction';
+	closeValidationErrorAlertAct
+} from './ValidationErrorAlertAction';
 
 import {Alert} from "react-bootstrap";
 
 
 const mapStateToProps = (state) => {
   return {
-      isShowAlert:state.authRdc.isShowAlert,
-      alertMessage:state.authRdc.alertMessage
+      isShowValidationErrAlert:state.alertRdc.isShowValidationErrAlert,
+      ValidationErrMsg:state.alertRdc.ValidationErrMsg
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onCloseAlert:()=>
-			dispatch(closeAlertAct())
+			dispatch(closeValidationErrorAlertAct())
 	}	
 }
 
@@ -25,18 +25,18 @@ class ValidationAlert extends Component  {
 
 	render() {
 		const { 
-            isShowAlert,
-            alertMessage,
+            isShowValidationErrAlert,
+            ValidationErrMsg,
             onCloseAlert
 			} = this.props;
 
 		return (
 			
-				(<Alert variant="danger" show={isShowAlert} 
+				(<Alert variant="danger" show={isShowValidationErrAlert} 
 					onClose={onCloseAlert} dismissible transition
                 >
                     <Alert.Heading>Ops! You got an error!</Alert.Heading>
-			        <p>{alertMessage}</p>
+			        <p>{ValidationErrMsg}</p>
 			    </Alert>)
 		)
 

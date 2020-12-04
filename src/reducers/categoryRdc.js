@@ -423,6 +423,9 @@ const categoryRdc = (state = initialStateCategory, action = {}) => {
                             isUpdateCategorySeqValid: null, updateCategorySeqErrMsg: ""
                         })
             }
+        /*----------user logout------------------*/
+        case constants.USER_LOG_OUT:
+            return Object.assign({}, state, initialStateCategory)
         default:
             return state
     }

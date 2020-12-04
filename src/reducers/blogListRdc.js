@@ -103,6 +103,9 @@ const blogListRdc = (state = initialStateBlogList, action = {}) => {
         /*-------------------------delete Blog---------------------------*/
         case constants.DELETE_BLOG_SUCCESS:
             return Object.assign({}, state, { isRefreshBlogListNeeded: true })
+        /*-------------------------user logout-------------------------*/
+        case constants.USER_LOG_OUT:
+            return Object.assign({}, state, initialStateBlogList)
         default:
             return state
 

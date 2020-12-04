@@ -441,6 +441,8 @@ const blogRdc = (state = initialStateBlog, action = {}) => {
                             isUpdateBlogSeqValid: null, updateBlogSeqErrMsg: ""
                         })
             }
+        case constants.USER_LOG_OUT:
+            return Object.assign({}, state, initialStateBlog)
         default:
             return state
     }

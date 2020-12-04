@@ -5,23 +5,28 @@ const initialStateAuth = {
     isAuth: false,
     userID: null,
     userName: null,
+    userEmail: null,
     captchaToken: null,
     token: null,
-    isShowAlert: false,
-    alertMessage: null,
+    expireTime: null,
     //login
     loginEmail: "",
     loginPassword: "",
     isPendingGetUser: false,
+    isShowLoginAlert: false,
     //register
     registerUserName: "",
     registerEmail: "",
     registerPassword: "",
     isPendingPostUser: false,
+    //login alert
+    loginAlertPassword: "",
+    isPendingGetLoginAlertUser: false,
 }
 
 const authRdc = (state = initialStateAuth, action = {}) => {
     switch (action.type) {
+        /*---------------Google Captchat---------------------*/
         case constants.GET_CAPTCHA_TOKEN_SUCCESS:
             return Object.assign({}, state, { captchaToken: action.payload })
         case constants.GET_CAPTCHA_TOKEN_FAILED:
@@ -31,18 +36,27 @@ const authRdc = (state = initialStateAuth, action = {}) => {
                         {
                             isAuth: false,
                             isPendingGetUser: false,
-                            alertMessage: action.payload.errMessage,
-                            onChangePassword: "",
-                            isShowAlert: true
+                            loginPassword: "",
                         })
                 case 'Register':
                     return Object.assign({}, state,
                         {
                             isAuth: false,
                             isPendingPostUser: false,
-                            alertMessage: action.payload.errMessage,
-                            onChangePassword: "",
-                            isShowAlert: true
+                            registerPassword: "",
+                        })
+                default:
+                    return state
+            }
+        case constants.GET_LOGIN_ALERT_CAPTCHA_TOKEN_SUCCESS:
+            return Object.assign({}, state, { captchaToken: action.payload })
+        case constants.GET_LOGIN_ALERT_CAPTCHA_TOKEN_FAILED:
+            switch (action.payload.actionCode) {
+                case 'Login':
+                    return Object.assign({}, state,
+                        {
+                            isPendingGetLoginAlertUser: false,
+                            loginAlertPassword: "",
                         })
                 default:
                     return state
@@ -55,7 +69,7 @@ const authRdc = (state = initialStateAuth, action = {}) => {
         case constants.ONCHANGE_REG_PASSWORD:
             return Object.assign({}, state, { registerPassword: action.payload })
         case constants.POST_USER_PENDING:
-            return Object.assign({}, state, { isPendingPostUser: true, isShowAlert: false })
+            return Object.assign({}, state, { isPendingPostUser: true })
         case constants.POST_USER_SUCCESS:
             return Object.assign({}, state,
                 {
@@ -64,18 +78,16 @@ const authRdc = (state = initialStateAuth, action = {}) => {
                     token: action.payload.access_token,
                     userID: action.payload.info.userID,
                     userName: action.payload.info.userName,
+                    userEmail: action.payload.info.userEmail,
+                    expireTime: action.payload.expires_in,
                 })
         case constants.POST_USER_FAILED:
             return Object.assign({}, state,
                 {
                     isAuth: false,
                     isPendingPostUser: false,
-                    alertMessage: action.payload,
                     registerPassword: "",
-                    isShowAlert: true
                 })
-        case constants.CLOSE_REG_ALERT:
-            return Object.assign({}, state, { isShowAlert: false })
         case constants.CLEAR_REG_USER:
             return Object.assign({}, state,
                 {
@@ -89,7 +101,7 @@ const authRdc = (state = initialStateAuth, action = {}) => {
         case constants.ONCHANGE_LOGIN_PASSWORD:
             return Object.assign({}, state, { loginPassword: action.payload })
         case constants.GET_USER_PENDING:
-            return Object.assign({}, state, { isPendingGetUser: true, isShowAlert: false })
+            return Object.assign({}, state, { isPendingGetUser: true })
         case constants.GET_USER_SUCCESS:
             return Object.assign({}, state,
                 {
@@ -98,15 +110,15 @@ const authRdc = (state = initialStateAuth, action = {}) => {
                     token: action.payload.access_token,
                     userID: action.payload.info.userID,
                     userName: action.payload.info.userName,
+                    userEmail: action.payload.info.userEmail,
+                    expireTime: action.payload.expires_in,
                 })
         case constants.GET_USER_FAILED:
             return Object.assign({}, state,
                 {
                     isAuth: false,
                     isPendingGetUser: false,
-                    alertMessage: action.payload,
                     loginPassword: "",
-                    isShowAlert: true
                 })
         case constants.CLEAR_LOGIN_USER:
             return Object.assign({}, state,
@@ -114,14 +126,35 @@ const authRdc = (state = initialStateAuth, action = {}) => {
                     loginEmail: "",
                     loginPassword: ""
                 })
-        /*------------Log out User----------------*/
-        case constants.USER_LOG_OUT:
+        /*----------------Login Alert User-----------------*/
+        case constants.ONCHANGE_LOGIN_ALERT_PASSWORD:
+            return Object.assign({}, state, { loginAlertPassword: action.payload })
+        case constants.GET_LOGIN_ALERT_USER_PENDING:
+            return Object.assign({}, state, { isPendingGetLoginAlertUser: true })
+        case constants.GET_LOGIN_ALERT_USER_SUCCESS:
             return Object.assign({}, state,
                 {
-                    isAuth: false,
-                    userID: null,
-                    userName: null
+                    isPendingGetLoginAlertUser: false,
+                    loginAlertPassword: "",
+                    token: action.payload.access_token,
+                    expireTime: action.payload.expires_in,
                 })
+        case constants.GET_LOGIN_ALERT_USER_FAILED:
+            return Object.assign({}, state,
+                {
+                    isPendingGetLoginAlertUser: false,
+                    loginAlertPassword: "",
+                })
+        case constants.CLEAR_LOGIN_ALERT_USER:
+            return Object.assign({}, state,
+                {
+                    loginAlertPassword: ""
+                })
+        /*------------Log out User----------------*/
+        case constants.USER_LOG_OUT:
+            return Object.assign({}, state, initialStateAuth)
+        case constants.LOGIN_ALERT_USER_LOG_OUT:
+            return Object.assign({}, state, initialStateAuth)
         default:
             return state
     }

@@ -12,7 +12,7 @@ import {
     clearRegisterUserAct
 } from './RegisterAction';
 
-import ValidationAlert from '../ValidationAlert/ValidationAlert';
+import ValidationErrorAlert from '../ValidationErrorAlert/ValidationErrorAlert';
 
 import { Container, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 
@@ -77,7 +77,7 @@ class Register extends Component {
                                     <Form.Label >
                                         User Name
                                         </Form.Label>
-                                    <Form.Control name="username"
+                                    <Form.Control name="username" disabled={isPendingPostUser}
                                         type="text" placeholder="Enter Username"
                                         value={registerUserName}
                                         onChange={onChangeRegisterUserName} />
@@ -87,7 +87,7 @@ class Register extends Component {
                                     <Form.Label >
                                         Email Address
                                         </Form.Label>
-                                    <Form.Control name="email"
+                                    <Form.Control name="email" disabled={isPendingPostUser}
                                         type="email" placeholder="Enter Email"
                                         value={registerEmail}
                                         onChange={onChangeRegisterEmail} />
@@ -97,7 +97,7 @@ class Register extends Component {
                                     <Form.Label>
                                         Password
                                         </Form.Label>
-                                    <Form.Control name="password"
+                                    <Form.Control name="password" disabled={isPendingPostUser}
                                         type="password" placeholder="Enter Password"
                                         value={registerPassword}
                                         onChange={onChangeRegisterPassword} />
@@ -119,7 +119,7 @@ class Register extends Component {
                                     Register
                                 </Button>
                             </Form>
-                            <ValidationAlert />
+                            <ValidationErrorAlert />
                             <p className="text-right">
                                 Already register?
                                 <a href="/mauton/login">

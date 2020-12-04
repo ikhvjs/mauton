@@ -459,6 +459,9 @@ const menu2Rdc = (state = initialStateMenu2, action = {}) => {
                             isUpdateMenu2SeqValid: null, updateMenu2SeqErrMsg: ""
                         })
             }
+        /*----------user logout------------------*/
+        case constants.USER_LOG_OUT:
+            return Object.assign({}, state, initialStateMenu2)
         default:
             return state
     }

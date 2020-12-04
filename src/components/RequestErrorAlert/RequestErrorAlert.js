@@ -5,8 +5,8 @@ import { Modal } from "react-bootstrap";
 
 const mapStateToProps = (state) => {
     return {
-        isShowRequestErrAlert: state.errorRdc.isShowRequestErrAlert,
-        requestErrMsg: state.errorRdc.requestErrMsg,
+        isShowRequestErrAlert: state.alertRdc.isShowRequestErrAlert,
+        requestErrMsg: state.alertRdc.requestErrMsg,
     }
 }
 

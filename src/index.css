@@ -10,3 +10,8 @@ body {
   /* font-family: 'BalooTamma2'; */
   font-family: 'Baloo Tamma 2', sans-serif;
 }
+
+/*hide the google captcha badge*/
+.grecaptcha-badge { 
+  visibility: hidden;
+}

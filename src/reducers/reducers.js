@@ -9,7 +9,7 @@ import tagRdc from './tagRdc';
 import menu1Rdc from './menu1Rdc';
 import menu2Rdc from './menu2Rdc';
 import blogListRdc from './blogListRdc';
-import errorRdc from './errorRdc';
+import alertRdc from './alertRdc';
 
 const rootReducer = combineReducers({
     authRdc,
@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
     menu1Rdc,
     menu2Rdc,
     blogListRdc,
-    errorRdc
+    alertRdc
   });
   
   export default rootReducer;

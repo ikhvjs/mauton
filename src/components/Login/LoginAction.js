@@ -7,8 +7,9 @@ import {
     GET_USER_FAILED,
     CLEAR_LOGIN_USER,
     GET_CAPTCHA_TOKEN_SUCCESS,
-    GET_CAPTCHA_TOKEN_FAILED
+    GET_CAPTCHA_TOKEN_FAILED,
 } from '../../constants';
+
 
 export const onChangeLoginEmailAct = (email) => {
     return ({ type: ONCHANGE_LOGIN_EMAIL, payload: email})

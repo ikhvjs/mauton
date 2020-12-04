@@ -47,6 +47,9 @@ const topbarRdc = (state = initialStateTopbar, action = {}) => {
               isRequestTopbarFailed: true
             })
       }
+    /*-------------------------user logout-------------------------*/
+    case constants.USER_LOG_OUT:
+      return Object.assign({}, state, initialStateTopbar)
     default:
       return state
   }
