@@ -22,7 +22,6 @@ export const requestSidebarAct = () => (dispatch,getState) => {
       'Authorization': `Bearer ${getState().authRdc.token}`
     },
     body: JSON.stringify({
-      userID: getState().authRdc.userID,
       topbarMenuID: getState().topbarRdc.selectTopbarID
     })
   })

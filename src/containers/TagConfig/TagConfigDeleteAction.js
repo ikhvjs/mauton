@@ -19,8 +19,7 @@ export const deleteTagAct = () => (dispatch,getState) =>{
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${getState().authRdc.token}`},
           body: JSON.stringify({
-            tagID: getState().tagRdc.deleteTagID,
-            userID: getState().authRdc.userID 
+            tagID: getState().tagRdc.deleteTagID
           })
         }
     )

@@ -47,10 +47,7 @@ export const requestCategoryAct = () => (dispatch, getState) => {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': `Bearer ${getState().authRdc.token}`
-    },
-    body: JSON.stringify({
-      userID: getState().authRdc.userID
-    })
+    }
   })
     .then(res => {
       resStatus = res.status
@@ -100,7 +97,6 @@ export const searchCategoryAct = () => (dispatch, getState) => {
     body: JSON.stringify({
       categoryName: getState().categoryRdc.searchCategoryName,
       categoryDesc: getState().categoryRdc.searchCategoryDesc,
-      userID: getState().authRdc.userID
     })
   }
   )

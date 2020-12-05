@@ -86,8 +86,7 @@ export const updateMenu2Act = () => (dispatch, getState) => {
             menu2ID: getState().menu2Rdc.updateMenu2ID,
             menu2Name: getState().menu2Rdc.updateMenu2Name,
             menu2ParentMenuID: getState().menu2Rdc.updateMenu2ParentMenuID,
-            seq: getState().menu2Rdc.updateMenu2Seq,
-            userID: getState().authRdc.userID
+            seq: getState().menu2Rdc.updateMenu2Seq
         })
     })
     .then(res => {

@@ -23,10 +23,7 @@ export const requestMenu2Act = () => (dispatch,getState) => {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': `Bearer ${getState().authRdc.token}`
-    },
-    body: JSON.stringify({
-      userID: getState().authRdc.userID
-    })
+    }
   })
     .then(res => {
       resStatus = res.status
@@ -79,8 +76,7 @@ export const searchMenu2Act = () => (dispatch,getState) =>{
     },
     body: JSON.stringify({
       menuName: getState().menu2Rdc.searchMenu2Name,
-      parentMenuName: getState().menu2Rdc.searchMenu2ParentName,
-      userID: getState().authRdc.userID
+      parentMenuName: getState().menu2Rdc.searchMenu2ParentName
     })
   })
     .then(res => {

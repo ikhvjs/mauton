@@ -65,8 +65,7 @@ export const postTagAct = () => (dispatch,getState) =>{
                   'Authorization': `Bearer ${getState().authRdc.token}`},
         body: JSON.stringify({
           tagName: getState().tagRdc.createTagName,
-          seq: getState().tagRdc.createTagSeq,
-          userID:getState().authRdc.userID
+          seq: getState().tagRdc.createTagSeq
         })
       }
   )

@@ -52,7 +52,6 @@ export const requestBlogAct = () => (dispatch, getState) => {
       'Authorization': `Bearer ${getState().authRdc.token}`
     },
     body: JSON.stringify({
-      userID: getState().authRdc.userID,
       blogID: getState().blogRdc.selectBlogID
     })
   })

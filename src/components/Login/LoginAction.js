@@ -51,6 +51,7 @@ export const getUserAct = (event, ownProps) => async (dispatch, getState) => {
             .then(res => {
                 switch (resStatus) {
                     case 200:
+                        localStorage.setItem('mautonToken', res.access_token);
                         return dispatch({ type: GET_USER_SUCCESS, payload: res })
                     case 400:
                         return dispatch({ type: GET_USER_FAILED, payload: res.errMessage })

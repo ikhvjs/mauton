@@ -65,8 +65,7 @@ export const postMenu1Act = () => (dispatch,getState) =>{
                   'Authorization': `Bearer ${getState().authRdc.token}`},
         body: JSON.stringify({
           menu1Name: getState().menu1Rdc.createMenu1Name,
-          seq: getState().menu1Rdc.createMenu1Seq,
-          userID:getState().authRdc.userID
+          seq: getState().menu1Rdc.createMenu1Seq
         })
       }
   )

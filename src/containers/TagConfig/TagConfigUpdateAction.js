@@ -67,8 +67,7 @@ export const updateTagAct = () => (dispatch, getState) => {
         body: JSON.stringify({
             tagID: getState().tagRdc.updateTagID,
             tagName: getState().tagRdc.updateTagName,
-            seq: getState().tagRdc.updateTagSeq,
-            userID: getState().authRdc.userID
+            seq: getState().tagRdc.updateTagSeq
         })
     }
     )

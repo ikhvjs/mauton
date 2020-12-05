@@ -116,7 +116,6 @@ export const postBlogAct = () => (dispatch, getState) => {
             blogTag: getState().blogRdc.createBlogTag,
             blogSeq: getState().blogRdc.createBlogSeq,
             blogContent: tinymce.get('blog-content').getContent(),
-            userID: getState().authRdc.userID,
             sidebarMenuID: getState().sidebarRdc.sidebarMenuID
         })
     })

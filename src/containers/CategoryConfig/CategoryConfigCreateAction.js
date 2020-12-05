@@ -87,7 +87,6 @@ export const postCategoryAct = () => (dispatch, getState) => {
             categoryName: getState().categoryRdc.createCategoryName,
             categoryDesc: getState().categoryRdc.createCategoryDesc,
             seq: getState().categoryRdc.createCategorySeq,
-            userID: getState().authRdc.userID
         })
     })
     .then(res => {

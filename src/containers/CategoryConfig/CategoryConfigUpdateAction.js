@@ -88,8 +88,7 @@ export const updateCategoryAct = () => (dispatch, getState) => {
             categoryID: getState().categoryRdc.updateCategoryID,
             categoryDesc: getState().categoryRdc.updateCategoryDesc,
             categoryName: getState().categoryRdc.updateCategoryName,
-            seq: getState().categoryRdc.updateCategorySeq,
-            userID: getState().authRdc.userID
+            seq: getState().categoryRdc.updateCategorySeq
         })
     }
     )

@@ -90,6 +90,14 @@ class Blog extends Component {
 					</Row>
 					<Row>
 						<Col>
+							Seq:
+								<Badge pill variant="secondary" className="ml-1">
+									{blog.seq}
+								</Badge>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
 							{`Last updated on ${transformDate(blog.last_updated_date)}`}
 						</Col>
 					</Row>

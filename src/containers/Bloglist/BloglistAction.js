@@ -24,7 +24,6 @@ export const requestBlogListAct = () => (dispatch, getState) => {
       'Authorization': `Bearer ${getState().authRdc.token}`
     },
     body: JSON.stringify({
-      userID: getState().authRdc.userID,
       menu2ID: getState().sidebarRdc.sidebarMenuID
     })
   })
@@ -48,8 +47,6 @@ export const requestBlogListAct = () => (dispatch, getState) => {
         payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOGLIST-REQUEST-2), please try again' }
       })
     )
-  // .then(data => dispatch({ type: REQUEST_BLOGLIST_SUCCESS, payload: data }))
-  // .catch(error => dispatch({ type: REQUEST_BLOGLIST_FAILED, payload: error }))
 };
 
 export const clearSearchBlogListAct = (event) => {
@@ -81,7 +78,6 @@ export const searchBlogListAct = () => (dispatch, getState) => {
       'Authorization': `Bearer ${getState().authRdc.token}`
     },
     body: JSON.stringify({
-      userID: getState().authRdc.userID,
       blogTitle: getState().blogListRdc.searchBlogTitle,
       categoryName: getState().blogListRdc.searchCategoryName,
       tagName: getState().blogListRdc.searchTagName,
@@ -108,9 +104,6 @@ export const searchBlogListAct = () => (dispatch, getState) => {
         payload: { Code: 'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage: 'Internal Server Error(Code:BLOGLIST-SEARCH-2), please try again' }
       })
     )
-  // .then(response => response.json())
-  // .then(data => dispatch({ type: SEARCH_BLOGLIST_SUCCESS, payload: data }))
-  // .catch(error => dispatch({ type: SEARCH_BLOGLIST_FAILED, payload: error }))
 
 }
 

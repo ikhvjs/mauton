@@ -67,8 +67,7 @@ export const updateMenu1Act = () => (dispatch, getState) => {
         body: JSON.stringify({
             menu1ID: getState().menu1Rdc.updateMenu1ID,
             menu1Name: getState().menu1Rdc.updateMenu1Name,
-            seq: getState().menu1Rdc.updateMenu1Seq,
-            userID: getState().authRdc.userID
+            seq: getState().menu1Rdc.updateMenu1Seq
         })
     })
     .then(res => {

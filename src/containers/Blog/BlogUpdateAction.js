@@ -124,7 +124,6 @@ export const updateBlogAct = () => (dispatch, getState) => {
             ),
             blogSeq: getState().blogRdc.updateBlogSeq,
             blogContent: tinymce.get('blog-content').getContent(),
-            userID: getState().authRdc.userID,
             sidebarMenuID: getState().sidebarRdc.sidebarMenuID
         })
     })

@@ -19,8 +19,7 @@ export const deleteCategoryAct = () => (dispatch,getState) =>{
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${getState().authRdc.token}`},
           body: JSON.stringify({
-            categoryID: getState().categoryRdc.deleteCategoryID,
-            userID: getState().authRdc.userID 
+            categoryID: getState().categoryRdc.deleteCategoryID
           })
         }
     )

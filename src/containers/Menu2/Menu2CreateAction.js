@@ -84,8 +84,7 @@ export const postMenu2Act = () => (dispatch,getState) =>{
         body: JSON.stringify({
           menu2Name: getState().menu2Rdc.createMenu2Name,
           menu2ParentMenuID: getState().menu2Rdc.createMenu2ParentMenuID,
-          seq: getState().menu2Rdc.createMenu2Seq,
-          userID:getState().authRdc.userID
+          seq: getState().menu2Rdc.createMenu2Seq
         })
       }
   )

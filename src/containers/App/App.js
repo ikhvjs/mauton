@@ -10,14 +10,12 @@ import LoginContainer from '../LoginContainer/LoginContainer';
 import RegisterContainer from '../RegisterContainer/RegisterContainer';
 import { PrivateRoute } from '../../components/PrivateRoute/PrivateRoute';
 
-// import $ from 'jquery';
-// import Popper from 'popper.js';
-
 const mapStateToProps = (state) => {
   return {
 	isAuth: state.authRdc.isAuth
   }
 }
+
 
 class App extends Component {
 

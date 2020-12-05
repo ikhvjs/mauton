@@ -15,10 +15,7 @@ export const requestTopbarAct = () => (dispatch,getState) => {
     headers: {'Content-Type': 'application/json',
               'Accept': 'application/json',
               'Authorization': `Bearer ${getState().authRdc.token}`
-            },
-    body: JSON.stringify({
-      userID: getState().authRdc.userID
-    })
+            }
   })
   .then(res => {
     resStatus = res.status

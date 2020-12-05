@@ -2,6 +2,9 @@ import * as constants from '../constants';
 
 const initialStateTag = {
     tags: [],
+    displayTags: [],
+    selectedPage: 1,
+    itemPerPage: 3,
     //request tag
     isPendingRequestTag: false,
     isRequestTagFailed: false,
@@ -345,6 +348,12 @@ const tagRdc = (state = initialStateTag, action = {}) => {
                         })
             }
         /*----------user logout------------------*/
+        case constants.SET_TAG_PAGE:
+            return Object.assign({}, state,
+                {
+                    displayTags: action.payload.displayTags,
+                    selectedPage: action.payload.selectedPage
+                })
         case constants.USER_LOG_OUT:
             return Object.assign({}, state, initialStateTag)
         default:

@@ -20,7 +20,6 @@ export const deleteBlogAct = () => (dispatch,getState) =>{
                     'Authorization': `Bearer ${getState().authRdc.token}`},
           body: JSON.stringify({
             blogID: getState().blogRdc.selectBlogID,
-            userID: getState().authRdc.userID 
           })
         }
     )

@@ -7,7 +7,8 @@ import {
 	clearSearchTagAct,
 	selectCreateTagAct,
 	selectDeleteTagAct,
-	selectUpdateTagAct
+	selectUpdateTagAct,
+	setPageAct
 } from './TagConfigAction';
 
 import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
@@ -17,7 +18,7 @@ import TagConfigCreate from './TagConfigCreate';
 import TagConfigDelete from './TagConfigDelete';
 import TagConfigUpdate from './TagConfigUpdate';
 import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
-
+import Pagination from "react-js-pagination";
 
 const mapStateToProps = (state) => {
 	return {
@@ -25,7 +26,10 @@ const mapStateToProps = (state) => {
 		isRefreshTagNeeded: state.tagRdc.isRefreshTagNeeded,
 		isPendingRequestTag: state.tagRdc.isPendingRequestTag,
 		isRequestTagFailed: state.tagRdc.isRequestTagFailed,
-		searchTagName: state.tagRdc.searchTagName
+		searchTagName: state.tagRdc.searchTagName,
+		itemPerPage: state.tagRdc.itemPerPage,
+		displayTags: state.tagRdc.displayTags,
+		selectedPage: state.tagRdc.selectedPage,
 	}
 }
 
@@ -45,6 +49,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(selectDeleteTagAct(event)),
 		onSelectUpdateTag: (event) =>
 			dispatch(selectUpdateTagAct(event)),
+		onSetPage: (page) =>
+			dispatch(setPageAct(page))
 
 
 	}
@@ -75,7 +81,11 @@ class TagConfig extends Component {
 			onSelectUpdateTag,
 			onSelectDeleteTag,
 			isPendingRequestTag,
-			isRequestTagFailed
+			isRequestTagFailed,
+			onSetPage,
+			displayTags,
+			itemPerPage,
+			selectedPage,
 		} = this.props;
 
 		return (
@@ -88,11 +98,11 @@ class TagConfig extends Component {
 					</Row>
 					<Row className="mb-1 px-3">
 						<Col xs={6} sm={4} md={5} className="mb-1">
-							<Form.Control 
-								size="sm" 
+							<Form.Control
+								size="sm"
 								name="tag-name"
-								type="text" 
-								placeholder="Enter Tag Name" 
+								type="text"
+								placeholder="Enter Tag Name"
 								value={searchTagName}
 								onChange={onChangeSearchTagName}
 							/>
@@ -121,7 +131,7 @@ class TagConfig extends Component {
 									Loading...
 								</div>)
 								: (isRequestTagFailed
-									? (<RequestErrorAlert/>)
+									? (<RequestErrorAlert />)
 									: (<Table striped hover bordered size="sm">
 										<thead>
 											<tr>
@@ -131,27 +141,27 @@ class TagConfig extends Component {
 											</tr>
 										</thead>
 										<tbody>
-											{tags.map((tag) => {
+											{displayTags.map((tag) => {
 												return (
 													<tr tag-id={tag.tag_id} key={tag.tag_id}>
 														<td name='tag-name'>{tag.tag_name}</td>
 														<td name='tag-seq'>{tag.seq}</td>
 														<td name='tag-action-button'>
-															<Button 
-																tag-id={tag.tag_id} 
-																tag-name={tag.tag_name} 
+															<Button
+																tag-id={tag.tag_id}
+																tag-name={tag.tag_name}
 																tag-seq={tag.seq}
 																className="mb-1 mx-1"
-																variant="success" 
+																variant="success"
 																name="update"
 																size="sm" onClick={onSelectUpdateTag}>
 																Update
 															</Button>
-															<Button 
-																tag-id={tag.tag_id} 
+															<Button
+																tag-id={tag.tag_id}
 																tag-name={tag.tag_name}
 																className="mb-1 mx-1"
-																variant="danger" 
+																variant="danger"
 																name="delete"
 																size="sm" onClick={onSelectDeleteTag}>
 																Delete
@@ -166,6 +176,19 @@ class TagConfig extends Component {
 									)
 								)
 							}
+						</Col>
+					</Row>
+					<Row>
+						<Col className="d-flex justify-content-center">
+							<Pagination
+								itemClass="page-item"
+								linkClass="page-link"
+								activePage={selectedPage}
+								itemsCountPerPage={itemPerPage}
+								totalItemsCount={tags.length}
+								pageRangeDisplayed={5}
+								onChange={onSetPage}
+							/>
 						</Col>
 					</Row>
 				</Col>

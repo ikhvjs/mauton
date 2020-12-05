@@ -19,8 +19,7 @@ export const deleteMenu1Act = () => (dispatch,getState) =>{
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${getState().authRdc.token}`},
           body: JSON.stringify({
-            menu1ID: getState().menu1Rdc.deleteMenu1ID,
-            userID: getState().authRdc.userID 
+            menu1ID: getState().menu1Rdc.deleteMenu1ID
           })
         }
     )

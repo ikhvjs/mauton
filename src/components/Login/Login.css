@@ -1,5 +1,5 @@
 #cover {
-    background: #222 url('../../img/cat4.png') center no-repeat;
+    background: #222 url('../../img/cat.png') center no-repeat;
     background-size: cover;
     height: 100%;
     display: flex;
