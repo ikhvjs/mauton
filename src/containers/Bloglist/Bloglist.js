@@ -176,7 +176,7 @@ class BlogList extends Component {
 												{displayBlogList.map(blog => {
 													return (
 														<Card bg="light" text="dark" border="warning"
-															key={blog.blog_id} style={{ width: '18rem' }}
+															key={blog.blog_id} 
 															id={blog.blog_id} >
 															<Card.Header className="card-header-bloglist" as="h5">
 																{blog.blog_title}

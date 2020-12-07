@@ -4,7 +4,9 @@ import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
 import { requestTopbarAct, selectTopbarAct, userLogOutAct } from './TopbarAction';
 import { requestSidebarAct } from '../Sidebar/SidebarAction';
+import './Topbar.css';
 import logo from '../../img/logo.png';
+
 
 const mapStateToProps = (state) => {
 	return {
@@ -40,8 +42,8 @@ class Topbar extends Component {
 			onUserLogOut
 		} = this.props;
 		return (
-			<Navbar collapseOnSelect id="topbar" bg="light" variant="light" expand="lg"
-				className="w-100 shadow my-1 mx-2 rounded">
+			<Navbar collapseOnSelect id="topbar" bg="light" variant="light" expand="sm"
+				className="w-100 shadow my-1 mx-2 rounded ">
 				<LinkContainer to="/">
 					<Navbar.Brand id="home" >
 						<img
@@ -72,9 +74,8 @@ class Topbar extends Component {
 						: null)
 				}
 				<Navbar.Toggle aria-controls="topbar-toggle" />
-				<Navbar.Collapse id="topbar-collapse">
-					<Nav className="mh-100 w-100">
-
+				<Navbar.Collapse id="topbar-collapse" className="justify-content-between">
+					<Nav id="link-container">
 						{(isPendingRequestTopbar) ?
 							(null)
 							: (topbar.map((topbar) => {
@@ -89,12 +90,16 @@ class Topbar extends Component {
 								)
 							}))
 						}
-						<LinkContainer to="/dashboard">
-							<Nav.Link id="dashboard" className='ml-auto'>Dashboard</Nav.Link>
-						</LinkContainer>
 					</Nav>
-					<Button variant="link">{userName}</Button>
-					<Button variant="outline-secondary" onClick={onUserLogOut}>LogOut</Button>
+					<div className="d-flex">
+						<Nav>
+							<LinkContainer to="/dashboard">
+								<Nav.Link id="dashboard">Dashboard</Nav.Link>
+							</LinkContainer>
+						</Nav>
+						<Button variant="link">{userName}</Button>
+						<Button variant="outline-secondary" onClick={onUserLogOut}>LogOut</Button>
+					</div>
 				</Navbar.Collapse>
 			</Navbar>
 		);

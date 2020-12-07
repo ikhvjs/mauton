@@ -1,0 +1,82 @@
+.navbar-nav {
+    overflow-x: auto;
+}
+
+
+@media (min-width: 576px) {
+    .navbar-nav {
+        max-width: 230px;
+    }
+}
+
+@media (min-width: 630px) {
+    .navbar-nav {
+        max-width: 280px;
+    }
+}
+
+@media (min-width: 718px) {
+    .navbar-nav {
+        max-width: 350px;
+    }
+}
+
+@media (min-width: 800px) {
+    .navbar-nav {
+        max-width: 450px;
+    }
+}
+
+@media (min-width: 970px) {
+    .navbar-nav {
+        max-width: 600px;
+    }
+}
+
+@media (min-width: 1100px) {
+    .navbar-nav {
+        max-width: 750px;
+    }
+}
+
+@media (min-width: 1250px) {
+    .navbar-nav {
+        max-width: 900px;
+    }
+}
+
+
+
+#link-container::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+#link-container::-webkit-scrollbar-button {
+  width: 7px;
+  height: 7px;
+}
+#link-container::-webkit-scrollbar-thumb {
+  background: #e1e1e1;
+  border: 0px none #ffffff;
+  border-radius: 100px;
+}
+#link-container::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+#link-container::-webkit-scrollbar-thumb:active {
+  background: #43b6be;
+}
+#link-container::-webkit-scrollbar-track {
+  background: #ffffff;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+#link-container::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+#link-container::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+#link-container::-webkit-scrollbar-corner {
+  background: transparent;
+}

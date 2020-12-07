@@ -11,6 +11,7 @@ export const transformDate = (dateInput) =>{
 				 pad(date.getDate()) 
 }
 
+
 export const getDisplayItems = (selectedPage, itemPerPage, items) => {
 	const itemsLength = items.length;
 	let endIndex;
