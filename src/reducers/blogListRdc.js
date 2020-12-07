@@ -2,6 +2,9 @@ import * as constants from '../constants';
 
 const initialStateBlogList = {
     blogList: [],
+    displayBlogList: [],
+    selectedPage: 1,
+    itemPerPage: 8,
     isPendingRequestBlogList: false,
     isRequestBlogListFailed: false,
     isRefreshBlogListNeeded: false,
@@ -103,6 +106,13 @@ const blogListRdc = (state = initialStateBlogList, action = {}) => {
         /*-------------------------delete Blog---------------------------*/
         case constants.DELETE_BLOG_SUCCESS:
             return Object.assign({}, state, { isRefreshBlogListNeeded: true })
+        /*--------select page--------------*/
+        case constants.SET_BLOGLIST_PAGE:
+            return Object.assign({}, state,
+                {
+                    displayBlogList: action.payload.displayBlogList,
+                    selectedPage: action.payload.selectedPage
+                })
         /*-------------------------user logout-------------------------*/
         case constants.USER_LOG_OUT:
             return Object.assign({}, state, initialStateBlogList)

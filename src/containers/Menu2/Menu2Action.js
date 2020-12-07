@@ -11,10 +11,13 @@ import {
   CLEAR_SEARCH_MENU2,
   SELECT_CREATE_MENU2,
   SELECT_DELETE_MENU2,
-  SELECT_UPDATE_MENU2
- } from '../../constants';
+  SELECT_UPDATE_MENU2,
+  SET_MENU2_PAGE
+} from '../../constants';
 
-export const requestMenu2Act = () => (dispatch,getState) => {
+import { getDisplayItems } from '../../utility/utility';
+
+export const requestMenu2Act = () => (dispatch, getState) => {
   let resStatus;
   dispatch({ type: REQUEST_MENU2_PENDING })
   fetch(`${API_PORT}/menu2/request`, {
@@ -32,7 +35,12 @@ export const requestMenu2Act = () => (dispatch,getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: REQUEST_MENU2_SUCCESS, payload: res })
+          dispatch({ type: REQUEST_MENU2_SUCCESS, payload: res });
+          const itemPerPage = getState().menu2Rdc.itemPerPage;
+          const menu2 = getState().menu2Rdc.menu2;
+          const displayMenu2 = getDisplayItems(1, itemPerPage, menu2);
+          dispatch({ type: SET_MENU2_PAGE, payload: { displayMenu2: displayMenu2, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: REQUEST_MENU2_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -64,7 +72,7 @@ export const clearSearchMenu2Act = () => {
   return ({ type: CLEAR_SEARCH_MENU2 });
 }
 
-export const searchMenu2Act = () => (dispatch,getState) =>{
+export const searchMenu2Act = () => (dispatch, getState) => {
   let resStatus;
   dispatch({ type: SEARCH_MENU2_PENDING });
   fetch(`${API_PORT}/menu2/search`, {
@@ -86,7 +94,12 @@ export const searchMenu2Act = () => (dispatch,getState) =>{
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: SEARCH_MENU2_SUCCESS, payload: res })
+          dispatch({ type: SEARCH_MENU2_SUCCESS, payload: res });
+          const itemPerPage = getState().menu2Rdc.itemPerPage;
+          const menu2 = getState().menu2Rdc.menu2;
+          const displayMenu2 = getDisplayItems(1, itemPerPage, menu2);
+          dispatch({ type: SET_MENU2_PAGE, payload: { displayMenu2: displayMenu2, selectedPage: 1 } });
+          break;
         case 400:
           return dispatch({ type: SEARCH_MENU2_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         case 500:
@@ -104,13 +117,13 @@ export const searchMenu2Act = () => (dispatch,getState) =>{
 }
 
 export const selectCreateMenu2Act = () => {
-  return ({type:SELECT_CREATE_MENU2})
+  return ({ type: SELECT_CREATE_MENU2 })
 }
 
 export const selectDeleteMenu2Act = (event) => {
   const menu2ID = Number(event.target.getAttribute('menu2-id'));
   const menu2Name = event.target.getAttribute('menu2-name');
-  return {type:SELECT_DELETE_MENU2, payload:{deleteMenu2Name:menu2Name,deleteMenu2ID:menu2ID}}
+  return { type: SELECT_DELETE_MENU2, payload: { deleteMenu2Name: menu2Name, deleteMenu2ID: menu2ID } }
 }
 
 export const selectUpdateMenu2Act = (event) => {
@@ -119,10 +132,23 @@ export const selectUpdateMenu2Act = (event) => {
   const menu2ParentMenuID = event.target.getAttribute('menu2-parent-menu-id');
   const menu2ParentName = event.target.getAttribute('menu2-parent-name');
   const menu2Seq = Number(event.target.getAttribute('menu2-seq'));
-  return {type:SELECT_UPDATE_MENU2, 
-    payload:{updateMenu2ID:menu2ID, 
-      updateMenu2Name:menu2Name,
-      updateMenu2ParentMenuID:menu2ParentMenuID,
-      updateMenu2ParentName:menu2ParentName,
-      updateMenu2Seq:menu2Seq}}
+  return {
+    type: SELECT_UPDATE_MENU2,
+    payload: {
+      updateMenu2ID: menu2ID,
+      updateMenu2Name: menu2Name,
+      updateMenu2ParentMenuID: menu2ParentMenuID,
+      updateMenu2ParentName: menu2ParentName,
+      updateMenu2Seq: menu2Seq
+    }
+  }
+}
+
+export const setPageAct = (selectedPage) => (dispatch, getState) => {
+  const itemPerPage = getState().menu2Rdc.itemPerPage;
+  const menu2 = getState().menu2Rdc.menu2;
+
+  const displayMenu2 = getDisplayItems(selectedPage, itemPerPage, menu2);
+
+  dispatch({ type: SET_MENU2_PAGE, payload: { displayMenu2: displayMenu2, selectedPage: selectedPage } });
 }

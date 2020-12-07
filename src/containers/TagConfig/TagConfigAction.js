@@ -14,6 +14,8 @@ import {
   SET_TAG_PAGE
 } from '../../constants';
 
+import { getDisplayItems } from '../../utility/utility';
+
 export const requestTagAct = () => (dispatch, getState) => {
   let resStatus;
   dispatch({ type: REQUEST_TAG_PENDING })
@@ -32,7 +34,12 @@ export const requestTagAct = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: REQUEST_TAG_SUCCESS, payload: res })
+          dispatch({ type: REQUEST_TAG_SUCCESS, payload: res });
+          const itemPerPage = getState().tagRdc.itemPerPage;
+          const tags = getState().tagRdc.tags;
+          const displayTags = getDisplayItems(1, itemPerPage, tags);
+          dispatch({ type: SET_TAG_PAGE, payload: { displayTags: displayTags, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: REQUEST_TAG_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -70,7 +77,12 @@ export const searchTagAct = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: SEARCH_TAG_SUCCESS, payload: res })
+          dispatch({ type: SEARCH_TAG_SUCCESS, payload: res });
+          const itemPerPage = getState().tagRdc.itemPerPage;
+          const tags = getState().tagRdc.tags;
+          const displayTags = getDisplayItems(1, itemPerPage, tags);
+          dispatch({ type: SET_TAG_PAGE, payload: { displayTags: displayTags, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: SEARCH_TAG_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -115,21 +127,10 @@ export const selectUpdateTagAct = (event) => {
 export const setPageAct = (selectedPage) => (dispatch, getState) => {
   const itemPerPage = getState().tagRdc.itemPerPage;
   const tags = getState().tagRdc.tags;
-  const itemsLength = tags.length;
-  let endIndex;
-  let startIndex;
 
-  if ((selectedPage * itemPerPage - 1) > itemsLength) {
-    endIndex = itemsLength - 1;
-    startIndex = selectedPage * itemPerPage - itemPerPage;
-  } else {
-    endIndex = selectedPage * itemPerPage - 1;
-    startIndex = (selectedPage - 1) * itemPerPage;
-  }
+  const displayTags = getDisplayItems(selectedPage, itemPerPage, tags);
 
-  const displayTags = tags.slice(startIndex, endIndex + 1);
-
-  dispatch({ type: SET_TAG_PAGE, payload: { displayTags: displayTags, selectedPage: selectedPage }});
+  dispatch({ type: SET_TAG_PAGE, payload: { displayTags: displayTags, selectedPage: selectedPage } });
 }
 
 

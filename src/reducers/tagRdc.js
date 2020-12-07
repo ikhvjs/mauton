@@ -4,7 +4,7 @@ const initialStateTag = {
     tags: [],
     displayTags: [],
     selectedPage: 1,
-    itemPerPage: 3,
+    itemPerPage: 10,
     //request tag
     isPendingRequestTag: false,
     isRequestTagFailed: false,

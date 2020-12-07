@@ -13,8 +13,11 @@ import {
   ONCHANGE_SEARCH_CATEGORY_DESC,
   SELECT_CREATE_CATEGORY,
   SELECT_DELETE_CATEGORY,
-  SELECT_UPDATE_CATEGORY
+  SELECT_UPDATE_CATEGORY,
+  SET_CATEGORY_PAGE,
 } from '../../constants';
+
+import { getDisplayItems } from '../../utility/utility';
 
 export const selectCreateCategoryAct = () => {
   return { type: SELECT_CREATE_CATEGORY }
@@ -31,11 +34,15 @@ export const selectUpdateCategoryAct = (event) => {
   const categoryName = event.target.getAttribute('category-name');
   const categoryDesc = event.target.getAttribute('category-desc');
   const categorySeq = Number(event.target.getAttribute('category-seq'));
-  return {type:SELECT_UPDATE_CATEGORY, payload:
-    {updateCategoryID:categoryID, 
-      updateCategoryName:categoryName,
-      updateCategoryDesc:categoryDesc,
-      updateCategorySeq:categorySeq}}
+  return {
+    type: SELECT_UPDATE_CATEGORY, payload:
+    {
+      updateCategoryID: categoryID,
+      updateCategoryName: categoryName,
+      updateCategoryDesc: categoryDesc,
+      updateCategorySeq: categorySeq
+    }
+  }
 }
 
 export const requestCategoryAct = () => (dispatch, getState) => {
@@ -56,7 +63,12 @@ export const requestCategoryAct = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: REQUEST_CATEGORY_SUCCESS, payload: res })
+          dispatch({ type: REQUEST_CATEGORY_SUCCESS, payload: res });
+          const itemPerPage = getState().categoryRdc.itemPerPage;
+          const categories = getState().categoryRdc.categories;
+          const displayCategories = getDisplayItems(1, itemPerPage, categories);
+          dispatch({ type: SET_CATEGORY_PAGE, payload: { displayCategories: displayCategories, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: REQUEST_CATEGORY_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -107,7 +119,12 @@ export const searchCategoryAct = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: SEARCH_CATEGORY_SUCCESS, payload: res })
+          dispatch({ type: SEARCH_CATEGORY_SUCCESS, payload: res });
+          const itemPerPage = getState().categoryRdc.itemPerPage;
+          const categories = getState().categoryRdc.categories;
+          const displayCategories = getDisplayItems(1, itemPerPage, categories);
+          dispatch({ type: SET_CATEGORY_PAGE, payload: { displayCategories: displayCategories, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: SEARCH_CATEGORY_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -122,3 +139,11 @@ export const searchCategoryAct = () => (dispatch, getState) => {
     )
 }
 
+export const setPageAct = (selectedPage) => (dispatch, getState) => {
+  const itemPerPage = getState().categoryRdc.itemPerPage;
+  const categories = getState().categoryRdc.categories;
+
+  const displayCategories = getDisplayItems(selectedPage, itemPerPage, categories);
+
+  dispatch({ type: SET_CATEGORY_PAGE, payload: { displayCategories: displayCategories, selectedPage: selectedPage } });
+}

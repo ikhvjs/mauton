@@ -2,6 +2,9 @@ import * as constants from '../constants';
 
 const initialStateCategory = {
     categories: [],
+    displayCategories: [],
+    selectedPage: 1,
+    itemPerPage: 10,
     isRefreshCategoryNeeded: false,
     //request ctgs
     isPendingRequestCategory: false,
@@ -423,6 +426,13 @@ const categoryRdc = (state = initialStateCategory, action = {}) => {
                             isUpdateCategorySeqValid: null, updateCategorySeqErrMsg: ""
                         })
             }
+        /*--------select page--------------*/
+        case constants.SET_CATEGORY_PAGE:
+            return Object.assign({}, state,
+                {
+                    displayCategories: action.payload.displayCategories,
+                    selectedPage: action.payload.selectedPage
+                })
         /*----------user logout------------------*/
         case constants.USER_LOG_OUT:
             return Object.assign({}, state, initialStateCategory)

@@ -2,6 +2,9 @@ import * as constants from '../constants';
 
 const initialStateMenu1 = {
     menu1: [],
+    displayMenu1: [],
+    selectedPage: 1,
+    itemPerPage: 10,
     isRefreshMenu1Needed: false,
     isRefreshTopbarNeeded: false,
     //request Menu1
@@ -378,6 +381,13 @@ const menu1Rdc = (state = initialStateMenu1, action = {}) => {
                             isUpdateMenu1SeqValid: null, updateMenu1SeqErrMsg: ""
                         })
             }
+        /*--------select page--------------*/
+        case constants.SET_MENU1_PAGE:
+            return Object.assign({}, state,
+                {
+                    displayMenu1: action.payload.displayMenu1,
+                    selectedPage: action.payload.selectedPage
+                })
         /*----------user logout------------------*/
         case constants.USER_LOG_OUT:
             return Object.assign({}, state, initialStateMenu1)

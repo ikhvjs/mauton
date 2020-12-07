@@ -9,6 +9,7 @@ import {
 	onchangeSearchBlogTitleAct,
 	onchangeSearchCategoryNameAct,
 	onchangeSearchTagNameAct,
+	setPageAct,
 } from './BlogListAction';
 import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
 import { requestTagAct } from '../TagConfig/TagConfigAction';
@@ -17,7 +18,7 @@ import { selectBlogAct, requestBlogAct, selectCreateBlogAct } from '../Blog/Blog
 import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
 import Blog from '../Blog/Blog';
 import BlogCreate from '../Blog/BlogCreate';
-
+import Pagination from "react-js-pagination";
 import { transformDate } from '../../utility/utility';
 import { CardColumns, Card, Button, Row, Form, Col, Badge, Spinner } from "react-bootstrap";
 import './BlogList.css';
@@ -32,6 +33,9 @@ const mapStateToProps = (state) => {
 		searchCategoryName: state.blogListRdc.searchCategoryName,
 		searchTagName: state.blogListRdc.searchTagName,
 		isShowBlog: state.blogRdc.isShowBlog,
+		itemPerPage: state.blogListRdc.itemPerPage,
+		displayBlogList: state.blogListRdc.displayBlogList,
+		selectedPage: state.blogListRdc.selectedPage,
 	}
 }
 
@@ -53,12 +57,14 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(onchangeSearchCategoryNameAct(event)),
 		onChangeSearchTagName: (event) =>
 			dispatch(onchangeSearchTagNameAct(event)),
-		onSelectCreateBlog: () =>{
+		onSelectCreateBlog: () => {
 			dispatch(selectCreateBlogAct());
 			dispatch(requestCategoryAct());
 			dispatch(requestTagAct());
-		}
-			
+		},
+		onSetPage: (page) =>
+			dispatch(setPageAct(page))
+
 	}
 }
 
@@ -93,7 +99,11 @@ class BlogList extends Component {
 			isPendingRequestBlogList,
 			isRequestBlogListFailed,
 			onSelectBlog,
-			isShowBlog
+			isShowBlog,
+			onSetPage,
+			displayBlogList,
+			itemPerPage,
+			selectedPage,
 		} = this.props;
 
 		return (
@@ -163,7 +173,7 @@ class BlogList extends Component {
 										: (isRequestBlogListFailed
 											? (<RequestErrorAlert />)
 											: (<CardColumns>
-												{blogList.map(blog => {
+												{displayBlogList.map(blog => {
 													return (
 														<Card bg="light" text="dark" border="warning"
 															key={blog.blog_id} style={{ width: '18rem' }}
@@ -213,6 +223,19 @@ class BlogList extends Component {
 									}
 								</Col>
 							</Row>
+							<Row>
+								<Col className="d-flex justify-content-center">
+									<Pagination
+										itemClass="page-item"
+										linkClass="page-link"
+										activePage={selectedPage}
+										itemsCountPerPage={itemPerPage}
+										totalItemsCount={blogList.length}
+										pageRangeDisplayed={5}
+										onChange={onSetPage}
+									/>
+								</Col>
+							</Row>
 						</Col>
 					</Row>
 					)}
@@ -224,7 +247,7 @@ class BlogList extends Component {
 						}
 					</Route>
 				</Switch>
-				<BlogCreate/>
+				<BlogCreate />
 			</React.Fragment>
 		)
 	}

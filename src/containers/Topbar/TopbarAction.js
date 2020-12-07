@@ -32,9 +32,12 @@ export const requestTopbarAct = () => (dispatch,getState) => {
       }
   })
   .catch( 
-    () =>dispatch({ type: REQUEST_TOPBAR_FAILED, 
-      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', errMessage:'Internal Server Error(Code:TOPBAR-REQUEST-2), please try again'} })
-  )
+    () => {
+      // console.log({err});
+      dispatch({ type: REQUEST_TOPBAR_FAILED, 
+      payload: {Code:'UNEXPECTED_INTERNAL_SERVER_ERROR', 
+      errMessage:'Internal Server Error(Code:TOPBAR-REQUEST-2), please try again'} });
+    })
 };
   
 

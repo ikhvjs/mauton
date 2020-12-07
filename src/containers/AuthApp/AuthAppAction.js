@@ -7,9 +7,8 @@ import {
 let timer;
 
 export const startSessionTimeOutAct = () => (dispatch, getState) => {
-  dispatch({ type: USER_START_SESSION });
   const timerOut = getState().authRdc.expireTime * 1000 - (Date.parse(new Date()));
-  // console.log({timerOut});
+  dispatch({ type: USER_START_SESSION, payload: timerOut });
   timer = setTimeout(
     () => dispatch({ type: USER_SESSION_TIMEOUT }),
     timerOut

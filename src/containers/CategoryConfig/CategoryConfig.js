@@ -8,7 +8,8 @@ import {
 	clearSearchCategoryAct,
 	selectCreateCategoryAct,
 	selectDeleteCategoryAct,
-	selectUpdateCategoryAct
+	selectUpdateCategoryAct,
+	setPageAct
 } from './CategoryConfigAction';
 
 import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
@@ -18,6 +19,7 @@ import CategoryConfigCreate from './CategoryConfigCreate';
 import CategoryConfigDelete from './CategoryConfigDelete';
 import CategoryConfigUpdate from './CategoryConfigUpdate';
 import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
+import Pagination from "react-js-pagination";
 
 const mapStateToProps = (state) => {
 	return {
@@ -26,7 +28,10 @@ const mapStateToProps = (state) => {
 		isPendingRequestCategory: state.categoryRdc.isPendingRequestCategory,
 		isRequestCategoryFailed: state.categoryRdc.isRequestCategoryFailed,
 		searchCategoryName: state.categoryRdc.searchCategoryName,
-		searchCategoryDesc: state.categoryRdc.searchCategoryDesc
+		searchCategoryDesc: state.categoryRdc.searchCategoryDesc,
+		itemPerPage: state.categoryRdc.itemPerPage,
+		displayCategories: state.categoryRdc.displayCategories,
+		selectedPage: state.categoryRdc.selectedPage,
 	}
 }
 
@@ -47,7 +52,9 @@ const mapDispatchToProps = (dispatch) => {
 		onSelectDeleteCategory: (event) =>
 			dispatch(selectDeleteCategoryAct(event)),
 		onSelectUpdateCategory: (event) =>
-			dispatch(selectUpdateCategoryAct(event))
+			dispatch(selectUpdateCategoryAct(event)),
+		onSetPage: (page) =>
+			dispatch(setPageAct(page))
 	}
 }
 
@@ -77,7 +84,11 @@ class CategoryConfig extends Component {
 			onSelectUpdateCategory,
 			onSelectDeleteCategory,
 			isPendingRequestCategory,
-			isRequestCategoryFailed
+			isRequestCategoryFailed,
+			onSetPage,
+			displayCategories,
+			itemPerPage,
+			selectedPage,
 		} = this.props;
 
 
@@ -139,58 +150,71 @@ class CategoryConfig extends Component {
 								: (isRequestCategoryFailed
 									? (<RequestErrorAlert />)
 									: (<Table striped hover bordered size="sm">
-											<thead>
-												<tr>
-													<th width="30%">Category Name</th>
-													<th width="40%">Category Desc</th>
-													<th width="10%">Seq</th>
-													<th width="20%">Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												{categories.map((category) => {
-													return (
-														<tr id={category.blog_category_id} key={category.blog_category_id}>
-															<td name='category-name'>{category.blog_category_name}</td>
-															<td name='category-desc'>{category.blog_category_desc}</td>
-															<td name='category-seq'>{category.seq}</td>
-															<td name='category-action-button'>
-															<Button 
-																category-id={category.blog_category_id} 
-																category-name={category.blog_category_name} 
-																category-desc={category.blog_category_desc} 
+										<thead>
+											<tr>
+												<th width="30%">Category Name</th>
+												<th width="40%">Category Desc</th>
+												<th width="10%">Seq</th>
+												<th width="20%">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											{displayCategories.map((category) => {
+												return (
+													<tr id={category.blog_category_id} key={category.blog_category_id}>
+														<td name='category-name'>{category.blog_category_name}</td>
+														<td name='category-desc'>{category.blog_category_desc}</td>
+														<td name='category-seq'>{category.seq}</td>
+														<td name='category-action-button'>
+															<Button
+																category-id={category.blog_category_id}
+																category-name={category.blog_category_name}
+																category-desc={category.blog_category_desc}
 																category-seq={category.seq}
 																className="mb-1 mx-1"
-																variant="success" 
+																variant="success"
 																name="update"
 																size="sm" onClick={onSelectUpdateCategory}>
 																Update
 															</Button>
-															<Button 
-																category-id={category.blog_category_id} 
-																category-name={category.blog_category_name} 
+															<Button
+																category-id={category.blog_category_id}
+																category-name={category.blog_category_name}
 																className="mb-1 mx-1"
-																variant="danger" 
+																variant="danger"
 																name="delete"
 																size="sm" onClick={onSelectDeleteCategory}>
 																Delete
 															</Button>
-															</td>
-														</tr>
-													)
-												})
-												}
-											</tbody>
-										</Table>
+														</td>
+													</tr>
+												)
+											})
+											}
+										</tbody>
+									</Table>
 									)
 								)
 							}
 						</Col>
 					</Row>
+					<Row>
+						<Col className="d-flex justify-content-center">
+							<Pagination
+								itemClass="page-item"
+								linkClass="page-link"
+								activePage={selectedPage}
+								itemsCountPerPage={itemPerPage}
+								totalItemsCount={categories.length}
+								pageRangeDisplayed={5}
+								onChange={onSetPage}
+							/>
+						</Col>
+					</Row>
 				</Col>
-				<CategoryConfigCreate/>
-				<CategoryConfigDelete/>
-				<CategoryConfigUpdate/>
+				<CategoryConfigCreate />
+				<CategoryConfigDelete />
+				<CategoryConfigUpdate />
 			</Row>
 
 		);

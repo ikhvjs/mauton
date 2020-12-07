@@ -9,9 +9,11 @@ import {
   CLEAR_SEARCH_BLOGLIST,
   ONCHANGE_SEARCH_BLOGLIST_BLOG_TITLE,
   ONCHANGE_SEARCH_BLOGLIST_CATEGORY_NAME,
-  ONCHANGE_SEARCH_BLOGLIST_TAG_NAME
+  ONCHANGE_SEARCH_BLOGLIST_TAG_NAME,
+  SET_BLOGLIST_PAGE
 } from '../../constants';
 
+import { getDisplayItems } from '../../utility/utility';
 
 export const requestBlogListAct = () => (dispatch, getState) => {
   let resStatus;
@@ -34,7 +36,12 @@ export const requestBlogListAct = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: REQUEST_BLOGLIST_SUCCESS, payload: res })
+          dispatch({ type: REQUEST_BLOGLIST_SUCCESS, payload: res });
+          const itemPerPage = getState().blogListRdc.itemPerPage;
+          const blogList = getState().blogListRdc.blogList;
+          const displayBlogList = getDisplayItems(1, itemPerPage, blogList);
+          dispatch({ type: SET_BLOGLIST_PAGE, payload: { displayBlogList: displayBlogList, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: REQUEST_BLOGLIST_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -91,7 +98,12 @@ export const searchBlogListAct = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: SEARCH_BLOGLIST_SUCCESS, payload: res })
+          dispatch({ type: SEARCH_BLOGLIST_SUCCESS, payload: res });
+          const itemPerPage = getState().blogListRdc.itemPerPage;
+          const blogList = getState().blogListRdc.blogList;
+          const displayBlogList = getDisplayItems(1, itemPerPage, blogList);
+          dispatch({ type: SET_BLOGLIST_PAGE, payload: { displayBlogList: displayBlogList, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: SEARCH_BLOGLIST_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -107,5 +119,11 @@ export const searchBlogListAct = () => (dispatch, getState) => {
 
 }
 
+export const setPageAct = (selectedPage) => (dispatch, getState) => {
+  const itemPerPage = getState().blogListRdc.itemPerPage;
+  const blogList = getState().blogListRdc.blogList;
 
+  const displayBlogList = getDisplayItems(selectedPage, itemPerPage, blogList);
 
+  dispatch({ type: SET_BLOGLIST_PAGE, payload: { displayBlogList: displayBlogList, selectedPage: selectedPage } });
+}

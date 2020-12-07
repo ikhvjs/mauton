@@ -10,9 +10,11 @@ import {
   CLEAR_SEARCH_MENU1,
   SELECT_CREATE_MENU1,
   SELECT_DELETE_MENU1,
-  SELECT_UPDATE_MENU1
+  SELECT_UPDATE_MENU1,
+  SET_MENU1_PAGE
 } from '../../constants';
 
+import { getDisplayItems } from '../../utility/utility';
 
 export const requestMenu1Act = () => (dispatch, getState) => {
   let resStatus;
@@ -32,7 +34,12 @@ export const requestMenu1Act = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: REQUEST_MENU1_SUCCESS, payload: res })
+          dispatch({ type: REQUEST_MENU1_SUCCESS, payload: res });
+          const itemPerPage = getState().menu1Rdc.itemPerPage;
+          const menu1 = getState().menu1Rdc.menu1;
+          const displayMenu1 = getDisplayItems(1, itemPerPage, menu1);
+          dispatch({ type: SET_MENU1_PAGE, payload: { displayMenu1: displayMenu1, selectedPage: 1 } });
+          break;
         case 500:
           return dispatch({ type: REQUEST_MENU1_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         default:
@@ -49,20 +56,20 @@ export const requestMenu1Act = () => (dispatch, getState) => {
 
 
 export const selectCreateMenu1Act = () => {
-  return {type:SELECT_CREATE_MENU1}
+  return { type: SELECT_CREATE_MENU1 }
 }
 
 export const selectDeleteMenu1Act = (event) => {
   const menu1ID = Number(event.target.getAttribute('menu1-id'));
   const menu1Name = event.target.getAttribute('menu1-name');
-  return {type:SELECT_DELETE_MENU1, payload:{deleteMenu1Name:menu1Name,deleteMenu1ID:menu1ID}}
+  return { type: SELECT_DELETE_MENU1, payload: { deleteMenu1Name: menu1Name, deleteMenu1ID: menu1ID } }
 }
 
 export const selectUpdateMenu1Act = (event) => {
   const menu1ID = Number(event.target.getAttribute('menu1-id'));
   const menu1Name = event.target.getAttribute('menu1-name');
   const menu1Seq = Number(event.target.getAttribute('menu1-seq'));
-  return {type:SELECT_UPDATE_MENU1, payload:{updateMenu1ID:menu1ID, updateMenu1Name:menu1Name,updateMenu1Seq:menu1Seq}}
+  return { type: SELECT_UPDATE_MENU1, payload: { updateMenu1ID: menu1ID, updateMenu1Name: menu1Name, updateMenu1Seq: menu1Seq } }
 }
 
 
@@ -96,7 +103,12 @@ export const searchMenu1Act = () => (dispatch, getState) => {
     .then(res => {
       switch (resStatus) {
         case 200:
-          return dispatch({ type: SEARCH_MENU1_SUCCESS, payload: res })
+          dispatch({ type: SEARCH_MENU1_SUCCESS, payload: res });
+          const itemPerPage = getState().menu1Rdc.itemPerPage;
+          const menu1 = getState().menu1Rdc.menu1;
+          const displayMenu1 = getDisplayItems(1, itemPerPage, menu1);
+          dispatch({ type: SET_MENU1_PAGE, payload: { displayMenu1: displayMenu1, selectedPage: 1 } });
+          break;
         case 400:
           return dispatch({ type: SEARCH_MENU1_FAILED, payload: { Code: res.Code, errMessage: res.errMessage } })
         case 500:
@@ -113,3 +125,11 @@ export const searchMenu1Act = () => (dispatch, getState) => {
     )
 }
 
+export const setPageAct = (selectedPage) => (dispatch, getState) => {
+  const itemPerPage = getState().menu1Rdc.itemPerPage;
+  const menu1 = getState().menu1Rdc.menu1;
+
+  const displayMenu1 = getDisplayItems(selectedPage, itemPerPage, menu1);
+
+  dispatch({ type: SET_MENU1_PAGE, payload: { displayMenu1: displayMenu1, selectedPage: selectedPage } });
+}
