@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
 import BlogList from '../BlogList/BlogList';
 import Sidebar from '../Sidebar/Sidebar';
-import { Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+
+
+const mapStateToProps = (state) => {
+	return {
+		sidebar: state.sidebarRdc.sidebar,
+	}
+}
 
 class Content extends Component {
 
 	render() {
 
 		const match = this.props.match;
+		const { sidebar } = this.props;
 
 		return (
 			<React.Fragment>
@@ -18,7 +27,15 @@ class Content extends Component {
 				<Col id="blog-container" className="min-vh-100" >
 					<Switch>
 						<Route exact path={match.path}>
-							<h3>Please select a topic in the blue menu</h3>
+							<Row className="vh-100">
+								<Col className='d-flex align-items-center justify-content-center'>
+									{(sidebar.length > 0)
+										? <h3>Please select a topic in the blue menu</h3>
+										: <h3>There is no item in the blue menu, please create one.</h3>
+									}
+
+								</Col>
+							</Row>
 						</Route>
 						<Route path={`${match.path}/:sidebarMenuID`}>
 							<BlogList />
@@ -33,4 +50,4 @@ class Content extends Component {
 
 }
 
-export default withRouter(Content);
+export default withRouter(connect(mapStateToProps, null)(Content));

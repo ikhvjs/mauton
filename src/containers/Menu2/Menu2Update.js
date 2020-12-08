@@ -7,8 +7,8 @@ import {
     onchangeUpdateMenu2ParentMenuIDAct,
     onchangeUpdateMenu2SeqAct
 } from './Menu2UpdateAction';
-
-import { Button, Row, Col, Modal, Spinner, Form } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Button, Row, Col, Modal, Form } from "react-bootstrap";
 
 const mapStateToProps = (state) => {
     return {
@@ -147,16 +147,7 @@ class Menu2Update extends Component {
                         </Form.Group>
                         {
                             isPendingUpdateMenu2
-                                ? (<div className="row d-flex align-items-center justify-content-end">
-                                    <Spinner
-                                        as="span"
-                                        animation="grow"
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    />
-                            Loading...
-                                </div>)
+                                ? (<LoadingBar />)
                                 : (<Row className="d-flex justify-content-end">
                                     <Button
                                         className="mb-1 mx-1"

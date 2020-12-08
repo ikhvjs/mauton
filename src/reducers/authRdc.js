@@ -34,14 +34,12 @@ const authRdc = (state = initialStateAuth, action = {}) => {
                 case 'Login':
                     return Object.assign({}, state,
                         {
-                            isAuth: false,
                             isPendingGetUser: false,
                             loginPassword: "",
                         })
                 case 'Register':
                     return Object.assign({}, state,
                         {
-                            isAuth: false,
                             isPendingPostUser: false,
                             registerPassword: "",
                         })

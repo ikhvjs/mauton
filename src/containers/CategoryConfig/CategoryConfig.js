@@ -11,8 +11,8 @@ import {
 	selectUpdateCategoryAct,
 	setPageAct
 } from './CategoryConfigAction';
-
-import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Table, Form, Button, Col, Row} from "react-bootstrap";
 import './CategoryConfig.css'
 
 import CategoryConfigCreate from './CategoryConfigCreate';
@@ -137,16 +137,7 @@ class CategoryConfig extends Component {
 					<Row className="my-1 px-3">
 						<Col>
 							{(isPendingRequestCategory)
-								? (<div className="d-flex align-items-center justify-content-center">
-									<Spinner
-										as="span"
-										animation="grow"
-										size="sm"
-										role="status"
-										aria-hidden="true"
-									/>
-									Loading...
-								</div>)
+								? (<LoadingBar />)
 								: (isRequestCategoryFailed
 									? (<RequestErrorAlert />)
 									: (<Table striped hover bordered size="sm">

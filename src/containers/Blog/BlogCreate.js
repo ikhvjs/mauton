@@ -10,8 +10,8 @@ import {
 } from './BlogCreateAction';
 import { customStyles } from './BlogCustomStyles';
 import TinyEditorComponent from '../../components/TinyEditorComponent/TinyEditorComponent';
-
-import { Form, Button, Row, Col, Modal, Spinner } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Form, Button, Row, Col, Modal } from "react-bootstrap";
 import Select from 'react-select';
 import './Blog.css';
 
@@ -215,16 +215,7 @@ class BlogCreate extends Component {
 						</Form.Group>
 						{
 							isPendingPostBlog
-								? (<div className="row d-flex align-items-center justify-content-end">
-									<Spinner
-										as="span"
-										animation="grow"
-										size="sm"
-										role="status"
-										aria-hidden="true"
-									/>
-									Loading...
-								</div>)
+								? (<LoadingBar />)
 								: (<Row className="d-flex justify-content-end">
 									<Button
 										className="mb-1 mx-1"

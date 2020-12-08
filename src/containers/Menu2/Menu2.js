@@ -11,9 +11,9 @@ import {
 	selectUpdateMenu2Act,
 	setPageAct
 } from './Menu2Action';
-
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
 import { requestMenu1Act } from '../Menu1/Menu1Action';
-import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
+import { Table, Form, Button, Col, Row } from "react-bootstrap";
 import './Menu2.css';
 import Menu2Create from './Menu2Create';
 import Menu2Delete from './Menu2Delete';
@@ -138,16 +138,7 @@ class Menu2 extends Component {
 					<Row className="my-1 px-3">
 						<Col>
 							{(isPendingRequestMenu2)
-								? (<div className="d-flex align-items-center justify-content-center">
-									<Spinner
-										as="span"
-										animation="grow"
-										size="sm"
-										role="status"
-										aria-hidden="true"
-									/>
-									Loading...
-								</div>)
+								? (<LoadingBar />)
 								: (isRequestMenu2Failed
 									? (<RequestErrorAlert />)
 									: (<Table striped hover bordered size="sm">

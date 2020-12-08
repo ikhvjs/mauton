@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
+import { Navbar, Nav, Button } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
 import { requestTopbarAct, selectTopbarAct, userLogOutAct } from './TopbarAction';
 import { requestSidebarAct } from '../Sidebar/SidebarAction';
 import './Topbar.css';
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
 import logo from '../../img/logo.png';
 
 
@@ -57,15 +58,7 @@ class Topbar extends Component {
 			    		</Navbar.Brand>
 				</LinkContainer>
 				{(isPendingRequestTopbar)
-					? (<div className="d-flex align-items-center"><Spinner
-						as="span"
-						animation="grow"
-						size="sm"
-						role="status"
-						aria-hidden="true"
-					/>
-					  Loading...
-					</div>)
+					? (<LoadingBar />)
 					: ((isRequestTopbarFailed)
 						? (<Button variant="primary"
 							size='sm' onClick={onRequestTopbar}>
@@ -81,7 +74,7 @@ class Topbar extends Component {
 							: (topbar.map((topbar) => {
 								return (
 									<LinkContainer key={topbar.menu_id} to={`/${topbar.menu_id}`}>
-										<Nav.Link key={topbar.menu_id}
+										<Nav.Link className="topbar-link" key={topbar.menu_id}
 											menu-id={topbar.menu_id}
 											onClick={onSelectTopbar}>
 											{topbar.menu_name}

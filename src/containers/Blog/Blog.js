@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
+import DOMPurify from 'dompurify';
 
 import { requestBlogAct, selectDeleteBlogAct, selectUpdateBlogAct} from './BlogAction';
 import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
@@ -64,7 +65,7 @@ class Blog extends Component {
 					</Row>
 					<Row>
 						<Col>
-							{ReactHtmlParser(blog.blog_content)}
+							{ReactHtmlParser(DOMPurify.sanitize(blog.blog_content))}
 						</Col>
 					</Row>
 					<hr />

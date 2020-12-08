@@ -2,6 +2,9 @@
     overflow-x: auto;
 }
 
+.topbar-link{
+  white-space: nowrap;
+}
 
 @media (min-width: 576px) {
     .navbar-nav {

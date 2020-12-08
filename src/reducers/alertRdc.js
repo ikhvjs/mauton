@@ -112,7 +112,7 @@ const alertRdc = (state = initialStateError, action = {}) => {
             return Object.assign({}, state,
                 {
                     isShowValidationErrAlert: true,
-                    ValidationErrMsg: action.payload
+                    ValidationErrMsg: action.payload.errMessage
                 })
         case constants.GET_LOGIN_ALERT_CAPTCHA_TOKEN_FAILED:
             return Object.assign({}, state,

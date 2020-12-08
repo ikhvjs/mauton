@@ -14,13 +14,13 @@ import {
 import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
 import { requestTagAct } from '../TagConfig/TagConfigAction';
 import { selectBlogAct, requestBlogAct, selectCreateBlogAct } from '../Blog/BlogAction';
-
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
 import RequestErrorAlert from '../../components/RequestErrorAlert/RequestErrorAlert';
 import Blog from '../Blog/Blog';
 import BlogCreate from '../Blog/BlogCreate';
 import Pagination from "react-js-pagination";
 import { transformDate } from '../../utility/utility';
-import { CardColumns, Card, Button, Row, Form, Col, Badge, Spinner } from "react-bootstrap";
+import { CardColumns, Card, Button, Row, Form, Col, Badge } from "react-bootstrap";
 import './BlogList.css';
 
 const mapStateToProps = (state) => {
@@ -158,18 +158,9 @@ class BlogList extends Component {
 							</Row>
 
 							<Row className="my-1 px-3">
-								<Col>
+								<Col className="d-flex justify-content-center">
 									{(isPendingRequestBlogList)
-										? (<div className="d-flex align-items-center justify-content-center">
-											<Spinner
-												as="span"
-												animation="grow"
-												size="sm"
-												role="status"
-												aria-hidden="true"
-											/>
-										Loading...
-										</div>)
+										? (<LoadingBar />)
 										: (isRequestBlogListFailed
 											? (<RequestErrorAlert />)
 											: (<CardColumns>

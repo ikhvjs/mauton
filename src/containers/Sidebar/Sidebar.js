@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, Spinner, Button } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Navbar, Nav, Button } from "react-bootstrap";
 import { requestBlogListAct } from '../BlogList/BlogListAction';
 import { requestSidebarAct, selectSidebarAct } from './SidebarAction';
 import './Sidebar.css';
@@ -40,7 +41,7 @@ class Sidebar extends Component {
 		} = this.props;
 		return (
 			(url === "/dashboard") ?
-				(<Navbar id="dashboard-siderbar" bg="primary" variant="dark" expand="sm"
+				(<Navbar collapseOnSelect id="dashboard-siderbar" bg="primary" variant="dark" expand="sm"
 					className="h-100 align-items-start justify-content-end shadow rounded">
 					<Navbar.Toggle aria-controls="sidebar-dashboard-toggle" />
 					<Navbar.Collapse id="sidebar-dashboard-collapse">
@@ -61,18 +62,10 @@ class Sidebar extends Component {
 					</Navbar.Collapse>
 				</Navbar>
 				) :
-				(<Navbar id="dynamic-siderbar" bg="primary" variant="dark" expand="sm"
+				(<Navbar collapseOnSelect id="dynamic-siderbar" bg="primary" variant="dark" expand="sm"
 					className="h-100 align-items-start justify-content-center shadow rounded">
 					{(isPendingRequestSidebar)
-						? (<div className="d-flex align-items-center"><Spinner
-							as="span"
-							animation="grow"
-							size="sm"
-							role="status"
-							aria-hidden="true"
-						/>
-					  		Loading...
-						</div>)
+						? (<LoadingBar />)
 						: ((isRequestSidebarFailed)
 							? (<Button variant="light" className="mr-1"
 								size='sm' onClick={onRequestSidebar}>

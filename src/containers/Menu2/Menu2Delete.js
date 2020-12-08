@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { closeDeleteMenu2Act, deleteMenu2Act } from './Menu2DeleteAction';
-
-import { Button, Row, Col, Modal, Spinner } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Button, Row, Col, Modal } from "react-bootstrap";
 
 const mapStateToProps = (state) => {
     return {
@@ -56,16 +56,7 @@ class Menu2Delete extends Component {
                     }
                     {
                         (isPendingDeleteMenu2)
-                            ? (<div className="row d-flex align-items-center justify-content-end">
-                                <Spinner
-                                    as="span"
-                                    animation="grow"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                />
-                                Deleting...
-                            </div>)
+                            ? (<LoadingBar />)
                             : (
                                 <Row className="d-flex justify-content-end">
                                     {(isDeleteMenu2Failed)
