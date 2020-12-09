@@ -1,5 +1,5 @@
 /*----------------API PORT----------------------*/
-export const API_PORT = 'https://mauton-api.herokuapp.com/';
+export const API_PORT = 'https://mauton-api.herokuapp.com';
 // export const API_PORT = 'http://localhost:3001';
 
 
