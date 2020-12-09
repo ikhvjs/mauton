@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { closeRequestErrorAlertAct } from './RequestErrorAlertAction';
 import { Modal } from "react-bootstrap";
+import './RequestErrorAlert.css';
 
 const mapStateToProps = (state) => {
     return {

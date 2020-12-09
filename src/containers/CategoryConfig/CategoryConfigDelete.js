@@ -44,7 +44,7 @@ class CategoryConfigDelete extends Component {
                 <Modal.Body>
                     {(isDeleteCategoryFailed)
                         ? (<Row>
-                            <Col className="delete-category-err-msg">
+                            <Col className="delete-err-msg">
                                 {deleteCategoryErrMsg}
                             </Col>
                         </Row>)

@@ -43,7 +43,7 @@ class Topbar extends Component {
 			onUserLogOut
 		} = this.props;
 		return (
-			<Navbar collapseOnSelect id="topbar" bg="light" variant="light" expand="sm"
+			<Navbar collapseOnSelect id="topbar" bg="light" variant="light" expand="md"
 				className="w-100 shadow my-1 mx-2 rounded ">
 				<LinkContainer to="/">
 					<Navbar.Brand id="home" >
@@ -84,7 +84,7 @@ class Topbar extends Component {
 							}))
 						}
 					</Nav>
-					<div className="d-flex">
+					<div className="d-flex justify-content-around">
 						<Nav>
 							<LinkContainer to="/dashboard">
 								<Nav.Link id="dashboard">Dashboard</Nav.Link>

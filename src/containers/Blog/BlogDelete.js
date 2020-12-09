@@ -44,7 +44,7 @@ class BlogDelete extends Component {
                 <Modal.Body>
                     {(isDeleteBlogFailed)
                         ? (<Row>
-                            <Col className="delete-blog-err-msg">
+                            <Col className="delete-err-msg">
                                 {deleteBlogErrMsg}
                             </Col>
                         </Row>)

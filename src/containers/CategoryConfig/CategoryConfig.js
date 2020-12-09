@@ -13,8 +13,6 @@ import {
 } from './CategoryConfigAction';
 import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
 import { Table, Form, Button, Col, Row} from "react-bootstrap";
-import './CategoryConfig.css'
-
 import CategoryConfigCreate from './CategoryConfigCreate';
 import CategoryConfigDelete from './CategoryConfigDelete';
 import CategoryConfigUpdate from './CategoryConfigUpdate';

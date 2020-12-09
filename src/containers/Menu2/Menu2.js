@@ -14,7 +14,6 @@ import {
 import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
 import { requestMenu1Act } from '../Menu1/Menu1Action';
 import { Table, Form, Button, Col, Row } from "react-bootstrap";
-import './Menu2.css';
 import Menu2Create from './Menu2Create';
 import Menu2Delete from './Menu2Delete';
 import Menu2Update from './Menu2Update';

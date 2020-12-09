@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import DOMPurify from 'dompurify';
-
 import { requestBlogAct, selectDeleteBlogAct, selectUpdateBlogAct} from './BlogAction';
 import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
 import { requestTagAct } from '../TagConfig/TagConfigAction';
-
 import BlogDelete from './BlogDelete';
 import BlogUpdate from './BlogUpdate';
-
 import { transformDate } from '../../utility/utility';
-
 import { Col, Badge, Button, Row } from "react-bootstrap";
 import './Blog.css';
 

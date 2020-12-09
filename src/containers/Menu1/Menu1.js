@@ -13,7 +13,6 @@ import {
 import { requestTopbarAct } from '../Topbar/TopbarAction';
 import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
 import { Table, Form, Button, Col, Row } from "react-bootstrap";
-import './Menu1.css';
 import Menu1Create from './Menu1Create';
 import Menu1Delete from './Menu1Delete';
 import Menu1Update from './Menu1Update';

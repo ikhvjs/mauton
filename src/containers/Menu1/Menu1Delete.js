@@ -44,7 +44,7 @@ class Menu1Delete extends Component {
                 <Modal.Body>
                     {(isDeleteMenu1Failed)
                         ? (<Row>
-                            <Col className="delete-menu1-err-msg">
+                            <Col className="delete-err-msg">
                                 {deleteMenu1ErrMsg}
                             </Col>
                         </Row>)
