@@ -1,6 +1,6 @@
 /*----------------API PORT----------------------*/
-// export const API_PORT = 'https://floating-depths-39554.herokuapp.com';
-export const API_PORT = 'http://localhost:3001';
+export const API_PORT = 'https://mauton-api.herokuapp.com/';
+// export const API_PORT = 'http://localhost:3001';
 
 
 /*----------------ReCaptchat----------------------*/
