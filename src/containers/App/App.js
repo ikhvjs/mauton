@@ -22,7 +22,7 @@ class App extends Component {
 	render() {
 
 		return (
-			<Router basename="mauton">
+			<Router basename={process.env.PUBLIC_URL}>
 				<Switch>
 					<Route path="/login">
 						<LoginContainer />
