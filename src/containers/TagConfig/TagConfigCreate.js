@@ -7,8 +7,8 @@ import {
     postTagAct,
     clearCreateTagAct
 } from './TagConfigCreateAction';
-
-import { Form, Button, Row, Col, Modal,Spinner } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Form, Button, Row, Col, Modal } from "react-bootstrap";
 
 const mapStateToProps = (state) => {
     return {
@@ -106,16 +106,7 @@ class TagConfigCreate extends Component {
                         </Form.Group>
                         {
                             isPendingPostTag
-                            ?(<div className="row d-flex align-items-center justify-content-end">
-                            <Spinner
-                                as="span"
-                                animation="grow"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                            Loading...
-                            </div>)
+                            ?(<LoadingBar />)
                             :(<Row className="d-flex justify-content-end">
                                 <Button 
                                     className="mb-1 mx-1" 

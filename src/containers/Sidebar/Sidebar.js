@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { requestBlogListAct } from '../BlogList/BlogListAction';
+import { requestBlogListAct } from '../Bloglist/BloglistAction';
 import { requestSidebarAct, selectSidebarAct } from './SidebarAction';
 import './Sidebar.css';
 

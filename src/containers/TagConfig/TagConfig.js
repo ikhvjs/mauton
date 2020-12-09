@@ -10,10 +10,9 @@ import {
 	selectUpdateTagAct,
 	setPageAct
 } from './TagConfigAction';
-
-import { Table, Form, Button, Col, Row, Spinner } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Table, Form, Button, Col, Row } from "react-bootstrap";
 import './TagConfig.css';
-
 import TagConfigCreate from './TagConfigCreate';
 import TagConfigDelete from './TagConfigDelete';
 import TagConfigUpdate from './TagConfigUpdate';
@@ -118,18 +117,9 @@ class TagConfig extends Component {
 						</Col>
 					</Row>
 					<Row className="my-1 px-3">
-						<Col>
+						<Col className="d-flex justify-content-center">
 							{(isPendingRequestTag)
-								? (<div className="d-flex align-items-center justify-content-center">
-									<Spinner
-										as="span"
-										animation="grow"
-										size="sm"
-										role="status"
-										aria-hidden="true"
-									/>
-									Loading...
-								</div>)
+								? (<LoadingBar />)
 								: (isRequestTagFailed
 									? (<RequestErrorAlert />)
 									: (<Table striped hover bordered size="sm">

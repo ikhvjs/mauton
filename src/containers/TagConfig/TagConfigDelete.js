@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { closeDeleteTagAct, deleteTagAct } from './TagConfigDeleteAction';
-
-import { Button, Row, Col, Modal, Spinner } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Button, Row, Col, Modal } from "react-bootstrap";
 
 const mapStateToProps = (state) => {
     return {
@@ -56,16 +56,7 @@ class TagConfigDelete extends Component {
                     }
                     {
                         (isPendingDeleteTag)
-                            ? (<div className="row d-flex align-items-center justify-content-end">
-                                <Spinner
-                                    as="span"
-                                    animation="grow"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                />
-                                Deleting...
-                            </div>)
+                            ? (<LoadingBar />)
                             : (
                                 <Row className="d-flex justify-content-end">
                                     {(isDeleteTagFailed)

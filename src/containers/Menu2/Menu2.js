@@ -135,7 +135,7 @@ class Menu2 extends Component {
 					</Row>
 
 					<Row className="my-1 px-3">
-						<Col>
+						<Col className="d-flex justify-content-center">
 							{(isPendingRequestMenu2)
 								? (<LoadingBar />)
 								: (isRequestMenu2Failed

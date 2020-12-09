@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
-import BlogList from '../BlogList/BlogList';
+import Bloglist from '../Bloglist/Bloglist';
 import Sidebar from '../Sidebar/Sidebar';
 import { Row, Col } from "react-bootstrap";
 
@@ -38,7 +38,7 @@ class Content extends Component {
 							</Row>
 						</Route>
 						<Route path={`${match.path}/:sidebarMenuID`}>
-							<BlogList />
+							<Bloglist />
 						</Route>
 					</Switch>
 				</Col>

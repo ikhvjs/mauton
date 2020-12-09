@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {    closeUpdateTagAct,
-            updateTagAct,
-            onchangeUpdateTagNameAct,
-            onchangeUpdateTagSeqAct
+import {
+    closeUpdateTagAct,
+    updateTagAct,
+    onchangeUpdateTagNameAct,
+    onchangeUpdateTagSeqAct
 } from './TagConfigUpdateAction';
-
-import { Button, Row, Col, Modal, Spinner, Form } from "react-bootstrap";
+import { LoadingBar } from '../../components/LoadingBar/LoadingBar';
+import { Button, Row, Col, Modal, Form } from "react-bootstrap";
 
 const mapStateToProps = (state) => {
     return {
@@ -27,9 +28,9 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(closeUpdateTagAct()),
         onUpdateTag: () =>
             dispatch(updateTagAct()),
-        onChangeUpdateTagName: (event)=>
+        onChangeUpdateTagName: (event) =>
             dispatch(onchangeUpdateTagNameAct(event)),
-        onChangeUpdateTagSeq: (event)=>
+        onChangeUpdateTagSeq: (event) =>
             dispatch(onchangeUpdateTagSeqAct(event)),
     }
 }
@@ -100,33 +101,24 @@ class TagConfigUpdate extends Component {
                         </Form.Group>
                         {
                             isPendingUpdateTag
-                            ?(<div className="row d-flex align-items-center justify-content-end">
-                            <Spinner
-                                as="span"
-                                animation="grow"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                            Loading...
-                            </div>)
-                            :(<Row className="d-flex justify-content-end">
-                                <Button 
-                                    className="mb-1 mx-1" 
-                                    name="create" onClick={onUpdateTag}
-                                    variant="primary" size="sm"
-                                    disabled={!isUpdateTagNameValid||!isUpdateTagSeqValid}>
-                                    Update
+                                ? (<LoadingBar />)
+                                : (<Row className="d-flex justify-content-end">
+                                    <Button
+                                        className="mb-1 mx-1"
+                                        name="create" onClick={onUpdateTag}
+                                        variant="primary" size="sm"
+                                        disabled={!isUpdateTagNameValid || !isUpdateTagSeqValid}>
+                                        Update
                                 </Button>
-                                <Button 
-                                    className="mb-1 mx-1" 
-                                    name="clear-create" onClick={onCloseUpdateTag}
-                                    variant="secondary"  size="sm">
+                                    <Button
+                                        className="mb-1 mx-1"
+                                        name="clear-create" onClick={onCloseUpdateTag}
+                                        variant="secondary" size="sm">
                                         Cancel
                                 </Button>
-                            </Row>)
+                                </Row>)
                         }
-                        
+
                     </Form>
                 </Modal.Body>
             </Modal>

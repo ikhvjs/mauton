@@ -10,7 +10,7 @@ import {
 	onchangeSearchCategoryNameAct,
 	onchangeSearchTagNameAct,
 	setPageAct,
-} from './BlogListAction';
+} from './BloglistAction';
 import { requestCategoryAct } from '../CategoryConfig/CategoryConfigAction';
 import { requestTagAct } from '../TagConfig/TagConfigAction';
 import { selectBlogAct, requestBlogAct, selectCreateBlogAct } from '../Blog/BlogAction';
@@ -21,7 +21,7 @@ import BlogCreate from '../Blog/BlogCreate';
 import Pagination from "react-js-pagination";
 import { transformDate } from '../../utility/utility';
 import { CardColumns, Card, Button, Row, Form, Col, Badge } from "react-bootstrap";
-import './BlogList.css';
+import './Bloglist.css';
 
 const mapStateToProps = (state) => {
 	return {
