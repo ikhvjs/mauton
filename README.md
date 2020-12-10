@@ -19,12 +19,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites 📋
 
-A Mauton API is required for backend development **[Click here](https://github.com/ikhvjs/mauton-api)**
-
 You'll need:
 * [Git](https://git-scm.com) 
 * [Node.js](https://nodejs.org/en/download/) (which comes with [NPM](http://npmjs.com)) installed on your computer.
 * [Google reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3) (which you need to register for a key)
+* [A Mauton API](https://github.com/ikhvjs/mauton-api) (which is for the Backend)
 
 ```
 node@v10.16.0 or higher
@@ -33,7 +32,7 @@ git@2.17.1 or higher
 ```
 
 **NOTE**:
-When you register your reCAPTCHA Key, remember to set domain for your reCAPTCHA same as your frontend in the google reCAPTCHA website:
+When you register your reCAPTCHA Key, remember to set domain for your reCAPTCHA same as your frontend in the google reCAPTCHA website.
 
 ## How To Use 🔧
 
@@ -69,7 +68,7 @@ Once your server has started, go to this url `http://localhost:3000/` and you wi
 Once you have done with your setup. You need to put your website online!
 I highly recommend to use [Heroku](https://heroku.com) to achieve this on the EASIEST WAY
 
-**[Read MY STEP-BY-STEP TUTORIAL FOR DEPLOYMENT in Heroku](https://github.com/ikhvjs/mauton-deployment)**
+**[Read MY Deployment Procedures](https://github.com/ikhvjs/mauton-deployment)**
 
 ## Technologies used 🛠️
 

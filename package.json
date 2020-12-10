@@ -1,6 +1,6 @@
 {
   "name": "mauton",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -54,10 +54,10 @@
     "type": "git",
     "url": "git+https://github.com/ikhvjs/mauton.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "ikhvjs",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ikhvjs/mauton/issues"
   },
-  "homepage": "https://mauton.herokuapp.com/"
+  "homepage": "https://ikhvjs.github.io/mauton/"
 }
