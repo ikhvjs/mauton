@@ -11,7 +11,7 @@ I was motivated to create this project because I wanted to record what I learn i
 ⚡️ Fully Responsive\
 ⚡️ Well organized documentation
 
-To view a demo example, **[click here](https://ikhvjs.github.io/mauton/)**\
+To view a demo example, **[click here](https://ikhvjs.github.io/mauton/)**
 
 ## Getting Started 🚀
 
@@ -30,8 +30,10 @@ You'll need:
 node@v10.16.0 or higher
 npm@6.9.0 or higher
 git@2.17.1 or higher
-
 ```
+
+**NOTE**:
+When you register your reCAPTCHA Key, remember to set domain for your reCAPTCHA same as your frontend in the google reCAPTCHA website:
 
 ## How To Use 🔧
 
@@ -61,17 +63,13 @@ $ npm start
 
 Once your server has started, go to this url `http://localhost:3000/` and you will see the website running on a Development Server:
 
----
-
-**NOTE**:
-When you register your reCAPTCHA Key, remember to set domain for your reCAPTCHA same as your frontend in the google reCAPTCHA website:
 
 ## Deployment 📦
 
 Once you have done with your setup. You need to put your website online!
 I highly recommend to use [Heroku](https://heroku.com) to achieve this on the EASIEST WAY
 
-**[WATCH NOW MY STEP-BY-STEP TUTORIAL FOR DEPLOYMENT](https://github.com/ikhvjs/mauton-deployment)**
+**[Read MY STEP-BY-STEP TUTORIAL FOR DEPLOYMENT in Heroku](https://github.com/ikhvjs/mauton-deployment)**
 
 ## Technologies used 🛠️
 
