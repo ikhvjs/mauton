@@ -8,7 +8,7 @@ class Home extends Component {
 		return (
 			<div className="home d-flex mx-2">
 				<Container className="text-center my-auto">
-					<h1 className="mb-1">Make your Blog</h1>
+					<h1 className="mb-1">Happy Blogging</h1>
 					<h3 className="mb-5">
 						<em>Manage your blogs in a easy way</em>
 					</h3>
