@@ -19,7 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites 📋
 
-A Mauton API is required for backend development **[Click here](https://github.com/ikhvjs/mauton-api)**\
+A Mauton API is required for backend development **[Click here](https://github.com/ikhvjs/mauton-api)**
 
 You'll need:
 * [Git](https://git-scm.com) 
