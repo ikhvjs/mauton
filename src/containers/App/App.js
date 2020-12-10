@@ -1,9 +1,10 @@
-import React,{ Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route
+	//   BrowserRouter as Router,
+	HashRouter,
+	Switch,
+	Route
 } from "react-router-dom";
 import AuthApp from '../AuthApp/AuthApp';
 import LoginContainer from '../LoginContainer/LoginContainer';
@@ -11,9 +12,9 @@ import RegisterContainer from '../RegisterContainer/RegisterContainer';
 import { PrivateRoute } from '../../components/PrivateRoute/PrivateRoute';
 
 const mapStateToProps = (state) => {
-  return {
-	isAuth: state.authRdc.isAuth
-  }
+	return {
+		isAuth: state.authRdc.isAuth
+	}
 }
 
 
@@ -22,7 +23,8 @@ class App extends Component {
 	render() {
 
 		return (
-			<Router basename={process.env.PUBLIC_URL}>
+			// <HashRouter basename={process.env.PUBLIC_URL}>
+			<HashRouter basename="/">
 				<Switch>
 					<Route path="/login">
 						<LoginContainer />
@@ -34,11 +36,11 @@ class App extends Component {
 						<AuthApp />
 					</PrivateRoute>
 				</Switch>
-			</Router>
+			</HashRouter >
 		);
 	}
-	
-	
+
+
 }
 
 export default connect(mapStateToProps, null)(App)

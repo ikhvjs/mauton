@@ -122,7 +122,7 @@ class Register extends Component {
                             <ValidationErrorAlert />
                             <p className="text-right">
                                 Already register?
-                                <a href="/mauton/login">
+                                <a href="/mauton/#/login">
                                     {` Sign in`}
                                 </a>
                             </p>

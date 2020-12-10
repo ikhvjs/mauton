@@ -104,7 +104,7 @@ class Login extends Component {
                             <ValidationErrorAlert />
                             <p className="text-right">
                                 Not yet
-                                <a href="/mauton/register">
+                                <a href="/mauton/#/register">
                                     {` register`}
                                 </a>
                                 ?
