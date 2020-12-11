@@ -7,7 +7,7 @@ import rootReducer from './reducers/rootReducer';
 let middleware = [thunkMiddleware];
 
 //append middleware for dev Env
-if (process.env.NODE_ENV !== 'prod') {
+if (process.env.NODE_ENV === 'development') {
   const logger = require('redux-logger').createLogger();
   // const logger = createLogger();
   middleware = [...middleware, logger];
