@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/mauton/static/css/main.2d1e24d8.chunk.css",
-    "main.js": "/mauton/static/js/main.7955aad4.chunk.js",
-    "main.js.map": "/mauton/static/js/main.7955aad4.chunk.js.map",
+    "main.js": "/mauton/static/js/main.82e7d651.chunk.js",
+    "main.js.map": "/mauton/static/js/main.82e7d651.chunk.js.map",
     "runtime-main.js": "/mauton/static/js/runtime-main.c70cf5c7.js",
     "runtime-main.js.map": "/mauton/static/js/runtime-main.c70cf5c7.js.map",
     "static/css/2.4614077c.chunk.css": "/mauton/static/css/2.4614077c.chunk.css",
-    "static/js/2.0506b303.chunk.js": "/mauton/static/js/2.0506b303.chunk.js",
-    "static/js/2.0506b303.chunk.js.map": "/mauton/static/js/2.0506b303.chunk.js.map",
+    "static/js/2.da26f592.chunk.js": "/mauton/static/js/2.da26f592.chunk.js",
+    "static/js/2.da26f592.chunk.js.map": "/mauton/static/js/2.da26f592.chunk.js.map",
     "index.html": "/mauton/index.html",
     "static/css/2.4614077c.chunk.css.map": "/mauton/static/css/2.4614077c.chunk.css.map",
     "static/css/main.2d1e24d8.chunk.css.map": "/mauton/static/css/main.2d1e24d8.chunk.css.map",
-    "static/js/2.0506b303.chunk.js.LICENSE.txt": "/mauton/static/js/2.0506b303.chunk.js.LICENSE.txt",
+    "static/js/2.da26f592.chunk.js.LICENSE.txt": "/mauton/static/js/2.da26f592.chunk.js.LICENSE.txt",
     "static/media/index.css": "/mauton/static/media/Pacifico-Regular.93cd59ff.ttf",
     "static/media/Home.css": "/mauton/static/media/bg-home.87655359.jpg",
     "static/media/Register.css": "/mauton/static/media/cat.2e11ef25.png"
@@ -19,8 +19,8 @@
   "entrypoints": [
     "static/js/runtime-main.c70cf5c7.js",
     "static/css/2.4614077c.chunk.css",
-    "static/js/2.0506b303.chunk.js",
+    "static/js/2.da26f592.chunk.js",
     "static/css/main.2d1e24d8.chunk.css",
-    "static/js/main.7955aad4.chunk.js"
+    "static/js/main.82e7d651.chunk.js"
   ]
 }
