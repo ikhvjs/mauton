@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/mauton/static/css/main.820dca1c.chunk.css",
-    "main.js": "/mauton/static/js/main.8d3a7b0e.chunk.js",
-    "main.js.map": "/mauton/static/js/main.8d3a7b0e.chunk.js.map",
-    "runtime-main.js": "/mauton/static/js/runtime-main.c70cf5c7.js",
-    "runtime-main.js.map": "/mauton/static/js/runtime-main.c70cf5c7.js.map",
-    "static/css/2.4614077c.chunk.css": "/mauton/static/css/2.4614077c.chunk.css",
-    "static/js/2.6372e2ce.chunk.js": "/mauton/static/js/2.6372e2ce.chunk.js",
-    "static/js/2.6372e2ce.chunk.js.map": "/mauton/static/js/2.6372e2ce.chunk.js.map",
-    "index.html": "/mauton/index.html",
-    "static/css/2.4614077c.chunk.css.map": "/mauton/static/css/2.4614077c.chunk.css.map",
-    "static/css/main.820dca1c.chunk.css.map": "/mauton/static/css/main.820dca1c.chunk.css.map",
-    "static/js/2.6372e2ce.chunk.js.LICENSE.txt": "/mauton/static/js/2.6372e2ce.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/mauton/static/media/Pacifico-Regular.93cd59ff.ttf",
-    "static/media/Home.css": "/mauton/static/media/bg-home.87655359.jpg",
-    "static/media/Register.css": "/mauton/static/media/cat.2e11ef25.png"
+    "main.css": "/static/css/main.f5155ff0.chunk.css",
+    "main.js": "/static/js/main.1eee5a9d.chunk.js",
+    "main.js.map": "/static/js/main.1eee5a9d.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.b79c6375.js",
+    "runtime-main.js.map": "/static/js/runtime-main.b79c6375.js.map",
+    "static/css/2.4614077c.chunk.css": "/static/css/2.4614077c.chunk.css",
+    "static/js/2.e2ddd028.chunk.js": "/static/js/2.e2ddd028.chunk.js",
+    "static/js/2.e2ddd028.chunk.js.map": "/static/js/2.e2ddd028.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.4614077c.chunk.css.map": "/static/css/2.4614077c.chunk.css.map",
+    "static/css/main.f5155ff0.chunk.css.map": "/static/css/main.f5155ff0.chunk.css.map",
+    "static/js/2.e2ddd028.chunk.js.LICENSE.txt": "/static/js/2.e2ddd028.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/static/media/Pacifico-Regular.93cd59ff.ttf",
+    "static/media/Home.css": "/static/media/bg-home.87655359.jpg",
+    "static/media/Register.css": "/static/media/cat.2e11ef25.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.c70cf5c7.js",
+    "static/js/runtime-main.b79c6375.js",
     "static/css/2.4614077c.chunk.css",
-    "static/js/2.6372e2ce.chunk.js",
-    "static/css/main.820dca1c.chunk.css",
-    "static/js/main.8d3a7b0e.chunk.js"
+    "static/js/2.e2ddd028.chunk.js",
+    "static/css/main.f5155ff0.chunk.css",
+    "static/js/main.1eee5a9d.chunk.js"
   ]
 }
