@@ -1,29 +1,25 @@
 name: Deploy to GitHub Pages
-on:
-  push:
-    branches:
-      - master
+    on:
+      push:
+        branches:
+          - master
+    jobs:
+      build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v1
 
-jobs:
-  build:
+        - name: Build
+          run: |
+            npm install
+            npm run-script build
+          env:
+            REACT_APP_CAPTCHAKEY: ${{ secrets.REACT_APP_CAPTCHAKEY }}
 
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Checkout
-      uses: actions/checkout@v1
-
-    - name: Build
-      env:
-          REACT_APP_CAPTCHAKEY: 6LeL8gUaAAAAABaPt2sVU_Q0RlI1PkpOkaHAhFdz
-      run: |
-        npm install
-        npm run-script build
-      
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: build
+        - name: Deploy
+          uses: JamesIves/github-pages-deploy-action@releases/v3
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_KEY }}
+            BRANCH: gh-pages
+            FOLDER: dist
