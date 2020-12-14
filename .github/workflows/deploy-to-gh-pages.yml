@@ -16,7 +16,7 @@ jobs:
 
     - name: Build
       env:
-          REACT_APP_CAPTCHAKEY: ${{ secrets.REACT_APP_CAPTCHAKEY }}
+          REACT_APP_CAPTCHAKEY: 6LeL8gUaAAAAABaPt2sVU_Q0RlI1PkpOkaHAhFdz
       run: |
         npm install
         npm run-script build

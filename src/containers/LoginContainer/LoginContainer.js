@@ -6,19 +6,19 @@ import { RECAPTCHAT_KEY } from '../../constants';
 import Login from '../../components/Login/Login';
 
 const mapStateToProps = (state) => {
-    return {
-      isAuth:state.authRdc.isAuth
-    }
+  return {
+    isAuth: state.authRdc.isAuth
   }
-  
+}
+
 
 class LoginContainer extends Component {
-    render() {
-        return this.props.isAuth ? <Redirect to='/' />
-        :(<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHAT_KEY}>
-            <Login />
-          </GoogleReCaptchaProvider>)
-    }
+  render() {
+    return this.props.isAuth ? <Redirect to='/' />
+      : (<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHAT_KEY}>
+        <Login />
+      </GoogleReCaptchaProvider>)
+  }
 }
-  
+
 export default connect(mapStateToProps, null)(LoginContainer)
