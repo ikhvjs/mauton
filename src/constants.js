@@ -1,10 +1,10 @@
 /*----------------API PORT----------------------*/
-export const API_PORT = 'https://mauton-api.herokuapp.com';
+export const API_PORT = 'https://mauton-api-demo.herokuapp.com';
 // export const API_PORT = 'http://localhost:3001';
 
 
 /*----------------ReCaptchat----------------------*/
-export const RECAPTCHAT_KEY = '6LcqXdgZAAAAAFoX6zuxeUH39LsB8JbFdd9TiVv0';
+export const RECAPTCHAT_KEY = process.env.REACT_APP_CAPTCHA_KEY;
 export const GET_CAPTCHA_TOKEN_SUCCESS = 'GET_CAPTCHA_TOKEN_SUCCESS';
 export const GET_CAPTCHA_TOKEN_FAILED = 'GET_CAPTCHA_TOKEN_FAILED';
 export const GET_LOGIN_ALERT_CAPTCHA_TOKEN_SUCCESS = 'GET_LOGIN_ALERT_CAPTCHA_TOKEN_SUCCESS';
