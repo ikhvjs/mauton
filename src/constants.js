@@ -4,7 +4,7 @@ export const API_PORT = 'https://mauton-api-demo.herokuapp.com';
 
 
 /*----------------ReCaptchat----------------------*/
-export const RECAPTCHAT_KEY = process.env.REACT_APP_CAPTCHA_KEY;
+export const RECAPTCHAT_KEY = process.env.REACT_APP_CAPTCHAKEY;
 export const GET_CAPTCHA_TOKEN_SUCCESS = 'GET_CAPTCHA_TOKEN_SUCCESS';
 export const GET_CAPTCHA_TOKEN_FAILED = 'GET_CAPTCHA_TOKEN_FAILED';
 export const GET_LOGIN_ALERT_CAPTCHA_TOKEN_SUCCESS = 'GET_LOGIN_ALERT_CAPTCHA_TOKEN_SUCCESS';

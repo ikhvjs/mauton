@@ -19,7 +19,7 @@ jobs:
         npm install
         npm run-script build
       env:
-        REACT_APP_CAPTCHA_KEY: ${{ secrets.REACT_APP_CAPTCHA_KEY }}
+        REACT_APP_CAPTCHAKEY: ${{ secrets.REACT_APP_CAPTCHAKEY }}
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
