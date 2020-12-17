@@ -17,9 +17,8 @@ import 'tinymce/plugins/lists';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/preview';
 import 'tinymce/plugins/table';
-// import 'tinymce/plugins/wordcount';
-// import 'tinymce/plugins/tinydrive';
-import 'tinymce/plugins/autoresize';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/codesample';
 
 
 
@@ -30,27 +29,27 @@ export const initTinyEditorAct = (id,blogContent="") => {
       width: '100%',
       min_height: 400,
       max_height: 400,
-      menubar: false,
+      // menubar: false,
+      menubar:"edit insert view format table tools help",
       skin: false,
       content_css: false,
       branding: false,
-      // images_upload_url: 'postAcceptor.php',
       plugins: [
         'image imagetools',
         ' lists link preview',
-        'table'
+        'table','code','codesample'
       ],
-      toolbar: 'undo redo | formatselect | ' +
-        'bold italic | forecolor backcolor | alignleft aligncenter ' +
+      toolbar: 'undo redo | formatselect | fontsizeselect | ' +
+        'bold italic | forecolor backcolor | alignleft aligncenter | ' +
         'alignright alignjustify | bullist numlist outdent indent | ' +
-        'removeformat | link image  |table|preview',
+        'removeformat | link image  | table | code codesample | preview',
       content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
 
     });
 
     setTimeout(function () {
       tinymce.get(id).setContent(blogContent);
-    },1)
+    },300)
 }
 
 export const removeTinyEditorAct = () => {

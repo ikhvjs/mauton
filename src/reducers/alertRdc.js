@@ -118,7 +118,7 @@ const alertRdc = (state = initialStateError, action = {}) => {
             return Object.assign({}, state,
                 {
                     isShowValidationErrAlert: true,
-                    ValidationErrMsg: action.payload
+                    ValidationErrMsg: action.payload.errMessage
                 })
         /*----------user logout------------------*/
         case constants.USER_LOG_OUT:
