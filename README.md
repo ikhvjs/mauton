@@ -7,11 +7,13 @@ I was motivated to create this project because I wanted to record what I learn i
   <img src="https://github.com/ikhvjs/mauton-deployment/blob/main/demo1-mauton.gif" alt="mauton-demo1"/>
   <br>
 </h2>
+
 ## Easy to manage your menu for blogs
 <h2 align="center">
   <img src="https://github.com/ikhvjs/mauton-deployment/blob/main/demo2-mauton.gif" alt="mauton-demo2"/>
   <br>
 </h2>
+
 ## Features
 
 ⚡️ Create React App\
