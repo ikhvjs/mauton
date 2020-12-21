@@ -35,7 +35,7 @@ You'll need:
 * [Git](https://git-scm.com) 
 * [Node.js](https://nodejs.org/en/download/) (which comes with [NPM](http://npmjs.com)) installed on your computer.
 * [Google reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3) (which you need to register for a key)
-* [A Mauton API](https://github.com/ikhvjs/mauton-api) (which is for the Backend)
+* [A mauton API](https://github.com/ikhvjs/mauton-api) (which is for the Backend)
 
 ```
 node@v10.16.0 or higher
